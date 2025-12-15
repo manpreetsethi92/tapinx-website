@@ -3707,7 +3707,7 @@
                                 // Returning user - go to dashboard
                                 localStorage.setItem('tapinx_logged_in', 'true');
                                 showPage('dashboard');
-                            } else {
+                        } else {
                                 // New user - transfer signup data to profile
                                 const name = localStorage.getItem('tapinx_signup_name') || '';
                                 const age = localStorage.getItem('tapinx_signup_age') || '';
@@ -3734,7 +3734,7 @@
                                 alert('Invalid code. Please check and try again.');
                             } else if (error.code === 'auth/code-expired') {
                                 alert('Code expired. Please request a new one.');
-                            } else {
+                        } else {
                                 alert('Verification failed. Please try again.');
                             }
                             
@@ -3742,9 +3742,11 @@
                             ['otp1','otp2','otp3','otp4','otp5','otp6'].forEach(id => {
                                 document.getElementById(id).value = '';
                             });
+                }
                             document.getElementById('otp1').focus();
                         });
-                    } else {
+                }
+                } else {
                     // No confirmation result - show error
                     alert('Something went wrong. Please try again.');
                     verifyBtn.textContent = 'Verify';
@@ -4075,7 +4077,7 @@
                 rows.forEach(row => {
                     if (row.dataset.category === category) {
                         row.style.display = 'flex';
-                    } else {
+                } else {
                         row.style.display = 'none';
                     }
                 });
