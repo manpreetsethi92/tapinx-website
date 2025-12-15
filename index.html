@@ -2456,7 +2456,7 @@
             </div>
             
             <div class="action-cards">
-                <div class="action-card attention-card-highlight" onclick="showPage('attention')">
+                <div class="action-card" id="attentionCard" onclick="showPage('attention')">
                     <h3 class="action-title">Attention Required!!</h3>
                     <p class="action-desc">6 opportunities waiting</p>
                 </div>
@@ -2464,7 +2464,7 @@
                     <h3 class="action-title">Speak to Taj</h3>
                     <p class="action-desc">Tell Taj who you want to meet</p>
                 </a>
-                <div class="action-card" onclick="showPage('connections')">
+                <div class="action-card" id="connectionsCard" onclick="showPage('connections')">
                     <h3 class="action-title">My Connections</h3>
                     <p class="action-desc">View your network</p>
                 </div>
@@ -3954,7 +3954,8 @@
             const { count: connectionCount } = await fetchConnections();
             
             // Update Attention Required count
-            const attentionDesc = document.querySelector('.attention-card-highlight .action-desc');
+            const attentionCard = document.getElementById('attentionCard');
+            const attentionDesc = attentionCard ? attentionCard.querySelector('.action-desc') : null;
             if (attentionDesc) {
                 if (matchCount === 0) {
                     attentionDesc.textContent = 'No pending requests';
@@ -3963,17 +3964,30 @@
                 } else {
                     attentionDesc.textContent = `${matchCount} opportunities waiting`;
                 }
+                // Toggle highlight based on match count
+                if (matchCount > 0) {
+                    attentionCard.classList.add('attention-card-highlight');
+                } else {
+                    attentionCard.classList.remove('attention-card-highlight');
+                }
             }
             
             // Update connections count
-            const connectionsCard = document.querySelector('.action-card[onclick="showPage(\'connections\')"] .action-desc');
-            if (connectionsCard) {
+            const connectionsCard = document.getElementById('connectionsCard');
+            const connectionsDesc = connectionsCard ? connectionsCard.querySelector('.action-desc') : null;
+            if (connectionsDesc) {
                 if (connectionCount === 0) {
-                    connectionsCard.textContent = 'View your network';
+                    connectionsDesc.textContent = 'View your network';
                 } else if (connectionCount === 1) {
-                    connectionsCard.textContent = '1 connection';
+                    connectionsDesc.textContent = '1 connection';
                 } else {
-                    connectionsCard.textContent = `${connectionCount} connections`;
+                    connectionsDesc.textContent = `${connectionCount} connections`;
+                }
+                // Toggle highlight based on connection count
+                if (connectionCount > 0) {
+                    connectionsCard.classList.add('attention-card-highlight');
+                } else {
+                    connectionsCard.classList.remove('attention-card-highlight');
                 }
             }
         }
