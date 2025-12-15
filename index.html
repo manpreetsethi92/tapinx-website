@@ -4001,7 +4001,7 @@
         }
         
         // ========== CONNECTIONS PAGE ==========
-        function loadConnections() {
+        async function loadConnections() {
             const name = localStorage.getItem('tapinx_user_name') || 'User';
             const photo = localStorage.getItem('tapinx_user_photo');
             const initial = name.charAt(0).toUpperCase();
@@ -4014,6 +4014,57 @@
                 document.getElementById('connAvatarImg').style.display = 'block';
                 document.getElementById('connAvatarInitial').style.display = 'none';
             }
+            
+            // Clear demo data
+            const pendingSection = document.getElementById('pendingSection');
+            const connectedSection = document.getElementById('connectedSection');
+            pendingSection.innerHTML = '<div class="conn-section-header"><span class="conn-section-title">Pending <span class="conn-section-badge" id="pendingBadge">0</span></span></div>';
+            connectedSection.innerHTML = '<div class="conn-section-header"><span class="conn-section-title">Connected</span></div><div style="text-align:center;padding:20px;color:#666;">Loading...</div>';
+            
+            // Fetch real connections from API
+            const { connections, count } = await fetchConnections();
+            
+            // Update counts
+            document.getElementById('connAllCount').textContent = count;
+            document.getElementById('connPendingCount').textContent = '0';
+            document.getElementById('connConnectedCount').textContent = count;
+            
+            if (count === 0) {
+                pendingSection.style.display = 'none';
+                connectedSection.innerHTML = '';
+                connectedSection.style.display = 'none';
+                document.getElementById('emptyConnected').style.display = 'block';
+                document.getElementById('connFilterPills').style.display = 'none';
+            } else {
+                document.getElementById('emptyConnected').style.display = 'none';
+                connectedSection.innerHTML = '<div class="conn-section-header"><span class="conn-section-title">Connected</span></div>' + connections.map(c => renderConnectionRow(c)).join('');
+            }
+        }
+        
+        function renderConnectionRow(conn) {
+            const initial = conn.name ? conn.name.charAt(0).toUpperCase() : '?';
+            const timeAgo = formatTimeAgo(conn.connected_at);
+            const gradients = [
+                'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+                'linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%)',
+                'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+            ];
+            const gradient = gradients[Math.floor(Math.random() * gradients.length)];
+            return `
+                <div class="connection-row" data-category="other" data-conn-status="connected" data-name="${conn.name || 'Unknown'}">
+                    <div class="row-avatar" style="background: ${gradient};">${initial}</div>
+                    <div class="row-info">
+                        <div class="row-name">${conn.name || 'Unknown'}</div>
+                        <div class="row-title">${conn.linkedin_url ? 'View LinkedIn' : ''}</div>
+                    </div>
+                    <div class="row-meta">
+                        <div class="row-time">${timeAgo}</div>
+                    </div>
+                    <button class="row-action" onclick="messageConnection(this, '${conn.name}')">Message</button>
+                </div>
+            `;
         }
         
         // Current connection status view
@@ -4205,7 +4256,7 @@
         });
         
         // ========== ATTENTION REQUIRED PAGE ==========
-        function loadAttention() {
+        async function loadAttention() {
             const name = localStorage.getItem('tapinx_user_name') || 'User';
             const photo = localStorage.getItem('tapinx_user_photo');
             const initial = name.charAt(0).toUpperCase();
@@ -4218,6 +4269,71 @@
                 document.getElementById('attnAvatarImg').style.display = 'block';
                 document.getElementById('attnAvatarInitial').style.display = 'none';
             }
+            
+            // Clear demo data and load real data
+            const proposalsContainer = document.getElementById('attnProposals');
+            proposalsContainer.innerHTML = '<div style="text-align:center;padding:40px;color:#666;">Loading...</div>';
+            
+            // Fetch real matches from API
+            const { matches, count } = await fetchMatches();
+            
+            // Update counts
+            document.getElementById('activeCount').textContent = count;
+            document.getElementById('interestedCount').textContent = '0';
+            document.getElementById('passedCount').textContent = '0';
+            
+            // Update filter tab count
+            const allTabCount = document.querySelector('.attn-tab.active .attn-tab-count');
+            if (allTabCount) allTabCount.textContent = count;
+            
+            if (count === 0) {
+                proposalsContainer.innerHTML = '';
+                document.getElementById('emptyActive').style.display = 'block';
+                document.querySelector('.attn-filter-tabs').style.display = 'none';
+            } else {
+                proposalsContainer.innerHTML = '';
+                document.getElementById('emptyActive').style.display = 'none';
+                document.querySelector('.attn-filter-tabs').style.display = 'flex';
+                matches.forEach(match => {
+                    proposalsContainer.innerHTML += renderProposalCard(match);
+                });
+            }
+        }
+        
+        function renderProposalCard(match) {
+            const timeAgo = formatTimeAgo(match.created_at);
+            return \`
+                <div class="proposal-card" data-type="intro" data-status="active" data-id="\${match.id}">
+                    <div class="proposal-badge job">Introduction</div>
+                    <div class="proposal-header">
+                        <div class="proposal-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">T</div>
+                        <div class="proposal-meta">
+                            <div class="proposal-from">From <strong>Taj</strong> • \${timeAgo}</div>
+                        </div>
+                    </div>
+                    <h3 class="proposal-title">Connect with \${match.other_name || 'someone'}</h3>
+                    <p class="proposal-desc">\${match.intro_message || 'Taj wants to introduce you to someone in the network.'}</p>
+                    <div class="proposal-actions">
+                        <button class="proposal-btn primary" onclick="markInterested(this)">I'm Interested</button>
+                        <button class="proposal-btn secondary" onclick="markPassed(this)">Not for me</button>
+                        <button class="proposal-btn tertiary" onclick="askTajMore(this, 'this connection')">Ask Taj more</button>
+                    </div>
+                </div>
+            \`;
+        }
+        
+        function formatTimeAgo(dateString) {
+            if (!dateString) return 'recently';
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            if (diffMins < 60) return diffMins + ' mins ago';
+            if (diffHours < 24) return diffHours + ' hours ago';
+            if (diffDays < 7) return diffDays + ' days ago';
+            return Math.floor(diffDays / 7) + ' weeks ago';
         }
         
         function toggleAttentionDropdown(e) {
