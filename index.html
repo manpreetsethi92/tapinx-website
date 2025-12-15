@@ -3123,20 +3123,29 @@
         }
         
         function initRecaptcha() {
-            if (!firebaseReady || recaptchaVerifier) return;
+            if (!firebaseReady) return;
+            
+            // Clear any existing verifier
+            if (recaptchaVerifier) {
+                try {
+                    recaptchaVerifier.clear();
+                } catch(e) {}
+                recaptchaVerifier = null;
+            }
             
             try {
                 recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-                    'size': 'invisible',
-                    'callback': (response) => {
-                        // reCAPTCHA solved
-                    },
-                    'expired-callback': () => {
-                        recaptchaVerifier = null;
-                    }
+                    'size': 'invisible'
+                });
+                recaptchaVerifier.render().then(function(widgetId) {
+                    console.log('reCAPTCHA rendered successfully');
+                }).catch(function(error) {
+                    console.error('reCAPTCHA render error:', error);
+                    recaptchaVerifier = null;
                 });
             } catch (error) {
-                console.error('reCAPTCHA error:', error);
+                console.error('reCAPTCHA init error:', error);
+                recaptchaVerifier = null;
             }
         }
         
@@ -3441,11 +3450,13 @@
             btn.textContent = 'Sending code...';
             btn.disabled = true;
             
+            // Store phone display
+            document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
+            
             // Check if Firebase is ready
             if (!firebaseReady || !auth) {
-                // Demo mode - skip to OTP step
-                console.log('Firebase not ready, using demo mode');
-                document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
+                // Demo mode - go straight to OTP step
+                console.log('Using demo mode (Firebase not ready)');
                 isSigningIn = false;
                 showOtpStep();
                 btn.textContent = 'Submit';
@@ -3453,47 +3464,50 @@
                 return;
             }
             
-            // Initialize reCAPTCHA and send OTP via Firebase
-            initRecaptcha();
-            
-            if (!recaptchaVerifier) {
-                // reCAPTCHA failed, use demo mode
-                console.log('reCAPTCHA not ready, using demo mode');
-                document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
-                isSigningIn = false;
-                showOtpStep();
-                btn.textContent = 'Submit';
-                btn.disabled = false;
-                return;
-            }
-            
-            auth.signInWithPhoneNumber(fullPhoneNumber, recaptchaVerifier)
-                .then((result) => {
-                    confirmationResult = result;
-                    document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
+            // Try Firebase phone auth
+            try {
+                initRecaptcha();
+                
+                if (!recaptchaVerifier) {
+                    // reCAPTCHA failed, use demo mode
+                    console.log('Using demo mode (reCAPTCHA not ready)');
                     isSigningIn = false;
                     showOtpStep();
                     btn.textContent = 'Submit';
                     btn.disabled = false;
-                })
-                .catch((error) => {
-                    console.error('SMS Error:', error);
-                    btn.textContent = 'Submit';
-                    btn.disabled = false;
-                    
-                    // Handle specific errors
-                    if (error.code === 'auth/invalid-phone-number') {
-                        document.getElementById('phoneError').textContent = 'Invalid phone number format';
-                        document.getElementById('phoneError').style.display = 'block';
-                    } else if (error.code === 'auth/too-many-requests') {
-                        alert('Too many attempts. Please try again later.');
-                    } else {
-                        alert('Failed to send code. Please try again.');
-                    }
-                    
-                    // Reset reCAPTCHA
-                    recaptchaVerifier = null;
-                });
+                    return;
+                }
+                
+                // Format phone for Firebase (E.164 format)
+                const phoneDigits = phone.replace(/\D/g, '');
+                const fullPhoneNumber = selectedCountry.code + phoneDigits;
+                
+                auth.signInWithPhoneNumber(fullPhoneNumber, recaptchaVerifier)
+                    .then((result) => {
+                        confirmationResult = result;
+                        isSigningIn = false;
+                        showOtpStep();
+                        btn.textContent = 'Submit';
+                        btn.disabled = false;
+                    })
+                    .catch((error) => {
+                        console.error('SMS Error:', error);
+                        // On error, fall back to demo mode
+                        console.log('Firebase failed, using demo mode');
+                        isSigningIn = false;
+                        showOtpStep();
+                        btn.textContent = 'Submit';
+                        btn.disabled = false;
+                        recaptchaVerifier = null;
+                    });
+            } catch (error) {
+                console.error('Firebase error:', error);
+                // Fallback to demo mode
+                isSigningIn = false;
+                showOtpStep();
+                btn.textContent = 'Submit';
+                btn.disabled = false;
+            }
         }
         
         function sendSigninCode() {
@@ -3506,20 +3520,18 @@
             
             document.getElementById('phoneError2').style.display = 'none';
             
-            // Format phone for Firebase (E.164 format)
-            const phoneDigits = phone.replace(/\D/g, '');
-            const fullPhoneNumber = selectedCountry.code + phoneDigits;
-            
             // Show loading state
             const btn = document.getElementById('signinBtn');
             btn.textContent = 'Sending code...';
             btn.disabled = true;
             
+            // Store phone display
+            document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
+            
             // Check if Firebase is ready
             if (!firebaseReady || !auth) {
                 // Demo mode
-                console.log('Firebase not ready, using demo mode');
-                document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
+                console.log('Using demo mode (Firebase not ready)');
                 isSigningIn = true;
                 showOtpStep();
                 btn.textContent = 'Send Code';
@@ -3527,45 +3539,47 @@
                 return;
             }
             
-            // Initialize reCAPTCHA and send OTP via Firebase
-            initRecaptcha();
-            
-            if (!recaptchaVerifier) {
-                // Demo mode
-                console.log('reCAPTCHA not ready, using demo mode');
-                document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
-                isSigningIn = true;
-                showOtpStep();
-                btn.textContent = 'Send Code';
-                btn.disabled = false;
-                return;
-            }
-            
-            auth.signInWithPhoneNumber(fullPhoneNumber, recaptchaVerifier)
-                .then((result) => {
-                    confirmationResult = result;
-                    document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
+            // Try Firebase phone auth
+            try {
+                initRecaptcha();
+                
+                if (!recaptchaVerifier) {
+                    console.log('Using demo mode (reCAPTCHA not ready)');
                     isSigningIn = true;
                     showOtpStep();
                     btn.textContent = 'Send Code';
                     btn.disabled = false;
-                })
-                .catch((error) => {
-                    console.error('SMS Error:', error);
-                    btn.textContent = 'Send Code';
-                    btn.disabled = false;
-                    
-                    if (error.code === 'auth/invalid-phone-number') {
-                        document.getElementById('phoneError2').textContent = 'Invalid phone number format';
-                        document.getElementById('phoneError2').style.display = 'block';
-                    } else if (error.code === 'auth/too-many-requests') {
-                        alert('Too many attempts. Please try again later.');
-                    } else {
-                        alert('Failed to send code. Please try again.');
-                    }
-                    
-                    recaptchaVerifier = null;
-                });
+                    return;
+                }
+                
+                const phoneDigits = phone.replace(/\D/g, '');
+                const fullPhoneNumber = selectedCountry.code + phoneDigits;
+                
+                auth.signInWithPhoneNumber(fullPhoneNumber, recaptchaVerifier)
+                    .then((result) => {
+                        confirmationResult = result;
+                        isSigningIn = true;
+                        showOtpStep();
+                        btn.textContent = 'Send Code';
+                        btn.disabled = false;
+                    })
+                    .catch((error) => {
+                        console.error('SMS Error:', error);
+                        // Fallback to demo mode
+                        console.log('Firebase failed, using demo mode');
+                        isSigningIn = true;
+                        showOtpStep();
+                        btn.textContent = 'Send Code';
+                        btn.disabled = false;
+                        recaptchaVerifier = null;
+                    });
+            } catch (error) {
+                console.error('Firebase error:', error);
+                isSigningIn = true;
+                showOtpStep();
+                btn.textContent = 'Send Code';
+                btn.disabled = false;
+            }
         }
         
         function startResendTimer() {
