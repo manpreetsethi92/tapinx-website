@@ -3734,7 +3734,7 @@
                                 alert('Invalid code. Please check and try again.');
                             } else if (error.code === 'auth/code-expired') {
                                 alert('Code expired. Please request a new one.');
-                        } else {
+                            } else {
                                 alert('Verification failed. Please try again.');
                             }
                             
@@ -3742,16 +3742,15 @@
                             ['otp1','otp2','otp3','otp4','otp5','otp6'].forEach(id => {
                                 document.getElementById(id).value = '';
                             });
-                }
                             document.getElementById('otp1').focus();
                         });
-                }
                 } else {
                     // No confirmation result - show error
                     alert('Something went wrong. Please try again.');
                     verifyBtn.textContent = 'Verify';
                     verifyBtn.disabled = false;
                 }
+            }
         }
         
         function resendCode() {
