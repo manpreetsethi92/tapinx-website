@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TapinX Admin - CEO Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f0f; 
+            color: #fff; 
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 20px 30px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 { font-size: 24px; color: #E50914; }
+        .header-stats {
+            display: flex;
+            gap: 30px;
+        }
+        .header-stat {
+            text-align: center;
+        }
+        .header-stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4ade80;
+        }
+        .header-stat-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+        }
+        
+        /* Navigation */
+        .nav {
+            background: #1a1a1a;
+            padding: 10px 30px;
+            display: flex;
+            gap: 20px;
+            border-bottom: 1px solid #333;
+        }
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #888;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover { background: #333; color: #fff; }
+        .nav-btn.active { background: #E50914; color: #fff; }
+        
+        /* Main Content */
+        .main {
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Section */
+        .section {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: linear-gradient(135deg, #1e1e2e 0%, #252535 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #333;
+        }
+        .card-title {
+            font-size: 14px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .card-value {
+            font-size: 36px;
+            font-weight: bold;
+        }
+        .card-value.green { color: #4ade80; }
+        .card-value.blue { color: #60a5fa; }
+        .card-value.yellow { color: #facc15; }
+        .card-value.red { color: #f87171; }
+        .card-subtitle {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        /* Summary Section */
+        .summary-box {
+            background: linear-gradient(135deg, #1a2a1a 0%, #1e2e1e 100%);
+            border: 1px solid #2d4a2d;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .summary-title {
+            font-size: 18px;
+            color: #4ade80;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .summary-content {
+            line-height: 1.8;
+            color: #ccc;
+        }
+        .highlight { color: #4ade80; font-weight: bold; }
+        .highlight-blue { color: #60a5fa; font-weight: bold; }
+        
+        /* Alerts */
+        .alerts {
+            margin-bottom: 30px;
+        }
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .alert.critical { background: #3b1515; border: 1px solid #7f1d1d; }
+        .alert.warning { background: #3b2e15; border: 1px solid #7f5d1d; }
+        .alert.info { background: #15253b; border: 1px solid #1d4d7f; }
+        
+        /* Table */
+        .table-container {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+        .table-header {
+            padding: 15px 20px;
+            background: #252525;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .table-title { font-size: 16px; font-weight: 600; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        th {
+            background: #252525;
+            color: #888;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        tr:hover { background: #252525; }
+        
+        /* Status Badges */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .badge.active { background: #166534; color: #4ade80; }
+        .badge.pending { background: #854d0e; color: #facc15; }
+        .badge.closed { background: #7f1d1d; color: #f87171; }
+        .badge.intro_sent { background: #1e40af; color: #60a5fa; }
+        
+        /* Agent Activity */
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .agent-card {
+            background: #1e1e2e;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #333;
+        }
+        .agent-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .agent-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-size: 13px;
+            color: #888;
+        }
+        .agent-stat-value { color: #fff; }
+        
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: #E50914; color: #fff; }
+        .btn-primary:hover { background: #c50812; }
+        .btn-secondary { background: #333; color: #fff; }
+        .btn-secondary:hover { background: #444; }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        /* Refresh indicator */
+        .refresh-time {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 TapinX Command Center</h1>
+        <div class="header-stats">
+            <div class="header-stat">
+                <div class="header-stat-value" id="liveUsers">-</div>
+                <div class="header-stat-label">Active Now</div>
+            </div>
+            <div class="header-stat">
+                <div class="header-stat-value" id="liveAsks">-</div>
+                <div class="header-stat-label">Active Asks</div>
+            </div>
+            <div class="header-stat">
+                <div class="header-stat-value" id="liveConnections">-</div>
+                <div class="header-stat-label">Connections</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="nav">
+        <button class="nav-btn active" onclick="showSection('overview')">�� Overview</button>
+        <button class="nav-btn" onclick="showSection('asks')">📋 Asks</button>
+        <button class="nav-btn" onclick="showSection('users')">👤 Users</button>
+        <button class="nav-btn" onclick="showSection('matches')">🤝 Matches</button>
+        <button class="nav-btn" onclick="showSection('agents')">🤖 Agents</button>
+        <button class="nav-btn" onclick="showSection('logs')">📜 Logs</button>
+        <span class="refresh-time" id="refreshTime"></span>
+    </div>
+    
+    <div class="main">
+        <!-- OVERVIEW SECTION -->
+        <div class="section active" id="section-overview">
+            <div class="summary-box" id="dailySummary">
+                <div class="summary-title">🌅 Today's Summary</div>
+                <div class="summary-content" id="summaryContent">Loading...</div>
+            </div>
+            
+            <div class="alerts" id="alertsContainer"></div>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-title">Total Users</div>
+                    <div class="card-value green" id="totalUsers">-</div>
+                    <div class="card-subtitle" id="newUsersToday">- new today</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Active Asks</div>
+                    <div class="card-value blue" id="activeAsks">-</div>
+                    <div class="card-subtitle" id="newAsksToday">- new today</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Successful Intros</div>
+                    <div class="card-value yellow" id="totalIntros">-</div>
+                    <div class="card-subtitle" id="introsToday">- today</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Pending Matches</div>
+                    <div class="card-value" id="pendingMatches">-</div>
+                    <div class="card-subtitle">awaiting response</div>
+                </div>
+            </div>
+            
+            <h3 style="margin-bottom: 15px;">🔥 Talent Gaps (Critical)</h3>
+            <div class="table-container" style="margin-bottom: 30px;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Skill</th>
+                            <th>Demand</th>
+                            <th>Supply</th>
+                            <th>Gap</th>
+                            <th>Severity</th>
+                        </tr>
+                    </thead>
+                    <tbody id="talentGapsTable">
+                        <tr><td colspan="5" class="loading">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- ASKS SECTION -->
+        <div class="section" id="section-asks">
+            <div class="table-container">
+                <div class="table-header">
+                    <span class="table-title">📋 All Asks</span>
+                    <button class="btn btn-primary" onclick="createAsk()">+ Create Ask</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title/Text</th>
+                            <th>Source</th>
+                            <th>Skills</th>
+                            <th>Status</th>
+                            <th>Matches</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="asksTable">
+                        <tr><td colspan="8" class="loading">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- USERS SECTION -->
+        <div class="section" id="section-users">
+            <div class="table-container">
+                <div class="table-header">
+                    <span class="table-title">👤 All Users</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Phone/Telegram</th>
+                            <th>Skills</th>
+                            <th>Profile %</th>
+                            <th>Last Active</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable">
+                        <tr><td colspan="7" class="loading">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- MATCHES SECTION -->
+        <div class="section" id="section-matches">
+            <div class="table-container">
+                <div class="table-header">
+                    <span class="table-title">🤝 All Matches</span>
+                    <button class="btn btn-primary" onclick="createMatch()">+ Create Match</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ask</th>
+                            <th>Requester</th>
+                            <th>Candidate</th>
+                            <th>Score</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="matchesTable">
+                        <tr><td colspan="8" class="loading">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- AGENTS SECTION -->
+        <div class="section" id="section-agents">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>🤖 Agent Status</h3>
+                <button class="btn btn-secondary" onclick="runDailyTasks()">▶️ Run Daily Tasks</button>
+            </div>
+            <div class="agent-grid" id="agentGrid">
+                <div class="loading">Loading agent stats...</div>
+            </div>
+        </div>
+        
+        <!-- LOGS SECTION -->
+        <div class="section" id="section-logs">
+            <div class="table-container">
+                <div class="table-header">
+                    <span class="table-title">📜 Agent Activity Logs</span>
+                    <select id="logFilter" onchange="loadLogs()" style="padding: 8px; background: #333; color: #fff; border: 1px solid #444; border-radius: 5px;">
+                        <option value="">All Agents</option>
+                        <option value="taj">TAJ</option>
+                        <option value="tim">TIM</option>
+                        <option value="twila">TWILA</option>
+                        <option value="sam">SAM</option>
+                        <option value="maya">MAYA</option>
+                        <option value="joy">JOY</option>
+                        <option value="olivia">OLIVIA</option>
+                        <option value="sarah">SARAH</option>
+                        <option value="nora">NORA</option>
+                        <option value="dana">DANA</option>
+                    </select>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Agent</th>
+                            <th>Action</th>
+                            <th>User</th>
+                            <th>Details</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logsTable">
+                        <tr><td colspan="6" class="loading">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://tapinx-backend-production.up.railway.app/api/admin';
+        
+        // Navigation
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('section-' + section).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Load section data
+            if (section === 'asks') loadAsks();
+            if (section === 'users') loadUsers();
+            if (section === 'matches') loadMatches();
+            if (section === 'agents') loadAgentStats();
+            if (section === 'logs') loadLogs();
+        }
+        
+        // Format date
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+        
+        function timeAgo(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            if (diffMins < 60) return diffMins + 'm ago';
+            if (diffHours < 24) return diffHours + 'h ago';
+            return diffDays + 'd ago';
+        }
+        
+        // Load Dashboard
+        async function loadDashboard() {
+            try {
+                // Real-time stats
+                const dashRes = await fetch(API_BASE + '/dashboard');
+                const dashData = await dashRes.json();
+                if (dashData.success) {
+                    document.getElementById('liveUsers').textContent = dashData.stats.active_now || 0;
+                    document.getElementById('liveAsks').textContent = dashData.stats.active_asks || 0;
+                    document.getElementById('liveConnections').textContent = dashData.stats.total_connections || 0;
+                }
+                
+                // Daily summary
+                const summaryRes = await fetch(API_BASE + '/daily-summary');
+                const summaryData = await summaryRes.json();
+                if (summaryData.success) {
+                    const s = summaryData.summary;
+                    
+                    // Update cards
+                    document.getElementById('totalUsers').textContent = s.users.total_users || 0;
+                    document.getElementById('newUsersToday').textContent = (s.users.new_today || 0) + ' new today';
+                    document.getElementById('activeAsks').textContent = s.asks.active_asks || 0;
+                    document.getElementById('newAsksToday').textContent = (s.asks.new_today || 0) + ' new today';
+                    document.getElementById('totalIntros').textContent = s.connections.successful_intros || 0;
+                    document.getElementById('introsToday').textContent = (s.connections.intros_today || 0) + ' today';
+                    document.getElementById('pendingMatches').textContent = s.connections.pending_response || 0;
+                    
+                    // Summary content
+                    let summaryHtml = '';
+                    s.highlights.forEach(h => {
+                        summaryHtml += h + '<br>';
+                    });
+                    if (s.highlights.length === 0) {
+                        summaryHtml = 'No major highlights today. Keep building! 🚀';
+                    }
+                    document.getElementById('summaryContent').innerHTML = summaryHtml;
+                    
+                    // Alerts
+                    let alertsHtml = '';
+                    s.alerts.forEach(a => {
+                        alertsHtml += `<div class="alert ${a.level}">${a.level === 'critical' ? '🚨' : a.level === 'warning' ? '⚠️' : 'ℹ️'} ${a.message}</div>`;
+                    });
+                    document.getElementById('alertsContainer').innerHTML = alertsHtml;
+                    
+                    // Talent gaps
+                    let gapsHtml = '';
+                    (s.talent_gaps.top_gaps || []).slice(0, 5).forEach(g => {
+                        gapsHtml += `<tr>
+                            <td>${g.skill}</td>
+                            <td>${g.demand_count}</td>
+                            <td>${g.supply_count}</td>
+                            <td><strong>${g.gap_count}</strong></td>
+                            <td><span class="badge ${g.gap_severity === 'critical' ? 'closed' : g.gap_severity === 'high' ? 'pending' : 'active'}">${g.gap_severity}</span></td>
+                        </tr>`;
+                    });
+                    if (gapsHtml === '') gapsHtml = '<tr><td colspan="5">No talent gaps detected 🎉</td></tr>';
+                    document.getElementById('talentGapsTable').innerHTML = gapsHtml;
+                }
+                
+                document.getElementById('refreshTime').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
+            } catch (error) {
+                console.error('Dashboard error:', error);
+            }
+        }
+        
+        // Load Asks
+        async function loadAsks() {
+            try {
+                const res = await fetch(API_BASE + '/asks?limit=100');
+                const data = await res.json();
+                if (data.success) {
+                    let html = '';
+                    data.asks.forEach(a => {
+                        html += `<tr>
+                            <td>${a.id}</td>
+                            <td>${a.title || a.ask_text?.substring(0, 50) || '-'}</td>
+                            <td><span class="badge">${a.source || 'user'}</span></td>
+                            <td>${(a.skills_needed || []).join(', ') || '-'}</td>
+                            <td><span class="badge ${a.status}">${a.status}</span></td>
+                            <td>${a.matches_sent || 0}</td>
+                            <td>${timeAgo(a.created_at)}</td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="findMatches(${a.id})">Find Matches</button>
+                            </td>
+                        </tr>`;
+                    });
+                    if (html === '') html = '<tr><td colspan="8">No asks found</td></tr>';
+                    document.getElementById('asksTable').innerHTML = html;
+                }
+            } catch (error) {
+                console.error('Asks error:', error);
+            }
+        }
+        
+        // Load Users
+        async function loadUsers() {
+            try {
+                const res = await fetch(API_BASE + '/users?limit=100');
+                const data = await res.json();
+                if (data.success) {
+                    let html = '';
+                    data.users.forEach(u => {
+                        html += `<tr>
+                            <td>${u.user_id || u.id}</td>
+                            <td>${u.name || '-'}</td>
+                            <td>${u.phone || u.telegram_chat_id || '-'}</td>
+                            <td>${(u.skills || []).slice(0, 3).join(', ') || '-'}</td>
+                            <td>${u.completeness_score || 0}%</td>
+                            <td>${timeAgo(u.last_active_at)}</td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="viewUser(${u.user_id || u.id})">View</button>
+                            </td>
+                        </tr>`;
+                    });
+                    if (html === '') html = '<tr><td colspan="7">No users found</td></tr>';
+                    document.getElementById('usersTable').innerHTML = html;
+                }
+            } catch (error) {
+                console.error('Users error:', error);
+            }
+        }
+        
+        // Load Matches
+        async function loadMatches() {
+            try {
+                const res = await fetch(API_BASE + '/matches?limit=100');
+                const data = await res.json();
+                if (data.success) {
+                    let html = '';
+                    data.matches.forEach(m => {
+                        html += `<tr>
+                            <td>${m.id}</td>
+                            <td>${m.ask_title || '-'}</td>
+                            <td>${m.requester_name || '-'}</td>
+                            <td>${m.candidate_name || '-'}</td>
+                            <td>${m.match_score || '-'}%</td>
+                            <td><span class="badge ${m.status}">${m.status}</span></td>
+                            <td>${timeAgo(m.created_at)}</td>
+                            <td>
+                                ${m.status === 'proposed' ? `<button class="btn btn-primary" onclick="forceIntro(${m.id})">Force Intro</button>` : '-'}
+                            </td>
+                        </tr>`;
+                    });
+                    if (html === '') html = '<tr><td colspan="8">No matches found</td></tr>';
+                    document.getElementById('matchesTable').innerHTML = html;
+                }
+            } catch (error) {
+                console.error('Matches error:', error);
+            }
+        }
+        
+        // Load Agent Stats
+        async function loadAgentStats() {
+            try {
+                const res = await fetch(API_BASE + '/agents/stats');
+                const data = await res.json();
+                if (data.success) {
+                    const agents = [
+                        { name: 'TIM', emoji: '📋', stats: data.stats.tim, desc: 'Ask Manager' },
+                        { name: 'TWILA', emoji: '👤', stats: data.stats.twila, desc: 'Profile Manager' },
+                        { name: 'SAM', emoji: '🎯', stats: data.stats.sam, desc: 'Matchmaker' },
+                        { name: 'MAYA', emoji: '🤝', stats: data.stats.maya, desc: 'Connections' },
+                        { name: 'OLIVIA', emoji: '✅', stats: data.stats.olivia, desc: 'Outcomes' },
+                        { name: 'SARAH', emoji: '📈', stats: data.stats.sarah, desc: 'Talent Gaps' },
+                        { name: 'NORA', emoji: '🔔', stats: data.stats.nora, desc: 'Notifications' }
+                    ];
+                    
+                    let html = '';
+                    agents.forEach(a => {
+                        html += `<div class="agent-card">
+                            <div class="agent-name">${a.emoji} ${a.name}</div>
+                            <div style="font-size: 12px; color: #666; margin-bottom: 10px;">${a.desc}</div>`;
+                        if (a.stats) {
+                            Object.entries(a.stats).forEach(([key, value]) => {
+                                html += `<div class="agent-stat"><span>${key.replace(/_/g, ' ')}</span><span class="agent-stat-value">${value || 0}</span></div>`;
+                            });
+                        }
+                        html += `</div>`;
+                    });
+                    document.getElementById('agentGrid').innerHTML = html;
+                }
+            } catch (error) {
+                console.error('Agent stats error:', error);
+            }
+        }
+        
+        // Load Logs
+        async function loadLogs() {
+            try {
+                const agent = document.getElementById('logFilter').value;
+                const url = API_BASE + '/agent-logs?limit=100' + (agent ? '&agent=' + agent : '');
+                const res = await fetch(url);
+                const data = await res.json();
+                if (data.success) {
+                    let html = '';
+                    data.logs.forEach(l => {
+                        html += `<tr>
+                            <td>${formatDate(l.created_at)}</td>
+                            <td><strong>${l.agent_name.toUpperCase()}</strong></td>
+                            <td>${l.action}</td>
+                            <td>${l.user_name || l.user_id || '-'}</td>
+                            <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">${JSON.stringify(l.details || {}).substring(0, 100)}</td>
+                            <td><span class="badge ${l.success ? 'active' : 'closed'}">${l.success ? 'OK' : 'FAIL'}</span></td>
+                        </tr>`;
+                    });
+                    if (html === '') html = '<tr><td colspan="6">No logs found</td></tr>';
+                    document.getElementById('logsTable').innerHTML = html;
+                }
+            } catch (error) {
+                console.error('Logs error:', error);
+            }
+        }
+        
+        // Actions
+        async function findMatches(askId) {
+            try {
+                const res = await fetch(API_BASE + '/asks/' + askId + '/matches');
+                const data = await res.json();
+                if (data.success) {
+                    alert('Found ' + data.matches.length + ' matches!\n\n' + 
+                        data.matches.map(m => m.name + ' - ' + m.match_score + '%').join('\n'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        async function forceIntro(matchId) {
+            if (!confirm('Force send introduction for match #' + matchId + '?')) return;
+            try {
+                const res = await fetch(API_BASE + '/matches/' + matchId + '/force-intro', { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Introduction sent!');
+                    loadMatches();
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        async function runDailyTasks() {
+            if (!confirm('Run daily tasks for all agents?')) return;
+            try {
+                const res = await fetch(API_BASE + '/agents/run-daily', { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Daily tasks completed!\n\n' + JSON.stringify(data.results, null, 2));
+                    loadAgentStats();
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        function createAsk() {
+            const title = prompt('Ask title:');
+            if (!title) return;
+            const skills = prompt('Skills needed (comma separated):');
+            // TODO: Create ask modal
+            alert('Create ask feature coming soon!');
+        }
+        
+        function createMatch() {
+            alert('Create match feature coming soon!');
+        }
+        
+        function viewUser(userId) {
+            alert('View user feature coming soon!');
+        }
+        
+        // Initial load
+        loadDashboard();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadDashboard, 30000);
+    </script>
+</body>
+</html>
