@@ -3086,7 +3086,7 @@
             if (!phone) return { matches: [], count: 0 };
             
             try {
-                const response = await fetch(`${API_URL}/matches/${encodeURIComponent(phone)}/matches`);
+                const response = await fetch(`${API_URL}/users/${encodeURIComponent(phone)}/matches`);
                 const data = await response.json();
                 if (data.success) {
                     return { matches: data.matches, count: data.count };
@@ -3103,7 +3103,7 @@
             if (!phone) return { connections: [], count: 0 };
             
             try {
-                const response = await fetch(`${API_URL}/matches/${encodeURIComponent(phone)}/connections`);
+                const response = await fetch(`${API_URL}/users/${encodeURIComponent(phone)}/connections`);
                 const data = await response.json();
                 if (data.success) {
                     return { connections: data.connections, count: data.count };
