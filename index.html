@@ -3077,6 +3077,61 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     
     <script>
+        // ========== API CONFIGURATION ==========
+        const API_URL = 'https://tapinx-backend-production.up.railway.app/api';
+        
+        // Fetch matches (Attention Required) from API
+        async function fetchMatches() {
+            const phone = localStorage.getItem('tapinx_phone');
+            if (!phone) return { matches: [], count: 0 };
+            
+            try {
+                const response = await fetch(`${API_URL}/matches/${encodeURIComponent(phone)}/matches`);
+                const data = await response.json();
+                if (data.success) {
+                    return { matches: data.matches, count: data.count };
+                }
+            } catch (error) {
+                console.error('Error fetching matches:', error);
+            }
+            return { matches: [], count: 0 };
+        }
+        
+        // Fetch connections from API
+        async function fetchConnections() {
+            const phone = localStorage.getItem('tapinx_phone');
+            if (!phone) return { connections: [], count: 0 };
+            
+            try {
+                const response = await fetch(`${API_URL}/matches/${encodeURIComponent(phone)}/connections`);
+                const data = await response.json();
+                if (data.success) {
+                    return { connections: data.connections, count: data.count };
+                }
+            } catch (error) {
+                console.error('Error fetching connections:', error);
+            }
+            return { connections: [], count: 0 };
+        }
+        
+        // Respond to a match (accept/decline)
+        async function respondToMatch(matchId, action) {
+            const phone = localStorage.getItem('tapinx_phone');
+            if (!phone) return false;
+            
+            try {
+                const response = await fetch(`${API_URL}/matches/${matchId}/respond`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action, phone })
+                });
+                const data = await response.json();
+                return data.success;
+            } catch (error) {
+                console.error('Error responding to match:', error);
+                return false;
+            }
+        }
         // ========== FIREBASE CONFIGURATION ==========
         let auth = null;
         let recaptchaVerifier = null;
@@ -3853,8 +3908,9 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
         
-        // ========== DASHBOARD PAGE ==========
-        function loadDashboard() {
+    
+       // ========== DASHBOARD PAGE ==========
+       async function loadDashboard() {
             const name = localStorage.getItem('tapinx_user_name') || 'User';
             const bio = localStorage.getItem('tapinx_user_bio') || 'No bio yet';
             const photo = localStorage.getItem('tapinx_user_photo');
@@ -3891,8 +3947,35 @@
                     socials.innerHTML += `<a href="${url}" target="_blank" class="social-badge">${icon} ${label}</a>`;
                 }
             });
+            
+            // Fetch real data from API
+            const { count: matchCount } = await fetchMatches();
+            const { count: connectionCount } = await fetchConnections();
+            
+            // Update Attention Required count
+            const attentionDesc = document.querySelector('.attention-card-highlight .action-desc');
+            if (attentionDesc) {
+                if (matchCount === 0) {
+                    attentionDesc.textContent = 'No pending requests';
+                } else if (matchCount === 1) {
+                    attentionDesc.textContent = '1 opportunity waiting';
+                } else {
+                    attentionDesc.textContent = `${matchCount} opportunities waiting`;
+                }
+            }
+            
+            // Update connections count
+            const connectionsCard = document.querySelector('.action-card[onclick="showPage(\'connections\')"] .action-desc');
+            if (connectionsCard) {
+                if (connectionCount === 0) {
+                    connectionsCard.textContent = 'View your network';
+                } else if (connectionCount === 1) {
+                    connectionsCard.textContent = '1 connection';
+                } else {
+                    connectionsCard.textContent = `${connectionCount} connections`;
+                }
+            }
         }
-        
         function toggleDropdown(e) {
             e.stopPropagation();
             document.getElementById('dashDropdown').classList.toggle('active');
