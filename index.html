@@ -609,6 +609,11 @@
             background: #c40812;
         }
         
+        .modal-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
         .back-btn {
             background: none;
             border: none;
@@ -659,6 +664,262 @@
             cursor: pointer;
         }
         
+        /* Enhanced signup modal styles */
+        .modal-content {
+            max-width: 500px;
+        }
+        
+        .modal-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .modal-row .modal-form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        .modal-row .modal-form-group.small {
+            flex: 0 0 140px;
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        
+        .modal-input:focus {
+            border-color: #E50914;
+        }
+        
+        .modal-input::placeholder {
+            color: #999;
+        }
+        
+        .modal-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            font-family: inherit;
+            background: #fff;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+        }
+        
+        .modal-select:focus {
+            border-color: #E50914;
+        }
+        
+        .phone-row {
+            display: flex;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+        
+        .phone-row:focus-within {
+            border-color: #E50914;
+        }
+        
+        .country-dropdown {
+            position: relative;
+        }
+        
+        .country-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 14px 12px;
+            background: #f9f9f9;
+            border: none;
+            border-right: 1px solid #ddd;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: inherit;
+            min-width: 90px;
+        }
+        
+        .country-btn:hover {
+            background: #f0f0f0;
+        }
+        
+        .country-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            max-height: 250px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+            min-width: 280px;
+        }
+        
+        .country-list.active {
+            display: block;
+        }
+        
+        .country-search {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            background: #fff;
+        }
+        
+        .country-search input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            font-family: inherit;
+        }
+        
+        .country-search input:focus {
+            border-color: #E50914;
+        }
+        
+        .country-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .country-item:hover {
+            background: #f5f5f5;
+        }
+        
+        .country-item .flag {
+            font-size: 20px;
+        }
+        
+        .country-item .name {
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .country-item .code {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .phone-number-input {
+            flex: 1;
+            padding: 14px 16px;
+            border: none;
+            font-size: 16px;
+            outline: none;
+            font-family: inherit;
+        }
+        
+        .phone-number-input::placeholder {
+            color: #999;
+        }
+        
+        .modal-error {
+            color: #E50914;
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+        }
+        
+        .modal-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .modal-checkbox input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .modal-checkbox label {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .modal-checkbox a {
+            color: #E50914;
+            text-decoration: none;
+        }
+        
+        .resend-timer {
+            color: #999;
+        }
+        
+        /* Telegram redirect modal */
+        .telegram-modal {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .telegram-modal h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .telegram-modal p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .telegram-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 16px 32px;
+            background: #E50914;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        
+        .telegram-btn:hover {
+            background: #c40812;
+        }
+        
+        .telegram-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
         /* ========== EDIT PROFILE PAGE ========== */
         #editProfilePage {
             background: #fafafa;
@@ -1994,12 +2255,12 @@
                 <div style="margin-top: 60px;">
                     <p class="subtitle">No cold DMs. No awkward asks. No follower counts. <span class="underline">Just real connections.</span></p>
                     
-                    <a href="https://t.me/TapinXBot" target="_blank" class="cta-button">
+                    <button class="cta-button" onclick="openSignUp()">
                         <svg class="telegram-icon" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
                         </svg>
-                        Start on Telegram
-                    </a>
+                        Get Started
+                    </button>
                     
                     <p class="signin-link">Already have an account? <a onclick="openSignIn()">Sign in</a></p>
                 </div>
@@ -2698,46 +2959,154 @@
         </main>
     </div>
     
-    <!-- ========== SIGN IN MODAL ========== -->
+    <!-- ========== SIGN UP / SIGN IN MODAL ========== -->
     <div class="modal-overlay" id="signInModal" onclick="closeSignIn(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeSignIn()">&times;</button>
             
-            <div class="modal-step" id="phoneStep">
-                <h2 class="modal-title">Sign in</h2>
-                <div class="modal-form-group">
-                    <label class="modal-label">Phone Number?</label>
-                    <div class="phone-input-container">
-                        <button class="country-select">
-                            <span class="flag">🇺🇸</span>
-                            <span>+1</span>
-                            <span style="color:#999;font-size:10px;">▾</span>
-                        </button>
-                        <input type="tel" class="phone-input" id="phoneInput" placeholder="(123) 456-7890" oninput="updateSendBtn()">
+            <!-- Step 1: Basic Info -->
+            <div class="modal-step" id="signupStep">
+                <h2 class="modal-title">Join Tapinx</h2>
+                
+                <div class="modal-row">
+                    <div class="modal-form-group">
+                        <label class="modal-label">What's your name?</label>
+                        <input type="text" class="modal-input" id="signupName" placeholder="Full name" oninput="validateSignupForm()">
+                        <p class="modal-error" id="nameError">Please enter your full name</p>
+                    </div>
+                    <div class="modal-form-group small">
+                        <label class="modal-label">How old are you?</label>
+                        <select class="modal-select" id="signupAge" onchange="validateSignupForm()">
+                            <option value="">Age</option>
+                            <script>
+                                for(let i = 18; i <= 80; i++) {
+                                    document.write('<option value="'+i+'">'+i+'</option>');
+                                }
+                            </script>
+                        </select>
+                        <p class="modal-error" id="ageError">Required</p>
                     </div>
                 </div>
-                <button class="modal-btn" id="sendCodeBtn" onclick="sendCode()">Send Code</button>
+                
+                <div class="modal-form-group">
+                    <label class="modal-label">Phone Number</label>
+                    <div class="phone-row">
+                        <div class="country-dropdown">
+                            <button type="button" class="country-btn" onclick="toggleCountryList()">
+                                <span class="flag" id="selectedFlag">🇺🇸</span>
+                                <span id="selectedCode">+1</span>
+                                <span style="color:#999;font-size:10px;">▾</span>
+                            </button>
+                            <div class="country-list" id="countryList">
+                                <div class="country-search">
+                                    <input type="text" placeholder="Search country..." id="countrySearch" oninput="filterCountries()">
+                                </div>
+                                <div id="countryItems"></div>
+                            </div>
+                        </div>
+                        <input type="tel" class="phone-number-input" id="phoneInput" placeholder="(123) 456-7890" oninput="formatPhoneNumber(this); validateSignupForm();">
+                    </div>
+                    <p class="modal-error" id="phoneError">Please enter a valid phone number</p>
+                </div>
+                
+                <div class="modal-checkbox">
+                    <input type="checkbox" id="termsCheckbox" onchange="validateSignupForm()">
+                    <label for="termsCheckbox">You must be 18 or above to use Tapinx. <a href="#">View our TOS.</a></label>
+                </div>
+                
+                <button class="modal-btn" id="submitBtn" onclick="submitSignup()">Submit</button>
+                <div id="recaptcha-container"></div>
             </div>
             
+            <!-- Step 2: OTP Verification -->
             <div class="modal-step hidden" id="otpStep">
-                <button class="back-btn" onclick="showPhoneStep()">← Back</button>
-                <h2 class="modal-title">Enter code</h2>
-                <p class="modal-subtitle">We sent a code to <span id="phoneDisplay"></span></p>
+                <button class="back-btn" onclick="showSignupStep()">← Back</button>
+                <h2 class="modal-title">Enter Code</h2>
+                <p class="modal-subtitle">We sent a 6-digit code to <span id="phoneDisplay">+1 (123) 456-7890</span></p>
                 <div class="otp-inputs">
-                    <input type="text" class="otp-input" maxlength="1" id="otp1" oninput="otpNext(this, 'otp2')">
-                    <input type="text" class="otp-input" maxlength="1" id="otp2" oninput="otpNext(this, 'otp3')">
-                    <input type="text" class="otp-input" maxlength="1" id="otp3" oninput="otpNext(this, 'otp4')">
-                    <input type="text" class="otp-input" maxlength="1" id="otp4" oninput="otpNext(this, 'otp5')">
-                    <input type="text" class="otp-input" maxlength="1" id="otp5" oninput="otpNext(this, 'otp6')">
-                    <input type="text" class="otp-input" maxlength="1" id="otp6" oninput="verifyOtp()">
+                    <input type="text" inputmode="numeric" class="otp-input" maxlength="1" id="otp1" oninput="otpInput(this, 'otp2', null)" onkeydown="otpKeydown(event, null)">
+                    <input type="text" inputmode="numeric" class="otp-input" maxlength="1" id="otp2" oninput="otpInput(this, 'otp3', 'otp1')" onkeydown="otpKeydown(event, 'otp1')">
+                    <input type="text" inputmode="numeric" class="otp-input" maxlength="1" id="otp3" oninput="otpInput(this, 'otp4', 'otp2')" onkeydown="otpKeydown(event, 'otp2')">
+                    <input type="text" inputmode="numeric" class="otp-input" maxlength="1" id="otp4" oninput="otpInput(this, 'otp5', 'otp3')" onkeydown="otpKeydown(event, 'otp3')">
+                    <input type="text" inputmode="numeric" class="otp-input" maxlength="1" id="otp5" oninput="otpInput(this, 'otp6', 'otp4')" onkeydown="otpKeydown(event, 'otp4')">
+                    <input type="text" inputmode="numeric" class="otp-input" maxlength="1" id="otp6" oninput="otpInput(this, null, 'otp5')" onkeydown="otpKeydown(event, 'otp5')">
                 </div>
-                <p class="resend-text">Didn't receive code? <a onclick="alert('Code resent!')">Resend</a></p>
+                <p class="resend-text"><span class="resend-timer" id="resendTimer">Resend code in 60s</span><a id="resendLink" style="display:none;" onclick="resendCode()">Resend code</a></p>
                 <button class="modal-btn active" onclick="verifyOtp()">Verify</button>
+            </div>
+            
+            <!-- Step 3: Sign In (for returning users) -->
+            <div class="modal-step hidden" id="signinStep">
+                <h2 class="modal-title">Welcome back!</h2>
+                <div class="modal-form-group">
+                    <label class="modal-label">Phone Number</label>
+                    <div class="phone-row">
+                        <div class="country-dropdown">
+                            <button type="button" class="country-btn" onclick="toggleCountryList()">
+                                <span class="flag" id="selectedFlag2">🇺🇸</span>
+                                <span id="selectedCode2">+1</span>
+                                <span style="color:#999;font-size:10px;">▾</span>
+                            </button>
+                        </div>
+                        <input type="tel" class="phone-number-input" id="phoneInput2" placeholder="(123) 456-7890" oninput="formatPhoneNumber(this)">
+                    </div>
+                    <p class="modal-error" id="phoneError2">Please enter a valid phone number</p>
+                </div>
+                <button class="modal-btn active" id="signinBtn" onclick="sendSigninCode()">Send Code</button>
+                <p style="text-align:center;margin-top:16px;font-size:14px;color:#666;">New to Tapinx? <a style="color:#E50914;cursor:pointer;" onclick="showSignupStep()">Sign up</a></p>
             </div>
         </div>
     </div>
     
+    <!-- ========== TELEGRAM REDIRECT MODAL ========== -->
+    <div class="modal-overlay" id="telegramModal" onclick="closeTelegramModal(event)">
+        <div class="modal-content telegram-modal" onclick="event.stopPropagation()">
+            <h2>Let's Message Taj!</h2>
+            <p>Your AI friend who will walk you through everything and help you make amazing connections 🎯</p>
+            <a href="https://t.me/TapinXBot?start=welcome" target="_blank" class="telegram-btn" onclick="goToTelegram()">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
+                Chat with Taj on Telegram
+            </a>
+        </div>
+    </div>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    
     <script>
+        // ========== FIREBASE CONFIGURATION ==========
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqV46aMnuk3OzF-VjQ_AtCiH3RxQ4RYUs",
+            authDomain: "tapinx-e6a04.firebaseapp.com",
+            projectId: "tapinx-e6a04",
+            storageBucket: "tapinx-e6a04.firebasestorage.app",
+            messagingSenderId: "898635790224",
+            appId: "1:898635790224:web:0c2f5bcde9f20c27cb6515",
+            measurementId: "G-95VQG4X74F"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        
+        // reCAPTCHA verifier (required for phone auth)
+        let recaptchaVerifier = null;
+        let confirmationResult = null;
+        
+        function initRecaptcha() {
+            if (recaptchaVerifier) return;
+            
+            recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+                'size': 'invisible',
+                'callback': (response) => {
+                    // reCAPTCHA solved
+                }
+            });
+        }
+        
         // ========== PAGE NAVIGATION ==========
         function showPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -2767,61 +3136,533 @@
             }
         }
         
-        // ========== SIGN IN MODAL ==========
+        // ========== COUNTRY DATA ==========
+        const countries = [
+            { name: 'United States', code: '+1', flag: '🇺🇸' },
+            { name: 'United Kingdom', code: '+44', flag: '🇬🇧' },
+            { name: 'Canada', code: '+1', flag: '🇨🇦' },
+            { name: 'India', code: '+91', flag: '🇮🇳' },
+            { name: 'Australia', code: '+61', flag: '🇦🇺' },
+            { name: 'Germany', code: '+49', flag: '🇩🇪' },
+            { name: 'France', code: '+33', flag: '🇫🇷' },
+            { name: 'Italy', code: '+39', flag: '🇮🇹' },
+            { name: 'Spain', code: '+34', flag: '🇪🇸' },
+            { name: 'Brazil', code: '+55', flag: '🇧🇷' },
+            { name: 'Mexico', code: '+52', flag: '🇲🇽' },
+            { name: 'Japan', code: '+81', flag: '🇯🇵' },
+            { name: 'South Korea', code: '+82', flag: '🇰🇷' },
+            { name: 'China', code: '+86', flag: '🇨🇳' },
+            { name: 'Singapore', code: '+65', flag: '🇸🇬' },
+            { name: 'United Arab Emirates', code: '+971', flag: '🇦🇪' },
+            { name: 'Netherlands', code: '+31', flag: '🇳🇱' },
+            { name: 'Sweden', code: '+46', flag: '🇸🇪' },
+            { name: 'Switzerland', code: '+41', flag: '🇨🇭' },
+            { name: 'Ireland', code: '+353', flag: '🇮🇪' },
+            { name: 'New Zealand', code: '+64', flag: '🇳🇿' },
+            { name: 'South Africa', code: '+27', flag: '🇿🇦' },
+            { name: 'Nigeria', code: '+234', flag: '🇳🇬' },
+            { name: 'Kenya', code: '+254', flag: '🇰🇪' },
+            { name: 'Israel', code: '+972', flag: '🇮🇱' },
+            { name: 'Poland', code: '+48', flag: '🇵🇱' },
+            { name: 'Portugal', code: '+351', flag: '🇵🇹' },
+            { name: 'Russia', code: '+7', flag: '🇷🇺' },
+            { name: 'Turkey', code: '+90', flag: '🇹🇷' },
+            { name: 'Argentina', code: '+54', flag: '🇦🇷' },
+            { name: 'Chile', code: '+56', flag: '🇨🇱' },
+            { name: 'Colombia', code: '+57', flag: '🇨🇴' },
+            { name: 'Philippines', code: '+63', flag: '🇵🇭' },
+            { name: 'Thailand', code: '+66', flag: '🇹🇭' },
+            { name: 'Vietnam', code: '+84', flag: '🇻🇳' },
+            { name: 'Indonesia', code: '+62', flag: '🇮🇩' },
+            { name: 'Malaysia', code: '+60', flag: '🇲🇾' },
+            { name: 'Pakistan', code: '+92', flag: '🇵🇰' },
+            { name: 'Bangladesh', code: '+880', flag: '🇧🇩' },
+            { name: 'Egypt', code: '+20', flag: '🇪🇬' }
+        ];
+        
+        let selectedCountry = countries[0];
+        let resendTimer = null;
+        let isSigningIn = false; // Track if signing in vs signing up
+        
+        // Initialize country list
+        function initCountryList() {
+            const container = document.getElementById('countryItems');
+            if (!container) return;
+            container.innerHTML = countries.map(c => `
+                <div class="country-item" onclick="selectCountry('${c.code}', '${c.flag}', '${c.name}')">
+                    <span class="flag">${c.flag}</span>
+                    <span class="name">${c.name}</span>
+                    <span class="code">${c.code}</span>
+                </div>
+            `).join('');
+        }
+        
+        function toggleCountryList() {
+            const list = document.getElementById('countryList');
+            list.classList.toggle('active');
+            if (list.classList.contains('active')) {
+                document.getElementById('countrySearch').focus();
+            }
+        }
+        
+        function selectCountry(code, flag, name) {
+            selectedCountry = { code, flag, name };
+            document.getElementById('selectedFlag').textContent = flag;
+            document.getElementById('selectedCode').textContent = code;
+            if (document.getElementById('selectedFlag2')) {
+                document.getElementById('selectedFlag2').textContent = flag;
+                document.getElementById('selectedCode2').textContent = code;
+            }
+            document.getElementById('countryList').classList.remove('active');
+        }
+        
+        function filterCountries() {
+            const query = document.getElementById('countrySearch').value.toLowerCase();
+            const items = document.querySelectorAll('.country-item');
+            items.forEach(item => {
+                const name = item.querySelector('.name').textContent.toLowerCase();
+                item.style.display = name.includes(query) ? 'flex' : 'none';
+            });
+        }
+        
+        // Close country list when clicking outside
+        document.addEventListener('click', function(e) {
+            const countryList = document.getElementById('countryList');
+            const countryBtn = document.querySelector('.country-btn');
+            if (countryList && countryBtn && !countryList.contains(e.target) && !countryBtn.contains(e.target)) {
+                countryList.classList.remove('active');
+            }
+        });
+        
+        // ========== SIGN UP / SIGN IN MODAL ==========
+        function openSignUp() {
+            // If already logged in, go straight to dashboard
+            if (localStorage.getItem('tapinx_logged_in') === 'true') {
+                showPage('dashboard');
+                return;
+            }
+            isSigningIn = false;
+            document.getElementById('signInModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            showSignupStep();
+            initCountryList();
+        }
+        
         function openSignIn() {
             // If already logged in, go straight to dashboard
             if (localStorage.getItem('tapinx_logged_in') === 'true') {
                 showPage('dashboard');
                 return;
             }
+            isSigningIn = true;
             document.getElementById('signInModal').classList.add('active');
             document.body.style.overflow = 'hidden';
+            showSigninStep();
+            initCountryList();
         }
         
         function closeSignIn(event) {
             if (event && event.target !== event.currentTarget) return;
             document.getElementById('signInModal').classList.remove('active');
             document.body.style.overflow = '';
-            document.getElementById('phoneStep').classList.remove('hidden');
-            document.getElementById('otpStep').classList.add('hidden');
+            resetModal();
         }
         
-        function updateSendBtn() {
-            const btn = document.getElementById('sendCodeBtn');
-            if (document.getElementById('phoneInput').value.trim()) {
+        function resetModal() {
+            // Reset all steps
+            document.getElementById('signupStep').classList.remove('hidden');
+            document.getElementById('otpStep').classList.add('hidden');
+            document.getElementById('signinStep').classList.add('hidden');
+            
+            // Clear all inputs
+            document.getElementById('signupName').value = '';
+            document.getElementById('signupAge').value = '';
+            document.getElementById('phoneInput').value = '';
+            if (document.getElementById('phoneInput2')) document.getElementById('phoneInput2').value = '';
+            document.getElementById('termsCheckbox').checked = false;
+            ['otp1','otp2','otp3','otp4','otp5','otp6'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            
+            // Hide all errors
+            document.querySelectorAll('.modal-error').forEach(el => el.style.display = 'none');
+            
+            // Clear timer
+            if (resendTimer) clearInterval(resendTimer);
+        }
+        
+        function showSignupStep() {
+            document.getElementById('signupStep').classList.remove('hidden');
+            document.getElementById('otpStep').classList.add('hidden');
+            document.getElementById('signinStep').classList.add('hidden');
+        }
+        
+        function showSigninStep() {
+            document.getElementById('signupStep').classList.add('hidden');
+            document.getElementById('otpStep').classList.add('hidden');
+            document.getElementById('signinStep').classList.remove('hidden');
+        }
+        
+        function showOtpStep() {
+            document.getElementById('signupStep').classList.add('hidden');
+            document.getElementById('signinStep').classList.add('hidden');
+            document.getElementById('otpStep').classList.remove('hidden');
+            document.getElementById('otp1').focus();
+            startResendTimer();
+        }
+        
+        function formatPhoneNumber(input) {
+            let value = input.value.replace(/\D/g, '');
+            value = value.substring(0, 10);
+            
+            if (value.length > 6) {
+                value = '(' + value.substring(0, 3) + ') ' + value.substring(3, 6) + '-' + value.substring(6);
+            } else if (value.length > 3) {
+                value = '(' + value.substring(0, 3) + ') ' + value.substring(3);
+            } else if (value.length > 0) {
+                value = '(' + value;
+            }
+            
+            input.value = value;
+        }
+        
+        function validatePhoneNumber(phone) {
+            const digits = phone.replace(/\D/g, '');
+            return digits.length >= 10;
+        }
+        
+        function validateSignupForm() {
+            const name = document.getElementById('signupName').value.trim();
+            const age = document.getElementById('signupAge').value;
+            const phone = document.getElementById('phoneInput').value;
+            const terms = document.getElementById('termsCheckbox').checked;
+            const btn = document.getElementById('submitBtn');
+            
+            // Check if all fields are valid
+            const hasValidName = name && name.split(' ').filter(n => n).length >= 2;
+            const hasAge = age !== '';
+            const hasValidPhone = validatePhoneNumber(phone);
+            const hasTerms = terms;
+            
+            if (hasValidName && hasAge && hasValidPhone && hasTerms) {
                 btn.classList.add('active');
             } else {
                 btn.classList.remove('active');
             }
         }
         
-        function sendCode() {
+        function submitSignup() {
+            const name = document.getElementById('signupName').value.trim();
+            const age = document.getElementById('signupAge').value;
             const phone = document.getElementById('phoneInput').value;
-            if (!phone.trim()) return;
-            document.getElementById('phoneDisplay').textContent = '+1 ' + phone;
-            document.getElementById('phoneStep').classList.add('hidden');
-            document.getElementById('otpStep').classList.remove('hidden');
-            document.getElementById('otp1').focus();
+            const terms = document.getElementById('termsCheckbox').checked;
+            
+            let hasError = false;
+            
+            // Validate name (must have first and last name)
+            if (!name || name.split(' ').filter(n => n).length < 2) {
+                document.getElementById('nameError').textContent = 'Please enter your full name (first and last)';
+                document.getElementById('nameError').style.display = 'block';
+                hasError = true;
+            } else {
+                document.getElementById('nameError').style.display = 'none';
+            }
+            
+            // Validate age
+            if (!age) {
+                document.getElementById('ageError').style.display = 'block';
+                hasError = true;
+            } else {
+                document.getElementById('ageError').style.display = 'none';
+            }
+            
+            // Validate phone
+            if (!validatePhoneNumber(phone)) {
+                document.getElementById('phoneError').textContent = 'Please enter a valid phone number';
+                document.getElementById('phoneError').style.display = 'block';
+                hasError = true;
+            } else {
+                document.getElementById('phoneError').style.display = 'none';
+            }
+            
+            // Validate terms
+            if (!terms) {
+                alert('Please agree to the Terms of Service');
+                hasError = true;
+            }
+            
+            if (hasError) return;
+            
+            // Store signup data temporarily
+            localStorage.setItem('tapinx_signup_name', name);
+            localStorage.setItem('tapinx_signup_age', age);
+            localStorage.setItem('tapinx_signup_phone', selectedCountry.code + ' ' + phone);
+            
+            // Format phone for Firebase (E.164 format)
+            const phoneDigits = phone.replace(/\D/g, '');
+            const fullPhoneNumber = selectedCountry.code + phoneDigits;
+            
+            // Show loading state
+            const btn = document.getElementById('submitBtn');
+            btn.textContent = 'Sending code...';
+            btn.disabled = true;
+            
+            // Initialize reCAPTCHA and send OTP via Firebase
+            initRecaptcha();
+            
+            auth.signInWithPhoneNumber(fullPhoneNumber, recaptchaVerifier)
+                .then((result) => {
+                    confirmationResult = result;
+                    document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
+                    isSigningIn = false;
+                    showOtpStep();
+                    btn.textContent = 'Submit';
+                    btn.disabled = false;
+                })
+                .catch((error) => {
+                    console.error('SMS Error:', error);
+                    btn.textContent = 'Submit';
+                    btn.disabled = false;
+                    
+                    // Handle specific errors
+                    if (error.code === 'auth/invalid-phone-number') {
+                        document.getElementById('phoneError').textContent = 'Invalid phone number format';
+                        document.getElementById('phoneError').style.display = 'block';
+                    } else if (error.code === 'auth/too-many-requests') {
+                        alert('Too many attempts. Please try again later.');
+                    } else {
+                        alert('Failed to send code. Please try again.');
+                    }
+                    
+                    // Reset reCAPTCHA
+                    recaptchaVerifier = null;
+                });
         }
         
-        function showPhoneStep() {
-            document.getElementById('phoneStep').classList.remove('hidden');
-            document.getElementById('otpStep').classList.add('hidden');
+        function sendSigninCode() {
+            const phone = document.getElementById('phoneInput2').value;
+            
+            if (!validatePhoneNumber(phone)) {
+                document.getElementById('phoneError2').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('phoneError2').style.display = 'none';
+            
+            // Format phone for Firebase (E.164 format)
+            const phoneDigits = phone.replace(/\D/g, '');
+            const fullPhoneNumber = selectedCountry.code + phoneDigits;
+            
+            // Show loading state
+            const btn = document.getElementById('signinBtn');
+            btn.textContent = 'Sending code...';
+            btn.disabled = true;
+            
+            // Initialize reCAPTCHA and send OTP via Firebase
+            initRecaptcha();
+            
+            auth.signInWithPhoneNumber(fullPhoneNumber, recaptchaVerifier)
+                .then((result) => {
+                    confirmationResult = result;
+                    document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
+                    isSigningIn = true;
+                    showOtpStep();
+                    btn.textContent = 'Send Code';
+                    btn.disabled = false;
+                })
+                .catch((error) => {
+                    console.error('SMS Error:', error);
+                    btn.textContent = 'Send Code';
+                    btn.disabled = false;
+                    
+                    if (error.code === 'auth/invalid-phone-number') {
+                        document.getElementById('phoneError2').textContent = 'Invalid phone number format';
+                        document.getElementById('phoneError2').style.display = 'block';
+                    } else if (error.code === 'auth/too-many-requests') {
+                        alert('Too many attempts. Please try again later.');
+                    } else {
+                        alert('Failed to send code. Please try again.');
+                    }
+                    
+                    recaptchaVerifier = null;
+                });
         }
         
-        function otpNext(current, nextId) {
-            if (current.value.length === 1) {
-                const next = document.getElementById(nextId);
-                if (next) next.focus();
+        function startResendTimer() {
+            let seconds = 60;
+            const timerEl = document.getElementById('resendTimer');
+            const linkEl = document.getElementById('resendLink');
+            
+            timerEl.style.display = 'inline';
+            linkEl.style.display = 'none';
+            
+            if (resendTimer) clearInterval(resendTimer);
+            
+            resendTimer = setInterval(() => {
+                seconds--;
+                timerEl.textContent = `Resend code in ${seconds}s`;
+                
+                if (seconds <= 0) {
+                    clearInterval(resendTimer);
+                    timerEl.style.display = 'none';
+                    linkEl.style.display = 'inline';
+                }
+            }, 1000);
+        }
+        
+        function otpInput(current, nextId, prevId) {
+            current.value = current.value.replace(/\D/g, '');
+            
+            if (current.value.length === 1 && nextId) {
+                document.getElementById(nextId).focus();
+            }
+            
+            const otp = ['otp1','otp2','otp3','otp4','otp5','otp6'].map(id => document.getElementById(id).value).join('');
+            if (otp.length === 6) {
+                verifyOtp();
+            }
+        }
+        
+        function otpKeydown(event, prevId) {
+            if (event.key === 'Backspace' && event.target.value === '' && prevId) {
+                document.getElementById(prevId).focus();
             }
         }
         
         function verifyOtp() {
             const otp = ['otp1','otp2','otp3','otp4','otp5','otp6'].map(id => document.getElementById(id).value).join('');
+            
             if (otp.length === 6) {
-                closeSignIn();
-                showPage('editProfile');
+                // Show loading state on verify button
+                const verifyBtn = document.querySelector('#otpStep .modal-btn');
+                verifyBtn.textContent = 'Verifying...';
+                verifyBtn.disabled = true;
+                
+                // Verify with Firebase
+                if (confirmationResult) {
+                    confirmationResult.confirm(otp)
+                        .then((result) => {
+                            // User signed in successfully
+                            const user = result.user;
+                            console.log('User verified:', user.phoneNumber);
+                            
+                            // Store Firebase UID
+                            localStorage.setItem('tapinx_uid', user.uid);
+                            
+                            verifyBtn.textContent = 'Verify';
+                            verifyBtn.disabled = false;
+                            closeSignIn();
+                            
+                            if (isSigningIn) {
+                                // Returning user - go to dashboard
+                                localStorage.setItem('tapinx_logged_in', 'true');
+                                showPage('dashboard');
+                            } else {
+                                // New user - transfer signup data to profile
+                                const name = localStorage.getItem('tapinx_signup_name') || '';
+                                const age = localStorage.getItem('tapinx_signup_age') || '';
+                                const phone = localStorage.getItem('tapinx_signup_phone') || '';
+                                
+                                localStorage.setItem('tapinx_user_name', name);
+                                localStorage.setItem('tapinx_user_age', age);
+                                localStorage.setItem('tapinx_phone', phone);
+                                
+                                // Clean up signup data
+                                localStorage.removeItem('tapinx_signup_name');
+                                localStorage.removeItem('tapinx_signup_age');
+                                localStorage.removeItem('tapinx_signup_phone');
+                                
+                                showPage('editProfile');
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Verification error:', error);
+                            verifyBtn.textContent = 'Verify';
+                            verifyBtn.disabled = false;
+                            
+                            if (error.code === 'auth/invalid-verification-code') {
+                                alert('Invalid code. Please check and try again.');
+                            } else if (error.code === 'auth/code-expired') {
+                                alert('Code expired. Please request a new one.');
+                            } else {
+                                alert('Verification failed. Please try again.');
+                            }
+                            
+                            // Clear OTP inputs
+                            ['otp1','otp2','otp3','otp4','otp5','otp6'].forEach(id => {
+                                document.getElementById(id).value = '';
+                            });
+                            document.getElementById('otp1').focus();
+                        });
+                } else {
+                    // Fallback for demo mode (no Firebase configured)
+                    console.log('Demo mode: Firebase not configured');
+                    verifyBtn.textContent = 'Verify';
+                    verifyBtn.disabled = false;
+                    closeSignIn();
+                    
+                    if (isSigningIn) {
+                        localStorage.setItem('tapinx_logged_in', 'true');
+                        showPage('dashboard');
+                    } else {
+                        const name = localStorage.getItem('tapinx_signup_name') || '';
+                        const age = localStorage.getItem('tapinx_signup_age') || '';
+                        const phone = localStorage.getItem('tapinx_signup_phone') || '';
+                        
+                        localStorage.setItem('tapinx_user_name', name);
+                        localStorage.setItem('tapinx_user_age', age);
+                        localStorage.setItem('tapinx_phone', phone);
+                        
+                        localStorage.removeItem('tapinx_signup_name');
+                        localStorage.removeItem('tapinx_signup_age');
+                        localStorage.removeItem('tapinx_signup_phone');
+                        
+                        showPage('editProfile');
+                    }
+                }
             }
+        }
+        
+        function resendCode() {
+            // Resend OTP using Firebase
+            const phone = document.getElementById('phoneDisplay').textContent;
+            const phoneDigits = phone.replace(/[^\d+]/g, '');
+            
+            initRecaptcha();
+            
+            auth.signInWithPhoneNumber(phoneDigits, recaptchaVerifier)
+                .then((result) => {
+                    confirmationResult = result;
+                    startResendTimer();
+                })
+                .catch((error) => {
+                    console.error('Resend error:', error);
+                    alert('Failed to resend code. Please try again.');
+                    recaptchaVerifier = null;
+                });
+        }
+        
+        // ========== TELEGRAM MODAL ==========
+        function showTelegramModal() {
+            document.getElementById('telegramModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeTelegramModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('telegramModal').classList.remove('active');
+            document.body.style.overflow = '';
+            showPage('dashboard');
+        }
+        
+        function goToTelegram() {
+            // Close modal and go to dashboard after a short delay
+            setTimeout(() => {
+                document.getElementById('telegramModal').classList.remove('active');
+                document.body.style.overflow = '';
+                showPage('dashboard');
+            }, 500);
         }
         
         // ========== PROFILE PAGE ==========
@@ -2904,6 +3745,9 @@
             
             if (!name || validateUrl(linkedin, 'linkedin') !== 'valid') return;
             
+            // Check if this is a new user (first time saving)
+            const isNewUser = !localStorage.getItem('tapinx_logged_in');
+            
             localStorage.setItem('tapinx_logged_in', 'true');
             localStorage.setItem('tapinx_user_name', name);
             localStorage.setItem('tapinx_user_bio', bio);
@@ -2919,7 +3763,14 @@
             }
             
             showToast('Profile saved!');
-            setTimeout(() => showPage('dashboard'), 1500);
+            
+            if (isNewUser) {
+                // Show Telegram modal for new users
+                setTimeout(() => showTelegramModal(), 1500);
+            } else {
+                // Go to dashboard for returning users
+                setTimeout(() => showPage('dashboard'), 1500);
+            }
         }
         
         function showToast(msg) {
