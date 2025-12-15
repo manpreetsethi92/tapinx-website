@@ -3689,33 +3689,12 @@
                             });
                             document.getElementById('otp1').focus();
                         });
-                } else {
-                    // Fallback for demo mode (no Firebase configured)
-                    console.log('Demo mode: Firebase not configured');
+                    } else {
+                    // No confirmation result - show error
+                    alert('Something went wrong. Please try again.');
                     verifyBtn.textContent = 'Verify';
                     verifyBtn.disabled = false;
-                    closeSignIn();
-                    
-                    if (isSigningIn) {
-                        localStorage.setItem('tapinx_logged_in', 'true');
-                        showPage('dashboard');
-                    } else {
-                        const name = localStorage.getItem('tapinx_signup_name') || '';
-                        const age = localStorage.getItem('tapinx_signup_age') || '';
-                        const phone = localStorage.getItem('tapinx_signup_phone') || '';
-                        
-                        localStorage.setItem('tapinx_user_name', name);
-                        localStorage.setItem('tapinx_user_age', age);
-                        localStorage.setItem('tapinx_phone', phone);
-                        
-                        localStorage.removeItem('tapinx_signup_name');
-                        localStorage.removeItem('tapinx_signup_age');
-                        localStorage.removeItem('tapinx_signup_phone');
-                        
-                        showPage('editProfile');
-                    }
                 }
-            }
         }
         
         function resendCode() {
