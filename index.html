@@ -4302,24 +4302,24 @@
         
         function renderProposalCard(match) {
             const timeAgo = formatTimeAgo(match.created_at);
-            return \`
-                <div class="proposal-card" data-type="intro" data-status="active" data-id="\${match.id}">
+            return `
+                <div class="proposal-card" data-type="intro" data-status="active" data-id="${match.id}">
                     <div class="proposal-badge job">Introduction</div>
                     <div class="proposal-header">
                         <div class="proposal-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">T</div>
                         <div class="proposal-meta">
-                            <div class="proposal-from">From <strong>Taj</strong> • \${timeAgo}</div>
+                            <div class="proposal-from">From <strong>Taj</strong> • ${timeAgo}</div>
                         </div>
                     </div>
-                    <h3 class="proposal-title">Connect with \${match.other_name || 'someone'}</h3>
-                    <p class="proposal-desc">\${match.intro_message || 'Taj wants to introduce you to someone in the network.'}</p>
+                    <h3 class="proposal-title">Connect with ${match.other_name || 'someone'}</h3>
+                    <p class="proposal-desc">${match.intro_message || 'Taj wants to introduce you to someone in the network.'}</p>
                     <div class="proposal-actions">
                         <button class="proposal-btn primary" onclick="markInterested(this)">I'm Interested</button>
                         <button class="proposal-btn secondary" onclick="markPassed(this)">Not for me</button>
                         <button class="proposal-btn tertiary" onclick="askTajMore(this, 'this connection')">Ask Taj more</button>
                     </div>
                 </div>
-            \`;
+            `;
         }
         
         function formatTimeAgo(dateString) {
