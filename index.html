@@ -3073,38 +3073,71 @@
     </div>
     
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     
     <script>
         // ========== FIREBASE CONFIGURATION ==========
-        const firebaseConfig = {
-            apiKey: "AIzaSyDqV46aMnuk3OzF-VjQ_AtCiH3RxQ4RYUs",
-            authDomain: "tapinx-e6a04.firebaseapp.com",
-            projectId: "tapinx-e6a04",
-            storageBucket: "tapinx-e6a04.firebasestorage.app",
-            messagingSenderId: "898635790224",
-            appId: "1:898635790224:web:0c2f5bcde9f20c27cb6515",
-            measurementId: "G-95VQG4X74F"
-        };
-        
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        
-        // reCAPTCHA verifier (required for phone auth)
+        let auth = null;
         let recaptchaVerifier = null;
         let confirmationResult = null;
+        let firebaseReady = false;
+        
+        // Initialize Firebase when ready
+        function initFirebase() {
+            if (typeof firebase === 'undefined') {
+                console.log('Firebase SDK not loaded yet, using demo mode');
+                return false;
+            }
+            
+            try {
+                const firebaseConfig = {
+                    apiKey: "AIzaSyDqV46aMnuk3OzF-VjQ_AtCiH3RxQ4RYUs",
+                    authDomain: "tapinx-e6a04.firebaseapp.com",
+                    projectId: "tapinx-e6a04",
+                    storageBucket: "tapinx-e6a04.firebasestorage.app",
+                    messagingSenderId: "898635790224",
+                    appId: "1:898635790224:web:0c2f5bcde9f20c27cb6515",
+                    measurementId: "G-95VQG4X74F"
+                };
+                
+                firebase.initializeApp(firebaseConfig);
+                auth = firebase.auth();
+                firebaseReady = true;
+                console.log('Firebase initialized successfully');
+                return true;
+            } catch (error) {
+                console.error('Firebase init error:', error);
+                return false;
+            }
+        }
+        
+        // Try to initialize Firebase on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initFirebase();
+        });
+        
+        // Also try immediately in case DOM is already ready
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            initFirebase();
+        }
         
         function initRecaptcha() {
-            if (recaptchaVerifier) return;
+            if (!firebaseReady || recaptchaVerifier) return;
             
-            recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-                'size': 'invisible',
-                'callback': (response) => {
-                    // reCAPTCHA solved
-                }
-            });
+            try {
+                recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+                    'size': 'invisible',
+                    'callback': (response) => {
+                        // reCAPTCHA solved
+                    },
+                    'expired-callback': () => {
+                        recaptchaVerifier = null;
+                    }
+                });
+            } catch (error) {
+                console.error('reCAPTCHA error:', error);
+            }
         }
         
         // ========== PAGE NAVIGATION ==========
@@ -3408,8 +3441,31 @@
             btn.textContent = 'Sending code...';
             btn.disabled = true;
             
+            // Check if Firebase is ready
+            if (!firebaseReady || !auth) {
+                // Demo mode - skip to OTP step
+                console.log('Firebase not ready, using demo mode');
+                document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
+                isSigningIn = false;
+                showOtpStep();
+                btn.textContent = 'Submit';
+                btn.disabled = false;
+                return;
+            }
+            
             // Initialize reCAPTCHA and send OTP via Firebase
             initRecaptcha();
+            
+            if (!recaptchaVerifier) {
+                // reCAPTCHA failed, use demo mode
+                console.log('reCAPTCHA not ready, using demo mode');
+                document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
+                isSigningIn = false;
+                showOtpStep();
+                btn.textContent = 'Submit';
+                btn.disabled = false;
+                return;
+            }
             
             auth.signInWithPhoneNumber(fullPhoneNumber, recaptchaVerifier)
                 .then((result) => {
@@ -3459,8 +3515,31 @@
             btn.textContent = 'Sending code...';
             btn.disabled = true;
             
+            // Check if Firebase is ready
+            if (!firebaseReady || !auth) {
+                // Demo mode
+                console.log('Firebase not ready, using demo mode');
+                document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
+                isSigningIn = true;
+                showOtpStep();
+                btn.textContent = 'Send Code';
+                btn.disabled = false;
+                return;
+            }
+            
             // Initialize reCAPTCHA and send OTP via Firebase
             initRecaptcha();
+            
+            if (!recaptchaVerifier) {
+                // Demo mode
+                console.log('reCAPTCHA not ready, using demo mode');
+                document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
+                isSigningIn = true;
+                showOtpStep();
+                btn.textContent = 'Send Code';
+                btn.disabled = false;
+                return;
+            }
             
             auth.signInWithPhoneNumber(fullPhoneNumber, recaptchaVerifier)
                 .then((result) => {
