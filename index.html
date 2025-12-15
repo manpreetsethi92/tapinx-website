@@ -3135,7 +3135,8 @@
             
             try {
                 recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-                    'size': 'invisible'
+                    'size': 'invisible',
+                    'siteKey': '6Lfq8issAAAAADs1c6CAivmsgzIVlV1W4uaYTLR7'
                 });
                 recaptchaVerifier.render().then(function(widgetId) {
                     console.log('reCAPTCHA rendered successfully');
