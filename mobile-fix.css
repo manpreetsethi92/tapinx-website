@@ -3,68 +3,101 @@
     /* Header */
     .header {
         padding: 8px 16px !important;
-        padding-top: 12px !important;
+        position: relative !important;
     }
     
     .logo {
-        font-size: 18px !important;
+        font-size: 20px !important;
     }
     
-    .header-signin {
-        display: none !important;
-    }
-    
-    .header-right {
+    .header-signin, .header-right {
         display: none !important;
     }
     
     /* Hero Section */
     #landingPage .hero {
-        grid-template-columns: 1fr !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
         text-align: center !important;
-        padding: 20px 24px 40px !important;
-        min-height: auto !important;
+        padding: 10px 20px 30px !important;
+        min-height: calc(100vh - 50px) !important;
+        gap: 0 !important;
     }
     
-    .hero-text h1 {
-        font-size: 18px !important;
-        line-height: 1.3 !important;
-        white-space: nowrap !important;
-    }
-    
-    /* Hide the old subtitle */
-    .hero-text .subtitle:first-of-type {
-        display: none !important;
-    }
-    
-    .hero-text .subtitle {
-        font-size: 15px !important;
-        line-height: 1.5 !important;
-    }
-    
-    /* Phone mockup - show on mobile */
+    /* Phone mockup - centered and scaled */
     .hero-visual {
-        display: block !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
         position: relative !important;
-        width: 280px !important;
-        height: 380px !important;
-        margin: 0 auto 30px !important;
-        order: -1 !important;
+        width: 100% !important;
+        max-width: 320px !important;
+        height: auto !important;
+        margin: 0 auto 20px !important;
+        transform: scale(0.7) !important;
+        transform-origin: center center !important;
     }
     
     .phone-container {
-        width: 180px !important;
-        height: 360px !important;
-        right: 0 !important;
+        position: relative !important;
         left: auto !important;
-        top: 20px !important;
+        right: auto !important;
+        margin: 0 auto !important;
     }
     
-    /* CTA Button - smaller */
+    /* Hide 5th bubble in each set */
+    .bubble-5, .bubble-10, .bubble-15, .bubble-20, .bubble-25, 
+    .bubble-30, .bubble-35, .bubble-40 {
+        display: none !important;
+    }
+    
+    /* Make bubbles smaller on mobile */
+    .message-bubble {
+        font-size: 12px !important;
+        padding: 10px 14px !important;
+        max-width: 160px !important;
+    }
+    
+    /* Adjust bubble positions to be more centered */
+    [class*="bubble-incoming"] {
+        left: -40px !important;
+    }
+    
+    [class*="bubble-outgoing"] {
+        right: -40px !important;
+    }
+    
+    /* Hero text */
+    .hero-text {
+        order: 2 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        width: 100% !important;
+    }
+    
+    .hero-text h1 {
+        font-size: 22px !important;
+        line-height: 1.3 !important;
+        margin-bottom: 12px !important;
+    }
+    
+    /* Subtitle */
+    .hero-text .subtitle {
+        font-size: 14px !important;
+        line-height: 1.6 !important;
+        color: #666 !important;
+        margin-bottom: 16px !important;
+    }
+    
+    /* CTA Button */
     .cta-button {
         padding: 12px 28px !important;
         font-size: 14px !important;
         gap: 8px !important;
+        margin-top: 8px !important;
     }
     
     .cta-button .telegram-icon {
@@ -72,53 +105,30 @@
         height: 16px !important;
     }
     
-    /* Profile/Dashboard */
-    .profile-name {
-        display: none !important;
+    .signin-link {
+        font-size: 13px !important;
+        margin-top: 12px !important;
     }
     
-    .dropdown-arrow {
-        display: none !important;
-    }
-    
-    /* Cards */
-    .action-cards {
-        grid-template-columns: 1fr !important;
-        padding: 0 16px !important;
-        gap: 16px !important;
-    }
-    
-    /* Modal */
-    .modal-content {
-        width: 95% !important;
-        max-width: none !important;
-        margin: 10px !important;
-        padding: 24px 20px !important;
-        max-height: 90vh !important;
-        overflow-y: auto !important;
-    }
-    
-    /* OTP Inputs */
-    .otp-container {
-        gap: 8px !important;
-    }
-    
-    .otp-input {
-        width: 45px !important;
-        height: 50px !important;
-        font-size: 20px !important;
+    /* Remove extra margins */
+    .hero-text > div[style*="margin-top"] {
+        margin-top: 20px !important;
     }
 }
 
 /* Extra small devices */
 @media (max-width: 380px) {
     .hero-text h1 {
-        font-size: 16px !important;
+        font-size: 20px !important;
     }
     
-    .otp-input {
-        width: 40px !important;
-        height: 45px !important;
-        font-size: 18px !important;
+    .hero-visual {
+        transform: scale(0.6) !important;
+    }
+    
+    .message-bubble {
+        font-size: 11px !important;
+        padding: 8px 12px !important;
+        max-width: 140px !important;
     }
 }
