@@ -19,14 +19,14 @@
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        justify-content: center !important;
+        justify-content: flex-start !important;
         text-align: center !important;
         padding: 10px 20px 30px !important;
         min-height: calc(100vh - 50px) !important;
         gap: 0 !important;
     }
     
-    /* Phone mockup - centered and scaled */
+    /* Phone mockup - centered and scaled, more space below */
     .hero-visual {
         display: flex !important;
         justify-content: center !important;
@@ -34,8 +34,8 @@
         position: relative !important;
         width: 100% !important;
         max-width: 320px !important;
-        height: 320px !important;
-        margin: 0 auto 15px !important;
+        height: 380px !important;
+        margin: 0 auto 40px !important;
     }
     
     .phone-container {
@@ -53,52 +53,52 @@
         display: none !important;
     }
     
-    /* Reposition remaining 4 bubbles */
-    .bubble-1 { top: 15% !important; left: -30px !important; }
-    .bubble-2 { top: 32% !important; right: -25px !important; }
-    .bubble-3 { top: 49% !important; left: -35px !important; }
-    .bubble-4 { top: 66% !important; right: -30px !important; }
+    /* Reposition remaining 4 bubbles - moved up slightly */
+    .bubble-1 { top: 10% !important; left: -30px !important; }
+    .bubble-2 { top: 25% !important; right: -25px !important; }
+    .bubble-3 { top: 40% !important; left: -35px !important; }
+    .bubble-4 { top: 55% !important; right: -30px !important; }
     
-    .bubble-6 { top: 15% !important; right: -30px !important; }
-    .bubble-7 { top: 32% !important; left: -25px !important; }
-    .bubble-8 { top: 49% !important; right: -35px !important; }
-    .bubble-9 { top: 66% !important; left: -30px !important; }
+    .bubble-6 { top: 10% !important; right: -30px !important; }
+    .bubble-7 { top: 25% !important; left: -25px !important; }
+    .bubble-8 { top: 40% !important; right: -35px !important; }
+    .bubble-9 { top: 55% !important; left: -30px !important; }
     
-    .bubble-11 { top: 15% !important; left: -25px !important; }
-    .bubble-12 { top: 32% !important; right: -30px !important; }
-    .bubble-13 { top: 49% !important; left: -30px !important; }
-    .bubble-14 { top: 66% !important; right: -25px !important; }
+    .bubble-11 { top: 10% !important; left: -25px !important; }
+    .bubble-12 { top: 25% !important; right: -30px !important; }
+    .bubble-13 { top: 40% !important; left: -30px !important; }
+    .bubble-14 { top: 55% !important; right: -25px !important; }
     
-    .bubble-16 { top: 15% !important; right: -35px !important; }
-    .bubble-17 { top: 32% !important; left: -30px !important; }
-    .bubble-18 { top: 49% !important; right: -25px !important; }
-    .bubble-19 { top: 66% !important; left: -35px !important; }
+    .bubble-16 { top: 10% !important; right: -35px !important; }
+    .bubble-17 { top: 25% !important; left: -30px !important; }
+    .bubble-18 { top: 40% !important; right: -25px !important; }
+    .bubble-19 { top: 55% !important; left: -35px !important; }
     
-    .bubble-21 { top: 15% !important; left: -30px !important; }
-    .bubble-22 { top: 32% !important; right: -35px !important; }
-    .bubble-23 { top: 49% !important; left: -25px !important; }
-    .bubble-24 { top: 66% !important; right: -30px !important; }
+    .bubble-21 { top: 10% !important; left: -30px !important; }
+    .bubble-22 { top: 25% !important; right: -35px !important; }
+    .bubble-23 { top: 40% !important; left: -25px !important; }
+    .bubble-24 { top: 55% !important; right: -30px !important; }
     
-    .bubble-26 { top: 15% !important; right: -25px !important; }
-    .bubble-27 { top: 32% !important; left: -35px !important; }
-    .bubble-28 { top: 49% !important; right: -30px !important; }
-    .bubble-29 { top: 66% !important; left: -25px !important; }
+    .bubble-26 { top: 10% !important; right: -25px !important; }
+    .bubble-27 { top: 25% !important; left: -35px !important; }
+    .bubble-28 { top: 40% !important; right: -30px !important; }
+    .bubble-29 { top: 55% !important; left: -25px !important; }
     
-    .bubble-31 { top: 15% !important; left: -35px !important; }
-    .bubble-32 { top: 32% !important; right: -25px !important; }
-    .bubble-33 { top: 49% !important; left: -30px !important; }
-    .bubble-34 { top: 66% !important; right: -35px !important; }
+    .bubble-31 { top: 10% !important; left: -35px !important; }
+    .bubble-32 { top: 25% !important; right: -25px !important; }
+    .bubble-33 { top: 40% !important; left: -30px !important; }
+    .bubble-34 { top: 55% !important; right: -35px !important; }
     
-    .bubble-36 { top: 15% !important; right: -30px !important; }
-    .bubble-37 { top: 32% !important; left: -25px !important; }
-    .bubble-38 { top: 49% !important; right: -35px !important; }
-    .bubble-39 { top: 66% !important; left: -30px !important; }
+    .bubble-36 { top: 10% !important; right: -30px !important; }
+    .bubble-37 { top: 25% !important; left: -25px !important; }
+    .bubble-38 { top: 40% !important; right: -35px !important; }
+    .bubble-39 { top: 55% !important; left: -30px !important; }
     
-    /* Make bubbles smaller */
+    /* Make bubbles text bigger (was 11px, now ~15px) */
     .message-bubble {
-        font-size: 11px !important;
-        padding: 8px 12px !important;
-        max-width: 140px !important;
+        font-size: 15px !important;
+        padding: 10px 14px !important;
+        max-width: 160px !important;
     }
     
     /* Hero text */
@@ -257,13 +257,13 @@
     }
     
     .hero-visual {
-        height: 280px !important;
+        height: 340px !important;
     }
     
     .message-bubble {
-        font-size: 10px !important;
-        padding: 6px 10px !important;
-        max-width: 120px !important;
+        font-size: 13px !important;
+        padding: 8px 12px !important;
+        max-width: 140px !important;
     }
     
     .welcome-section h1 {
