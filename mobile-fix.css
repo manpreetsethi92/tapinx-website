@@ -147,80 +147,79 @@
     /* ========== DASHBOARD PAGE ========== */
     #dashboardPage {
         min-height: 100vh !important;
-        padding-bottom: 20px !important;
+    }
+    
+    #dashboardPage .header {
+        padding: 8px 16px !important;
     }
     
     .dashboard-content {
-        padding: 60px 16px 20px !important;
-        min-height: calc(100vh - 60px) !important;
-        display: flex !important;
-        flex-direction: column !important;
+        padding: 50px 16px 16px !important;
     }
     
     .welcome-section {
-        padding: 15px 0 !important;
-        margin-bottom: 10px !important;
-    }
-    
-    .welcome-section h1 {
-        font-size: 24px !important;
-        margin-bottom: 4px !important;
-    }
-    
-    .welcome-section p {
-        font-size: 14px !important;
-    }
-    
-    /* Profile Card - much smaller */
-    .profile-card {
-        padding: 16px !important;
-        margin-bottom: 12px !important;
-    }
-    
-    .profile-card .avatar {
-        width: 50px !important;
-        height: 50px !important;
-    }
-    
-    .profile-card .avatar span {
-        font-size: 20px !important;
-    }
-    
-    .profile-card h2 {
-        font-size: 18px !important;
-        margin: 8px 0 2px !important;
-    }
-    
-    .profile-card .bio {
-        font-size: 13px !important;
+        padding: 8px 0 !important;
         margin-bottom: 8px !important;
     }
     
-    .profile-card .linkedin-btn {
-        padding: 6px 14px !important;
-        font-size: 12px !important;
+    .welcome-section h1 {
+        font-size: 22px !important;
+        margin-bottom: 2px !important;
     }
     
-    /* Action Cards - compact */
+    .welcome-section p {
+        font-size: 13px !important;
+    }
+    
+    /* Profile Card - compact */
+    .profile-card {
+        padding: 12px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .profile-card .avatar {
+        width: 45px !important;
+        height: 45px !important;
+    }
+    
+    .profile-card .avatar span {
+        font-size: 18px !important;
+    }
+    
+    .profile-card h2 {
+        font-size: 16px !important;
+        margin: 6px 0 2px !important;
+    }
+    
+    .profile-card .bio {
+        font-size: 12px !important;
+        margin-bottom: 6px !important;
+    }
+    
+    .profile-card .linkedin-btn {
+        padding: 5px 12px !important;
+        font-size: 11px !important;
+    }
+    
+    /* Action Cards - more compact */
     .action-cards {
         display: flex !important;
         flex-direction: column !important;
-        gap: 10px !important;
-        flex: 1 !important;
+        gap: 8px !important;
     }
     
     .action-card {
-        padding: 14px 16px !important;
+        padding: 12px 14px !important;
         min-height: auto !important;
     }
     
     .action-card h3 {
-        font-size: 15px !important;
-        margin-bottom: 2px !important;
+        font-size: 14px !important;
+        margin-bottom: 1px !important;
     }
     
     .action-card p {
-        font-size: 12px !important;
+        font-size: 11px !important;
         color: #666 !important;
     }
     
@@ -267,15 +266,23 @@
     }
     
     .welcome-section h1 {
-        font-size: 22px !important;
+        font-size: 20px !important;
     }
     
     .profile-card .avatar {
-        width: 45px !important;
-        height: 45px !important;
+        width: 40px !important;
+        height: 40px !important;
     }
     
     .action-card {
-        padding: 12px 14px !important;
+        padding: 10px 12px !important;
+    }
+    
+    .action-card h3 {
+        font-size: 13px !important;
+    }
+    
+    .action-card p {
+        font-size: 10px !important;
     }
 }
