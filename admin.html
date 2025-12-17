@@ -883,81 +883,70 @@
             return diffDays + 'd ago';
         }
         
-        // Load Dashboard - handles multiple API response formats
+        // Load Dashboard - aggregate from working endpoints
         async function loadDashboard() {
             try {
-                const res = await fetch(API_BASE + '/dashboard');
-                const data = await res.json();
-                console.log('API Response:', data);
+                // Fetch from all working endpoints in parallel
+                const [usersRes, asksRes, matchesRes, gapsRes] = await Promise.all([
+                    fetch(API_BASE + '/users?limit=1000').catch(() => null),
+                    fetch(API_BASE + '/asks?limit=1000').catch(() => null),
+                    fetch(API_BASE + '/matches?limit=1000').catch(() => null),
+                    fetch(API_BASE + '/talent-gaps').catch(() => null)
+                ]);
                 
-                // Handle different possible response formats
-                let d = null;
-                if (data.dashboard) {
-                    d = data.dashboard;
-                } else if (data.data) {
-                    d = data.data;
-                } else if (data.total_users !== undefined) {
-                    d = data; // Data is at root level
-                }
+                const usersData = usersRes ? await usersRes.json() : {};
+                const asksData = asksRes ? await asksRes.json() : {};
+                const matchesData = matchesRes ? await matchesRes.json() : {};
+                const gapsData = gapsRes ? await gapsRes.json() : {};
                 
-                if (d) {
-                    const totalUsers = d.total_users ?? d.totalUsers ?? 0;
-                    const activeAsks = d.active_asks ?? d.activeAsks ?? 0;
-                    const intros = d.successful_intros ?? d.successfulIntros ?? d.total_intros ?? 0;
-                    const pending = d.pending_matches ?? d.pendingMatches ?? 0;
-                    
-                    document.getElementById('totalUsers').textContent = totalUsers;
-                    document.getElementById('activeAsks').textContent = activeAsks;
-                    document.getElementById('totalIntros').textContent = intros;
-                    document.getElementById('pendingMatches').textContent = pending;
-                    document.getElementById('liveUsers').textContent = totalUsers;
-                    document.getElementById('liveAsks').textContent = activeAsks;
-                    document.getElementById('liveConnections').textContent = intros;
-                    
-                    document.getElementById('summaryContent').innerHTML = 
-                        `Your network has <span class="highlight">${totalUsers} members</span> with 
-                        <span class="highlight-blue">${activeAsks} active requests</span>. 
-                        <span class="highlight-purple">${intros} successful introductions</span> made, 
-                        <span class="highlight">${pending} matches</span> pending.`;
-                    
-                    // Talent Gaps
-                    const gaps = d.talent_gaps || d.talentGaps || [];
-                    if (gaps.length > 0) {
-                        let gapsHtml = '';
-                        gaps.forEach(g => {
-                            gapsHtml += `<tr>
-                                <td><strong>${g.skill_name || g.skill}</strong></td>
-                                <td>${g.demand_count || g.demand || 0}</td>
-                                <td>${g.supply_count || g.supply || 0}</td>
-                                <td>${(g.demand_count || g.demand || 0) - (g.supply_count || g.supply || 0)}</td>
-                                <td><span class="badge ${g.severity === 'critical' ? 'closed' : (g.severity === 'high' ? 'pending' : 'active')}">${(g.severity || 'low').toUpperCase()}</span></td>
-                            </tr>`;
-                        });
-                        document.getElementById('talentGapsTable').innerHTML = gapsHtml;
-                    } else {
-                        document.getElementById('talentGapsTable').innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">No talent gaps identified</td></tr>';
-                    }
+                // Count from actual data
+                const users = usersData.users || usersData.data || [];
+                const asks = asksData.asks || asksData.data || [];
+                const matches = matchesData.matches || matchesData.data || [];
+                const gaps = gapsData.gaps || gapsData.data || [];
+                
+                const totalUsers = users.length;
+                const activeAsks = asks.filter(a => a.status === 'active').length;
+                const successfulIntros = matches.filter(m => m.status === 'intro_sent' || m.status === 'accepted' || m.status === 'connected').length;
+                const pendingMatches = matches.filter(m => m.status === 'proposed' || m.status === 'pending').length;
+                
+                // Update UI
+                document.getElementById('totalUsers').textContent = totalUsers;
+                document.getElementById('activeAsks').textContent = activeAsks;
+                document.getElementById('totalIntros').textContent = successfulIntros;
+                document.getElementById('pendingMatches').textContent = pendingMatches;
+                document.getElementById('liveUsers').textContent = totalUsers;
+                document.getElementById('liveAsks').textContent = activeAsks;
+                document.getElementById('liveConnections').textContent = successfulIntros;
+                
+                document.getElementById('summaryContent').innerHTML = 
+                    `Your network has <span class="highlight">${totalUsers} members</span> with 
+                    <span class="highlight-blue">${activeAsks} active requests</span>. 
+                    <span class="highlight-purple">${successfulIntros} introductions</span> sent, 
+                    <span class="highlight">${pendingMatches} matches</span> pending response.`;
+                
+                // Talent Gaps
+                if (gaps.length > 0) {
+                    let gapsHtml = '';
+                    gaps.forEach(g => {
+                        gapsHtml += `<tr>
+                            <td><strong>${g.skill_name || g.skill}</strong></td>
+                            <td>${g.demand_count || g.demand || 0}</td>
+                            <td>${g.supply_count || g.supply || 0}</td>
+                            <td>${(g.demand_count || g.demand || 0) - (g.supply_count || g.supply || 0)}</td>
+                            <td><span class="badge ${g.severity === 'critical' ? 'closed' : (g.severity === 'high' ? 'pending' : 'active')}">${(g.severity || 'low').toUpperCase()}</span></td>
+                        </tr>`;
+                    });
+                    document.getElementById('talentGapsTable').innerHTML = gapsHtml;
                 } else {
-                    setDashboardDefaults();
+                    document.getElementById('talentGapsTable').innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">No talent gaps identified</td></tr>';
                 }
                 
                 document.getElementById('refreshTime').textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             } catch (error) {
                 console.error('Dashboard error:', error);
-                setDashboardDefaults();
+                document.getElementById('summaryContent').innerHTML = 'Error loading data: ' + error.message;
             }
-        }
-        
-        function setDashboardDefaults() {
-            document.getElementById('totalUsers').textContent = '0';
-            document.getElementById('activeAsks').textContent = '0';
-            document.getElementById('totalIntros').textContent = '0';
-            document.getElementById('pendingMatches').textContent = '0';
-            document.getElementById('liveUsers').textContent = '0';
-            document.getElementById('liveAsks').textContent = '0';
-            document.getElementById('liveConnections').textContent = '0';
-            document.getElementById('summaryContent').innerHTML = 'Unable to load data. Check API connection.';
-            document.getElementById('talentGapsTable').innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No data</td></tr>';
         }
         
         async function loadAsks() {
