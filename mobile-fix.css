@@ -392,3 +392,21 @@
         font-size: 22px !important;
     }
 }
+
+/* Phone Row Fix */
+.phone-row {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.country-btn {
+    display: flex !important;
+}
+
+.country-list {
+    display: none !important;
+}
+
+.country-list.active {
+    display: block !important;
+}
