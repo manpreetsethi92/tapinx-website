@@ -9,24 +9,25 @@
         right: 0 !important;
         z-index: 100 !important;
         background: rgba(255,255,255,0.95) !important;
+        height: 50px !important;
     }
     
     .logo {
         font-size: 20px !important;
     }
     
-    .header-signin, .header-right {
+    .header-signin {
         display: none !important;
     }
     
-    /* ========== ALL PAGES - reduce top padding ========== */
+    /* ========== ALL PAGES - minimal top padding ========== */
     .page {
         padding-top: 50px !important;
     }
     
     .page-back-btn {
-        margin-top: 10px !important;
-        margin-bottom: 10px !important;
+        margin-top: 0 !important;
+        margin-bottom: 8px !important;
     }
     
     /* ========== LANDING PAGE ========== */
@@ -120,7 +121,7 @@
         max-width: 180px !important;
     }
     
-    /* Hero text - more space from phone */
+    /* Hero text */
     .hero-text {
         order: 2 !important;
         display: flex !important;
@@ -164,57 +165,66 @@
     /* ========== DASHBOARD PAGE ========== */
     #dashboardPage {
         min-height: 100vh !important;
+        padding-top: 50px !important;
+    }
+    
+    #dashboardPage .header {
+        position: fixed !important;
     }
     
     .dashboard-content {
-        padding: 50px 16px 16px !important;
+        padding: 8px 16px 16px !important;
+        margin-top: 0 !important;
     }
     
     .welcome-section {
-        padding: 8px 0 !important;
-        margin-bottom: 8px !important;
+        padding: 0 !important;
+        margin-bottom: 10px !important;
     }
     
     .welcome-section h1 {
         font-size: 22px !important;
         margin-bottom: 2px !important;
+        margin-top: 0 !important;
     }
     
     .welcome-section p {
         font-size: 13px !important;
+        margin: 0 !important;
     }
     
-    /* Profile Card - compact */
+    /* Profile Card */
     .profile-card {
-        padding: 12px !important;
-        margin-bottom: 8px !important;
+        padding: 14px !important;
+        margin-bottom: 10px !important;
+        margin-top: 10px !important;
     }
     
     .profile-card .avatar {
-        width: 45px !important;
-        height: 45px !important;
+        width: 50px !important;
+        height: 50px !important;
     }
     
     .profile-card .avatar span {
-        font-size: 18px !important;
+        font-size: 20px !important;
     }
     
     .profile-card h2 {
         font-size: 16px !important;
-        margin: 6px 0 2px !important;
+        margin: 8px 0 2px !important;
     }
     
     .profile-card .bio {
         font-size: 12px !important;
-        margin-bottom: 6px !important;
+        margin-bottom: 8px !important;
     }
     
     .profile-card .linkedin-btn {
-        padding: 5px 12px !important;
-        font-size: 11px !important;
+        padding: 6px 14px !important;
+        font-size: 12px !important;
     }
     
-    /* Action Cards - more compact */
+    /* Action Cards */
     .action-cards {
         display: flex !important;
         flex-direction: column !important;
@@ -222,73 +232,95 @@
     }
     
     .action-card {
-        padding: 12px 14px !important;
+        padding: 14px 16px !important;
         min-height: auto !important;
     }
     
     .action-card h3 {
-        font-size: 14px !important;
-        margin-bottom: 1px !important;
+        font-size: 15px !important;
+        margin-bottom: 2px !important;
     }
     
     .action-card p {
-        font-size: 11px !important;
+        font-size: 12px !important;
         color: #666 !important;
     }
     
-    /* ========== CONNECTIONS PAGE ========== */
-    #connectionsPage {
+    /* ========== INNER PAGES (Connections, Attention, etc) ========== */
+    #connectionsPage,
+    #attentionPage,
+    #opportunitiesPage,
+    #invitePage {
         padding-top: 50px !important;
     }
     
-    #connectionsPage > div {
-        padding: 10px 16px !important;
-    }
-    
-    #connectionsPage h1 {
-        font-size: 22px !important;
-        margin-bottom: 4px !important;
-    }
-    
-    #connectionsPage > div > p {
-        font-size: 13px !important;
-        margin-bottom: 12px !important;
-    }
-    
-    /* ========== ATTENTION/OPPORTUNITIES PAGE ========== */
-    #attentionPage, 
-    #opportunitiesPage {
-        padding-top: 50px !important;
-    }
-    
+    #connectionsPage > div,
     #attentionPage > div,
-    #opportunitiesPage > div {
-        padding: 10px 16px !important;
+    #opportunitiesPage > div,
+    #invitePage > div {
+        padding: 8px 16px 16px !important;
     }
     
+    /* Back button - tight to header */
+    #connectionsPage .page-back-btn,
+    #attentionPage .page-back-btn,
+    #opportunitiesPage .page-back-btn,
+    #invitePage .page-back-btn {
+        margin-top: 0 !important;
+        margin-bottom: 10px !important;
+        padding-top: 0 !important;
+    }
+    
+    /* Page titles - no extra margin */
+    #connectionsPage h1,
     #attentionPage h1,
-    #opportunitiesPage h1 {
-        font-size: 22px !important;
+    #opportunitiesPage h1,
+    #invitePage h1 {
+        font-size: 24px !important;
+        margin-top: 0 !important;
         margin-bottom: 4px !important;
+    }
+    
+    #connectionsPage > div > p,
+    #attentionPage > div > p,
+    #opportunitiesPage > div > p {
+        font-size: 14px !important;
+        margin-bottom: 15px !important;
+        margin-top: 0 !important;
     }
     
     /* Tab navigation */
     .tab-nav {
-        margin-top: 10px !important;
+        margin-top: 12px !important;
+        margin-bottom: 15px !important;
     }
     
     .tab-btn {
-        padding: 8px 12px !important;
-        font-size: 13px !important;
+        padding: 10px 14px !important;
+        font-size: 14px !important;
     }
     
     /* Search input */
     .search-input,
     input[type="search"],
     input[placeholder*="Search"] {
-        padding: 10px 14px !important;
+        padding: 12px 16px !important;
+        font-size: 15px !important;
+        margin-bottom: 12px !important;
+    }
+    
+    /* Empty state */
+    .empty-state {
+        padding: 30px 20px !important;
+    }
+    
+    .empty-state h3 {
+        font-size: 18px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .empty-state p {
         font-size: 14px !important;
-        margin-bottom: 10px !important;
     }
     
     /* Modal */
@@ -339,19 +371,24 @@
     }
     
     .profile-card .avatar {
-        width: 40px !important;
-        height: 40px !important;
+        width: 45px !important;
+        height: 45px !important;
     }
     
     .action-card {
-        padding: 10px 12px !important;
+        padding: 12px 14px !important;
     }
     
     .action-card h3 {
-        font-size: 13px !important;
+        font-size: 14px !important;
     }
     
     .action-card p {
-        font-size: 10px !important;
+        font-size: 11px !important;
+    }
+    
+    #connectionsPage h1,
+    #attentionPage h1 {
+        font-size: 22px !important;
     }
 }
