@@ -3,7 +3,12 @@
     /* Header */
     .header {
         padding: 8px 16px !important;
-        position: relative !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 100 !important;
+        background: rgba(255,255,255,0.95) !important;
     }
     
     .logo {
@@ -12,6 +17,25 @@
     
     .header-signin, .header-right {
         display: none !important;
+    }
+    
+    /* ========== ALL PAGES - reduce top padding ========== */
+    .page {
+        padding-top: 50px !important;
+    }
+    
+    .page-back-btn {
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    /* Page titles */
+    .page-title, 
+    .page h1:first-of-type,
+    .connections-page h1,
+    .attention-page h1 {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
     }
     
     /* ========== LANDING PAGE ========== */
@@ -53,7 +77,7 @@
         display: none !important;
     }
     
-    /* Reposition remaining 4 bubbles - moved up slightly */
+    /* Reposition remaining 4 bubbles */
     .bubble-1 { top: 10% !important; left: -30px !important; }
     .bubble-2 { top: 25% !important; right: -25px !important; }
     .bubble-3 { top: 40% !important; left: -35px !important; }
@@ -94,7 +118,7 @@
     .bubble-38 { top: 40% !important; right: -35px !important; }
     .bubble-39 { top: 55% !important; left: -30px !important; }
     
-    /* Make bubbles text bigger (was 11px, now ~15px) */
+    /* Make bubbles text bigger */
     .message-bubble {
         font-size: 15px !important;
         padding: 10px 14px !important;
@@ -147,10 +171,6 @@
     /* ========== DASHBOARD PAGE ========== */
     #dashboardPage {
         min-height: 100vh !important;
-    }
-    
-    #dashboardPage .header {
-        padding: 8px 16px !important;
     }
     
     .dashboard-content {
@@ -221,6 +241,61 @@
     .action-card p {
         font-size: 11px !important;
         color: #666 !important;
+    }
+    
+    /* ========== CONNECTIONS PAGE ========== */
+    #connectionsPage {
+        padding-top: 50px !important;
+    }
+    
+    #connectionsPage > div {
+        padding: 10px 16px !important;
+    }
+    
+    #connectionsPage h1 {
+        font-size: 22px !important;
+        margin-bottom: 4px !important;
+    }
+    
+    #connectionsPage > div > p {
+        font-size: 13px !important;
+        margin-bottom: 12px !important;
+    }
+    
+    /* ========== ATTENTION/OPPORTUNITIES PAGE ========== */
+    #attentionPage, 
+    #opportunitiesPage {
+        padding-top: 50px !important;
+    }
+    
+    #attentionPage > div,
+    #opportunitiesPage > div {
+        padding: 10px 16px !important;
+    }
+    
+    #attentionPage h1,
+    #opportunitiesPage h1 {
+        font-size: 22px !important;
+        margin-bottom: 4px !important;
+    }
+    
+    /* Tab navigation */
+    .tab-nav {
+        margin-top: 10px !important;
+    }
+    
+    .tab-btn {
+        padding: 8px 12px !important;
+        font-size: 13px !important;
+    }
+    
+    /* Search input */
+    .search-input,
+    input[type="search"],
+    input[placeholder*="Search"] {
+        padding: 10px 14px !important;
+        font-size: 14px !important;
+        margin-bottom: 10px !important;
     }
     
     /* Modal */
