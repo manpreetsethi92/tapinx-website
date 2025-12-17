@@ -40,7 +40,7 @@
             top: 0;
             left: 0;
             right: 0;
-            z-index: 9999;
+            z-index: 100;
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
         }
@@ -117,7 +117,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: visible;
+            overflow: hidden;
         }
         
         .avatar span {
@@ -551,7 +551,7 @@
             display: flex;
             border: 1px solid #ddd;
             border-radius: 8px;
-            overflow: visible;
+            overflow: hidden;
         }
         
         .phone-input-container:focus-within {
@@ -727,7 +727,7 @@
             display: flex;
             border: 1px solid #ddd;
             border-radius: 8px;
-            overflow: visible;
+            overflow: hidden;
             transition: border-color 0.2s;
         }
         
@@ -767,7 +767,7 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             max-height: 250px;
             overflow-y: auto;
-            z-index: 9999;
+            z-index: 100;
             display: none;
             min-width: 280px;
         }
@@ -975,7 +975,7 @@
             height: 90px;
             border-radius: 50%;
             margin: 0 auto 12px;
-            overflow: visible;
+            overflow: hidden;
             cursor: pointer;
         }
         
@@ -1224,7 +1224,7 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 16px;
-            overflow: visible;
+            overflow: hidden;
         }
         
         .profile-avatar-large span {
@@ -1734,7 +1734,7 @@
             font-size: 13px;
             color: #666;
             white-space: nowrap;
-            overflow: visible;
+            overflow: hidden;
             text-overflow: ellipsis;
         }
         
