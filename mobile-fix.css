@@ -14,7 +14,7 @@
         display: none !important;
     }
     
-    /* Hero Section */
+    /* ========== LANDING PAGE ========== */
     #landingPage .hero {
         display: flex !important;
         flex-direction: column !important;
@@ -47,62 +47,54 @@
         transform-origin: center center !important;
     }
     
-    /* Hide 5th bubble in each set (bubbles 5, 10, 15, 20, 25, 30, 35, 40) */
+    /* Hide 5th bubble in each set */
     .bubble-5, .bubble-10, .bubble-15, .bubble-20, 
     .bubble-25, .bubble-30, .bubble-35, .bubble-40 {
         display: none !important;
     }
     
-    /* Reposition remaining 4 bubbles to fill the space evenly */
-    /* Set 1 */
+    /* Reposition remaining 4 bubbles */
     .bubble-1 { top: 15% !important; left: -30px !important; }
     .bubble-2 { top: 32% !important; right: -25px !important; }
     .bubble-3 { top: 49% !important; left: -35px !important; }
     .bubble-4 { top: 66% !important; right: -30px !important; }
     
-    /* Set 2 */
     .bubble-6 { top: 15% !important; right: -30px !important; }
     .bubble-7 { top: 32% !important; left: -25px !important; }
     .bubble-8 { top: 49% !important; right: -35px !important; }
     .bubble-9 { top: 66% !important; left: -30px !important; }
     
-    /* Set 3 */
     .bubble-11 { top: 15% !important; left: -25px !important; }
     .bubble-12 { top: 32% !important; right: -30px !important; }
     .bubble-13 { top: 49% !important; left: -30px !important; }
     .bubble-14 { top: 66% !important; right: -25px !important; }
     
-    /* Set 4 */
     .bubble-16 { top: 15% !important; right: -35px !important; }
     .bubble-17 { top: 32% !important; left: -30px !important; }
     .bubble-18 { top: 49% !important; right: -25px !important; }
     .bubble-19 { top: 66% !important; left: -35px !important; }
     
-    /* Set 5 */
     .bubble-21 { top: 15% !important; left: -30px !important; }
     .bubble-22 { top: 32% !important; right: -35px !important; }
     .bubble-23 { top: 49% !important; left: -25px !important; }
     .bubble-24 { top: 66% !important; right: -30px !important; }
     
-    /* Set 6 */
     .bubble-26 { top: 15% !important; right: -25px !important; }
     .bubble-27 { top: 32% !important; left: -35px !important; }
     .bubble-28 { top: 49% !important; right: -30px !important; }
     .bubble-29 { top: 66% !important; left: -25px !important; }
     
-    /* Set 7 */
     .bubble-31 { top: 15% !important; left: -35px !important; }
     .bubble-32 { top: 32% !important; right: -25px !important; }
     .bubble-33 { top: 49% !important; left: -30px !important; }
     .bubble-34 { top: 66% !important; right: -35px !important; }
     
-    /* Set 8 */
     .bubble-36 { top: 15% !important; right: -30px !important; }
     .bubble-37 { top: 32% !important; left: -25px !important; }
     .bubble-38 { top: 49% !important; right: -35px !important; }
     .bubble-39 { top: 66% !important; left: -30px !important; }
     
-    /* Make bubbles smaller on mobile */
+    /* Make bubbles smaller */
     .message-bubble {
         font-size: 11px !important;
         padding: 8px 12px !important;
@@ -124,7 +116,6 @@
         margin-bottom: 10px !important;
     }
     
-    /* Subtitle */
     .hero-text .subtitle {
         font-size: 14px !important;
         line-height: 1.6 !important;
@@ -132,7 +123,6 @@
         margin-bottom: 14px !important;
     }
     
-    /* CTA Button */
     .cta-button {
         padding: 12px 28px !important;
         font-size: 14px !important;
@@ -150,9 +140,109 @@
         margin-top: 10px !important;
     }
     
-    /* Remove extra margins */
     .hero-text > div[style*="margin-top"] {
         margin-top: 15px !important;
+    }
+    
+    /* ========== DASHBOARD PAGE ========== */
+    #dashboardPage {
+        min-height: 100vh !important;
+        padding-bottom: 20px !important;
+    }
+    
+    .dashboard-content {
+        padding: 60px 16px 20px !important;
+        min-height: calc(100vh - 60px) !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    .welcome-section {
+        padding: 15px 0 !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .welcome-section h1 {
+        font-size: 24px !important;
+        margin-bottom: 4px !important;
+    }
+    
+    .welcome-section p {
+        font-size: 14px !important;
+    }
+    
+    /* Profile Card - much smaller */
+    .profile-card {
+        padding: 16px !important;
+        margin-bottom: 12px !important;
+    }
+    
+    .profile-card .avatar {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .profile-card .avatar span {
+        font-size: 20px !important;
+    }
+    
+    .profile-card h2 {
+        font-size: 18px !important;
+        margin: 8px 0 2px !important;
+    }
+    
+    .profile-card .bio {
+        font-size: 13px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .profile-card .linkedin-btn {
+        padding: 6px 14px !important;
+        font-size: 12px !important;
+    }
+    
+    /* Action Cards - compact */
+    .action-cards {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        flex: 1 !important;
+    }
+    
+    .action-card {
+        padding: 14px 16px !important;
+        min-height: auto !important;
+    }
+    
+    .action-card h3 {
+        font-size: 15px !important;
+        margin-bottom: 2px !important;
+    }
+    
+    .action-card p {
+        font-size: 12px !important;
+        color: #666 !important;
+    }
+    
+    /* Modal */
+    .modal-content {
+        width: 95% !important;
+        max-width: none !important;
+        margin: 10px !important;
+        padding: 24px 20px !important;
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+    }
+    
+    /* OTP Inputs */
+    .otp-container {
+        gap: 8px !important;
+    }
+    
+    .otp-input {
+        width: 45px !important;
+        height: 50px !important;
+        font-size: 20px !important;
     }
 }
 
@@ -174,5 +264,18 @@
         font-size: 10px !important;
         padding: 6px 10px !important;
         max-width: 120px !important;
+    }
+    
+    .welcome-section h1 {
+        font-size: 22px !important;
+    }
+    
+    .profile-card .avatar {
+        width: 45px !important;
+        height: 45px !important;
+    }
+    
+    .action-card {
+        padding: 12px 14px !important;
     }
 }
