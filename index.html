@@ -3303,7 +3303,7 @@
         }
         
         function selectCountry(code, flag, name) {
-            selectedCountry = { code, flag, name };
+            selectedCountry = { code, flag, name }; var phoneInput = document.getElementById('phoneInput'); if (phoneInput) { phoneInput.value = ''; var formats = {'+1':'(000) 000-0000', '+91':'00000 00000', '+44':'0000 000000', '+61':'000 000 000', '+971':'00 000 0000'}; phoneInput.placeholder = formats[code] || '0000000000'; }
             document.getElementById('selectedFlag').textContent = flag;
             document.getElementById('selectedCode').textContent = code;
             if (document.getElementById('selectedFlag2')) {
