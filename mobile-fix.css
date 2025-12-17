@@ -160,6 +160,8 @@
     }
     
     .signin-link {
+        font-size: 11px !important;
+        opacity: 0.6 !important;
         font-size: 13px !important;
         margin-top: 10px !important;
     }
