@@ -3311,6 +3311,12 @@
                 document.getElementById('selectedCode2').textContent = code;
             }
             document.getElementById('countryList').classList.remove('active');
+            // Update phone placeholder based on country format
+            var phoneInput = document.getElementById('phoneInput');
+            if (phoneInput) {
+                phoneInput.value = '';
+                phoneInput.placeholder = selectedCountry.format ? selectedCountry.format.replace(/#/g, '0') : '(123) 456-7890';
+            }
         }
         
         function filterCountries() {
