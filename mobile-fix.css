@@ -303,7 +303,7 @@
     /* Search input */
     .search-input,
     input[type="search"],
-    input[placeholder*="Search"] {
+    input.search-connections-input {
         padding: 12px 16px !important;
         font-size: 15px !important;
         margin-bottom: 12px !important;
