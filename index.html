@@ -3311,6 +3311,8 @@
                 document.getElementById('selectedCode2').textContent = code;
             }
             document.getElementById('countryList').classList.remove('active');
+            var phoneInput = document.getElementById('phoneInput');
+            if (phoneInput) { phoneInput.value = ''; }
             // Update phone placeholder based on country format
             var phoneInput = document.getElementById('phoneInput');
             if (phoneInput) {
