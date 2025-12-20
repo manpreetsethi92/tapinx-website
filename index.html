@@ -301,12 +301,11 @@
         
         .phone-container {
             position: relative;
-            display: inline-block;
+            overflow: visible;
         }
         
         .phone-frame {
             position: relative;
-            display: block;
         }
         
         .phone-frame img.frame {
@@ -316,25 +315,15 @@
             display: block;
         }
         
-        /* Phone screen area - overlay on top of the phone image */
-        .phone-screen {
-            position: absolute;
-            top: 12%;
-            left: 6%;
-            width: 88%;
-            height: 76%;
-            overflow: hidden;
-        }
-        
-        /* Message Bubbles - positioned inside phone-screen */
+        /* Message Bubbles */
         .message-bubble {
             position: absolute;
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-size: 11px;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 13px;
             font-weight: 400;
-            max-width: 42%;
-            line-height: 1.4;
+            max-width: 140px;
+            line-height: 1.45;
             opacity: 0;
             z-index: 10;
         }
@@ -343,52 +332,32 @@
             background: #1F2937;
             color: #FFFFFF;
             border-bottom-left-radius: 4px;
-            left: 4%;
-            right: auto;
         }
         
         .bubble-outgoing {
             background: #F3F4F6;
             color: #111111;
             border-bottom-right-radius: 4px;
-            right: 4%;
-            left: auto;
         }
         
-        /* Bubble Positions - INSIDE phone-screen container */
+        /* Bubble Positions - INSIDE phone, proper vertical spacing */
         /* Convo 1: User(right), Taj(left), User(right), Taj(left) */
-        .bubble-1 { top: 6%; }
-        .bubble-2 { top: 22%; }
-        .bubble-3 { top: 40%; }
-        .bubble-4 { top: 58%; }
+        .bubble-1 { top: 18%; right: 12%; animation: bubble1 24s ease-in-out infinite; }
+        .bubble-2 { top: 30%; left: 12%; animation: bubble2 24s ease-in-out infinite; }
+        .bubble-3 { top: 44%; right: 12%; animation: bubble3 24s ease-in-out infinite; }
+        .bubble-4 { top: 58%; left: 12%; animation: bubble4 24s ease-in-out infinite; }
         
         /* Convo 2: Taj(left), User(right), Taj(left), User(right) */
-        .bubble-5 { top: 6%; }
-        .bubble-6 { top: 22%; }
-        .bubble-7 { top: 40%; }
-        .bubble-8 { top: 58%; }
+        .bubble-5 { top: 18%; left: 12%; animation: bubble1 24s ease-in-out infinite; animation-delay: 8s; }
+        .bubble-6 { top: 32%; right: 12%; animation: bubble2 24s ease-in-out infinite; animation-delay: 8s; }
+        .bubble-7 { top: 46%; left: 12%; animation: bubble3 24s ease-in-out infinite; animation-delay: 8s; }
+        .bubble-8 { top: 60%; right: 12%; animation: bubble4 24s ease-in-out infinite; animation-delay: 8s; }
         
         /* Convo 3: User(right), Taj(left), User(right), Taj(left) */
-        .bubble-9 { top: 6%; }
-        .bubble-10 { top: 22%; }
-        .bubble-11 { top: 40%; }
-        .bubble-12 { top: 58%; }
-        
-        /* Animations */
-        .bubble-1 { animation: bubble1 24s ease-in-out infinite; }
-        .bubble-2 { animation: bubble2 24s ease-in-out infinite; }
-        .bubble-3 { animation: bubble3 24s ease-in-out infinite; }
-        .bubble-4 { animation: bubble4 24s ease-in-out infinite; }
-        
-        .bubble-5 { animation: bubble1 24s ease-in-out infinite; animation-delay: 8s; }
-        .bubble-6 { animation: bubble2 24s ease-in-out infinite; animation-delay: 8s; }
-        .bubble-7 { animation: bubble3 24s ease-in-out infinite; animation-delay: 8s; }
-        .bubble-8 { animation: bubble4 24s ease-in-out infinite; animation-delay: 8s; }
-        
-        .bubble-9 { animation: bubble1 24s ease-in-out infinite; animation-delay: 16s; }
-        .bubble-10 { animation: bubble2 24s ease-in-out infinite; animation-delay: 16s; }
-        .bubble-11 { animation: bubble3 24s ease-in-out infinite; animation-delay: 16s; }
-        .bubble-12 { animation: bubble4 24s ease-in-out infinite; animation-delay: 16s; }
+        .bubble-9 { top: 18%; right: 12%; animation: bubble1 24s ease-in-out infinite; animation-delay: 16s; }
+        .bubble-10 { top: 32%; left: 12%; animation: bubble2 24s ease-in-out infinite; animation-delay: 16s; }
+        .bubble-11 { top: 46%; right: 12%; animation: bubble3 24s ease-in-out infinite; animation-delay: 16s; }
+        .bubble-12 { top: 60%; left: 12%; animation: bubble4 24s ease-in-out infinite; animation-delay: 16s; }
         
         /* 8s per conversation = 33% of 24s cycle, no overlap */
         @keyframes bubble1 {
@@ -3725,10 +3694,29 @@
             .message-bubble {
                 font-size: 10px;
                 padding: 6px 10px;
-                max-width: 45%;
+                max-width: 100px;
                 line-height: 1.3;
                 border-radius: 10px;
             }
+            
+            /* Space bubbles inside the phone screen area (below header ~15%, above input ~85%) */
+            /* Convo 1: User(right), Taj(left), User(right), Taj(left) */
+            .bubble-1 { top: 20%; right: 20%; left: auto; }
+            .bubble-2 { top: 34%; left: 20%; right: auto; }
+            .bubble-3 { top: 50%; right: 20%; left: auto; }
+            .bubble-4 { top: 66%; left: 20%; right: auto; }
+            
+            /* Convo 2: Taj(left), User(right), Taj(left), User(right) */
+            .bubble-5 { top: 20%; left: 20%; right: auto; }
+            .bubble-6 { top: 34%; right: 20%; left: auto; }
+            .bubble-7 { top: 50%; left: 20%; right: auto; }
+            .bubble-8 { top: 66%; right: 20%; left: auto; }
+            
+            /* Convo 3: User(right), Taj(left), User(right), Taj(left) */
+            .bubble-9 { top: 20%; right: 20%; left: auto; }
+            .bubble-10 { top: 34%; left: 20%; right: auto; }
+            .bubble-11 { top: 50%; right: 20%; left: auto; }
+            .bubble-12 { top: 66%; left: 20%; right: auto; }
             
             .action-cards {
                 grid-template-columns: 1fr;
@@ -5443,27 +5431,26 @@
             
             <div class="hero-visual">
                 <div class="phone-container">
+                    <!-- Conversation 1: Music Producer (User starts) -->
+                    <div class="message-bubble bubble-outgoing bubble-1">I need a producer for my R&B track</div>
+                    <div class="message-bubble bubble-incoming bubble-2">What's your budget?</div>
+                    <div class="message-bubble bubble-outgoing bubble-3">$2-3k, ready to start next week</div>
+                    <div class="message-bubble bubble-incoming bubble-4">Found 2 producers. Connecting you now.</div>
+                    
+                    <!-- Conversation 2: Makeup Artist (Taj starts) -->
+                    <div class="message-bubble bubble-incoming bubble-5">A director needs a makeup artist for a music video shoot in LA. $800/day. Interested?</div>
+                    <div class="message-bubble bubble-outgoing bubble-6">When's the shoot?</div>
+                    <div class="message-bubble bubble-incoming bubble-7">This Saturday</div>
+                    <div class="message-bubble bubble-outgoing bubble-8">I'm in</div>
+                    
+                    <!-- Conversation 3: Video Editor (User starts) -->
+                    <div class="message-bubble bubble-outgoing bubble-9">Looking for a video editor for my YouTube channel</div>
+                    <div class="message-bubble bubble-incoming bubble-10">What type of content?</div>
+                    <div class="message-bubble bubble-outgoing bubble-11">Vlogs, 10-15 min episodes</div>
+                    <div class="message-bubble bubble-incoming bubble-12">Got 3 editors. Sending intros now.</div>
+                    
                     <div class="phone-frame">
                         <img class="frame" src="Iphone_Telegram_Photo.png" alt="TapinX">
-                        <div class="phone-screen">
-                            <!-- Conversation 1: Music Producer (User starts) -->
-                            <div class="message-bubble bubble-outgoing bubble-1">I need a producer for my R&B track</div>
-                            <div class="message-bubble bubble-incoming bubble-2">What's your budget?</div>
-                            <div class="message-bubble bubble-outgoing bubble-3">$2-3k, ready to start next week</div>
-                            <div class="message-bubble bubble-incoming bubble-4">Found 2 producers. Connecting you now.</div>
-                            
-                            <!-- Conversation 2: Makeup Artist (Taj starts) -->
-                            <div class="message-bubble bubble-incoming bubble-5">A director needs a makeup artist for a music video shoot in LA. $800/day. Interested?</div>
-                            <div class="message-bubble bubble-outgoing bubble-6">When's the shoot?</div>
-                            <div class="message-bubble bubble-incoming bubble-7">This Saturday</div>
-                            <div class="message-bubble bubble-outgoing bubble-8">I'm in</div>
-                            
-                            <!-- Conversation 3: Video Editor (User starts) -->
-                            <div class="message-bubble bubble-outgoing bubble-9">Looking for a video editor for my YouTube channel</div>
-                            <div class="message-bubble bubble-incoming bubble-10">What type of content?</div>
-                            <div class="message-bubble bubble-outgoing bubble-11">Vlogs, 10-15 min episodes</div>
-                            <div class="message-bubble bubble-incoming bubble-12">Got 3 editors. Sending intros now.</div>
-                        </div>
                     </div>
                 </div>
             </div>
