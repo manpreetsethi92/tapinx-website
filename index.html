@@ -1419,6 +1419,226 @@
             color: #fff;
         }
         
+        /* Skills Section */
+        .edit-section-desc {
+            font-size: 13px;
+            color: #536471;
+            margin-bottom: 16px;
+        }
+        
+        .skills-input-wrapper {
+            position: relative;
+            margin-bottom: 12px;
+        }
+        
+        .skills-search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e1e4e8;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.15s;
+        }
+        
+        .skills-search-input:focus {
+            border-color: #0f1419;
+        }
+        
+        .skills-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e1e4e8;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            margin-top: 4px;
+        }
+        
+        .skills-dropdown.show {
+            display: block;
+        }
+        
+        .skills-dropdown-item {
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.1s;
+        }
+        
+        .skills-dropdown-item:hover {
+            background: #f7f9f9;
+        }
+        
+        .skills-dropdown-item.add-custom {
+            color: #E50914;
+            font-weight: 500;
+            border-top: 1px solid #e1e4e8;
+        }
+        
+        .selected-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+            min-height: 36px;
+        }
+        
+        .skill-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #0f1419;
+        }
+        
+        .skill-tag-remove {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0,0,0,0.1);
+            color: #536471;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            line-height: 1;
+            transition: all 0.15s;
+        }
+        
+        .skill-tag-remove:hover {
+            background: #E50914;
+            color: white;
+        }
+        
+        .skills-categories {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .skills-category-btn {
+            padding: 6px 14px;
+            border: 1px solid #e1e4e8;
+            border-radius: 20px;
+            background: white;
+            font-size: 13px;
+            font-weight: 500;
+            color: #536471;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s;
+        }
+        
+        .skills-category-btn:hover {
+            border-color: #0f1419;
+            color: #0f1419;
+        }
+        
+        .skills-category-btn.active {
+            background: #0f1419;
+            border-color: #0f1419;
+            color: white;
+        }
+        
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 4px 0;
+        }
+        
+        .skill-option {
+            padding: 8px 14px;
+            border: 1px solid #e1e4e8;
+            border-radius: 20px;
+            background: white;
+            font-size: 13px;
+            color: #0f1419;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s;
+        }
+        
+        .skill-option:hover {
+            border-color: #0f1419;
+            background: #f7f9f9;
+        }
+        
+        .skill-option.selected {
+            background: #E50914;
+            border-color: #E50914;
+            color: white;
+        }
+        
+        .skill-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Profile Building Overlay */
+        .profile-building-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.95);
+            z-index: 50;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+        }
+        
+        .profile-building-overlay.show {
+            display: flex;
+        }
+        
+        .profile-building-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid #e1e4e8;
+            border-top-color: #E50914;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .profile-building-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0f1419;
+            margin-bottom: 8px;
+        }
+        
+        .profile-building-subtext {
+            font-size: 14px;
+            color: #536471;
+        }
+        
         .edit-modal-footer {
             display: flex;
             align-items: center;
@@ -5897,6 +6117,13 @@
     <!-- ========== EDIT PROFILE MODAL (LinkedIn-style) ========== -->
     <div class="edit-profile-overlay" id="editProfileOverlay" onclick="closeEditProfileModal(event)">
         <div class="edit-profile-modal" onclick="event.stopPropagation()">
+            <!-- Profile Building Overlay -->
+            <div class="profile-building-overlay" id="profileBuildingOverlay">
+                <div class="profile-building-spinner"></div>
+                <div class="profile-building-text">Building your profile...</div>
+                <div class="profile-building-subtext">Fetching data from your social links</div>
+            </div>
+            
             <div class="edit-modal-header">
                 <h2 class="edit-modal-title">Edit Profile</h2>
                 <button class="edit-modal-close" onclick="closeEditProfileModal()">×</button>
@@ -5938,6 +6165,33 @@
                     <div class="edit-form-group">
                         <label class="edit-label">Bio</label>
                         <textarea class="edit-textarea" id="editBioInput" placeholder="Tell people about yourself..."></textarea>
+                    </div>
+                </div>
+                
+                <!-- Skills Section -->
+                <div class="edit-section">
+                    <div class="edit-section-title">Top Skills</div>
+                    <p class="edit-section-desc">Select up to 5 skills you want to be known for</p>
+                    
+                    <div class="skills-input-wrapper">
+                        <input type="text" class="skills-search-input" id="skillsSearchInput" placeholder="Search or add a skill..." oninput="filterSkills(this.value)" onfocus="showSkillsDropdown()" autocomplete="off">
+                        <div class="skills-dropdown" id="skillsDropdown"></div>
+                    </div>
+                    
+                    <div class="selected-skills" id="selectedSkills">
+                        <!-- Selected skill tags will appear here -->
+                    </div>
+                    
+                    <div class="skills-categories">
+                        <button class="skills-category-btn active" onclick="showSkillCategory('all', this)">All</button>
+                        <button class="skills-category-btn" onclick="showSkillCategory('tech', this)">Tech</button>
+                        <button class="skills-category-btn" onclick="showSkillCategory('creative', this)">Creative</button>
+                        <button class="skills-category-btn" onclick="showSkillCategory('business', this)">Business</button>
+                        <button class="skills-category-btn" onclick="showSkillCategory('other', this)">Other</button>
+                    </div>
+                    
+                    <div class="skills-grid" id="skillsGrid">
+                        <!-- Skill options will be populated by JS -->
                     </div>
                 </div>
                 
@@ -6980,6 +7234,9 @@
                 document.getElementById('editPhotoPlaceholder').style.display = 'flex';
             }
             
+            // Initialize skills
+            initSkills();
+            
             // Validate links
             validateEditLinks();
             checkEditForm();
@@ -7092,6 +7349,9 @@
                 localStorage.setItem('tapinx_user_photo', photo.src);
             }
             
+            // Save skills
+            localStorage.setItem('tapinx_user_skills', JSON.stringify(selectedSkills));
+            
             // Close modal and show toast
             closeEditProfileModal();
             showNewToast('Profile saved');
@@ -7103,6 +7363,257 @@
             if (document.getElementById('dashboardPage').classList.contains('active')) {
                 loadDashboard();
             }
+            
+            // Trigger profile scraping webhook if Instagram was added
+            const instagramUrl = document.getElementById('editInstagramInput').value;
+            if (instagramUrl && validateEditUrl(instagramUrl, 'instagram') === 'valid') {
+                triggerProfileScrape(instagramUrl);
+            }
+        }
+        
+        // ========== SKILLS SYSTEM ==========
+        let selectedSkills = [];
+        const maxSkills = 5;
+        
+        const skillsData = {
+            tech: [
+                'JavaScript', 'Python', 'React', 'Node.js', 'TypeScript', 'AWS', 'Machine Learning', 
+                'AI/ML', 'Data Science', 'iOS Development', 'Android', 'DevOps', 'Cloud Architecture',
+                'Blockchain', 'Cybersecurity', 'Full Stack', 'Frontend', 'Backend', 'Mobile Development',
+                'Database Design', 'API Design', 'System Design', 'Product Engineering'
+            ],
+            creative: [
+                'UI/UX Design', 'Graphic Design', 'Brand Design', 'Video Production', 'Photography',
+                'Motion Graphics', 'Illustration', '3D Design', 'Animation', 'Art Direction',
+                'Content Creation', 'Copywriting', 'Creative Direction', 'Music Production',
+                'Sound Design', 'Film Making', 'Podcast Production', 'Social Media Content'
+            ],
+            business: [
+                'Product Management', 'Project Management', 'Strategy', 'Marketing', 'Sales',
+                'Business Development', 'Operations', 'Finance', 'Consulting', 'Analytics',
+                'Growth Marketing', 'SEO/SEM', 'Partnerships', 'Fundraising', 'Investor Relations',
+                'Customer Success', 'Account Management', 'Team Leadership', 'Executive Leadership'
+            ],
+            other: [
+                'Public Speaking', 'Writing', 'Coaching', 'Mentorship', 'Community Building',
+                'Event Planning', 'Recruiting', 'HR', 'Legal', 'Real Estate', 'Healthcare',
+                'Education', 'Research', 'Non-profit', 'Sustainability', 'Fitness', 'Wellness'
+            ]
+        };
+        
+        function initSkills() {
+            // Load saved skills
+            const saved = localStorage.getItem('tapinx_user_skills');
+            if (saved) {
+                selectedSkills = JSON.parse(saved);
+            } else {
+                selectedSkills = [];
+            }
+            renderSelectedSkills();
+            renderSkillsGrid('all');
+        }
+        
+        function renderSelectedSkills() {
+            const container = document.getElementById('selectedSkills');
+            if (!container) return;
+            
+            if (selectedSkills.length === 0) {
+                container.innerHTML = '<span style="color: #536471; font-size: 13px;">No skills selected yet</span>';
+                return;
+            }
+            
+            container.innerHTML = selectedSkills.map(skill => `
+                <span class="skill-tag">
+                    ${skill}
+                    <button class="skill-tag-remove" onclick="removeSkill('${skill}')">×</button>
+                </span>
+            `).join('');
+        }
+        
+        function renderSkillsGrid(category) {
+            const grid = document.getElementById('skillsGrid');
+            if (!grid) return;
+            
+            let skills = [];
+            if (category === 'all') {
+                skills = [...skillsData.tech, ...skillsData.creative, ...skillsData.business, ...skillsData.other];
+            } else {
+                skills = skillsData[category] || [];
+            }
+            
+            // Sort alphabetically
+            skills.sort();
+            
+            grid.innerHTML = skills.map(skill => {
+                const isSelected = selectedSkills.includes(skill);
+                const isDisabled = !isSelected && selectedSkills.length >= maxSkills;
+                return `
+                    <button class="skill-option ${isSelected ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}" 
+                            onclick="toggleSkill('${skill}')" 
+                            ${isDisabled ? 'disabled' : ''}>
+                        ${skill}
+                    </button>
+                `;
+            }).join('');
+        }
+        
+        function showSkillCategory(category, btn) {
+            document.querySelectorAll('.skills-category-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderSkillsGrid(category);
+        }
+        
+        function toggleSkill(skill) {
+            if (selectedSkills.includes(skill)) {
+                removeSkill(skill);
+            } else if (selectedSkills.length < maxSkills) {
+                selectedSkills.push(skill);
+                renderSelectedSkills();
+                renderSkillsGrid(getCurrentCategory());
+                checkEditForm();
+            }
+        }
+        
+        function removeSkill(skill) {
+            selectedSkills = selectedSkills.filter(s => s !== skill);
+            renderSelectedSkills();
+            renderSkillsGrid(getCurrentCategory());
+            checkEditForm();
+        }
+        
+        function getCurrentCategory() {
+            const activeBtn = document.querySelector('.skills-category-btn.active');
+            if (activeBtn) {
+                const text = activeBtn.textContent.toLowerCase();
+                if (text === 'all') return 'all';
+                return text;
+            }
+            return 'all';
+        }
+        
+        function filterSkills(query) {
+            const dropdown = document.getElementById('skillsDropdown');
+            if (!query.trim()) {
+                dropdown.classList.remove('show');
+                return;
+            }
+            
+            const allSkills = [...skillsData.tech, ...skillsData.creative, ...skillsData.business, ...skillsData.other];
+            const filtered = allSkills.filter(s => 
+                s.toLowerCase().includes(query.toLowerCase()) && !selectedSkills.includes(s)
+            ).slice(0, 5);
+            
+            let html = filtered.map(skill => `
+                <div class="skills-dropdown-item" onclick="selectSkillFromDropdown('${skill}')">${skill}</div>
+            `).join('');
+            
+            // Add custom skill option if no exact match
+            const exactMatch = allSkills.some(s => s.toLowerCase() === query.toLowerCase());
+            if (!exactMatch && query.trim().length > 1 && selectedSkills.length < maxSkills) {
+                html += `<div class="skills-dropdown-item add-custom" onclick="addCustomSkill('${query.trim()}')">+ Add "${query.trim()}"</div>`;
+            }
+            
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+        
+        function showSkillsDropdown() {
+            const input = document.getElementById('skillsSearchInput');
+            if (input.value.trim()) {
+                filterSkills(input.value);
+            }
+        }
+        
+        function selectSkillFromDropdown(skill) {
+            if (selectedSkills.length < maxSkills) {
+                selectedSkills.push(skill);
+                renderSelectedSkills();
+                renderSkillsGrid(getCurrentCategory());
+                document.getElementById('skillsSearchInput').value = '';
+                document.getElementById('skillsDropdown').classList.remove('show');
+                checkEditForm();
+            }
+        }
+        
+        function addCustomSkill(skill) {
+            if (selectedSkills.length < maxSkills && !selectedSkills.includes(skill)) {
+                selectedSkills.push(skill);
+                renderSelectedSkills();
+                document.getElementById('skillsSearchInput').value = '';
+                document.getElementById('skillsDropdown').classList.remove('show');
+                checkEditForm();
+            }
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('skillsDropdown');
+            const input = document.getElementById('skillsSearchInput');
+            if (dropdown && input && !dropdown.contains(e.target) && e.target !== input) {
+                dropdown.classList.remove('show');
+            }
+        });
+        
+        // ========== PROFILE SCRAPING ==========
+        async function triggerProfileScrape(instagramUrl) {
+            // This sends a webhook to your n8n workflow
+            // The workflow will scrape the profile and update via API
+            try {
+                const webhookUrl = 'https://your-n8n-instance.com/webhook/scrape-profile';
+                const userId = localStorage.getItem('tapinx_user_id') || 'user_' + Date.now();
+                
+                // Store user ID if not exists
+                if (!localStorage.getItem('tapinx_user_id')) {
+                    localStorage.setItem('tapinx_user_id', userId);
+                }
+                
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: userId,
+                        instagramUrl: instagramUrl,
+                        linkedinUrl: document.getElementById('editLinkedinInput').value || null
+                    })
+                });
+                
+                console.log('Profile scrape triggered');
+            } catch (error) {
+                console.log('Profile scrape webhook not configured');
+            }
+        }
+        
+        function showProfileBuilding() {
+            document.getElementById('profileBuildingOverlay').classList.add('show');
+        }
+        
+        function hideProfileBuilding() {
+            document.getElementById('profileBuildingOverlay').classList.remove('show');
+        }
+        
+        // Function to receive scraped data (called by webhook callback or polling)
+        function applyScrapedProfile(data) {
+            if (data.name) {
+                document.getElementById('editNameInput').value = data.name;
+            }
+            if (data.bio) {
+                document.getElementById('editBioInput').value = data.bio;
+            }
+            if (data.photo) {
+                const preview = document.getElementById('editPhotoPreview');
+                preview.src = data.photo;
+                preview.style.display = 'block';
+                document.getElementById('editPhotoPlaceholder').style.display = 'none';
+            }
+            if (data.skills && Array.isArray(data.skills)) {
+                selectedSkills = data.skills.slice(0, maxSkills);
+                renderSelectedSkills();
+                renderSkillsGrid(getCurrentCategory());
+            }
+            
+            hideProfileBuilding();
+            showNewToast('Profile updated from your social links!');
+            checkEditForm();
         }
         
         // ========== PROFILE PAGE ==========
