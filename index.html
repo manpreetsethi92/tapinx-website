@@ -329,12 +329,12 @@
         /* Message Bubbles - positioned inside phone-screen */
         .message-bubble {
             position: absolute;
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-size: 13px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 11px;
             font-weight: 400;
-            max-width: 140px;
-            line-height: 1.45;
+            max-width: 42%;
+            line-height: 1.4;
             opacity: 0;
             z-index: 10;
         }
@@ -343,32 +343,50 @@
             background: #1F2937;
             color: #FFFFFF;
             border-bottom-left-radius: 4px;
+            left: 4%;
         }
         
         .bubble-outgoing {
             background: #F3F4F6;
             color: #111111;
             border-bottom-right-radius: 4px;
+            right: 4%;
         }
         
         /* Bubble Positions - INSIDE phone-screen container */
         /* Convo 1: User(right), Taj(left), User(right), Taj(left) */
-        .bubble-1 { top: 8%; right: 5%; animation: bubble1 24s ease-in-out infinite; }
-        .bubble-2 { top: 24%; left: 5%; animation: bubble2 24s ease-in-out infinite; }
-        .bubble-3 { top: 42%; right: 5%; animation: bubble3 24s ease-in-out infinite; }
-        .bubble-4 { top: 60%; left: 5%; animation: bubble4 24s ease-in-out infinite; }
+        .bubble-1 { top: 6%; }
+        .bubble-2 { top: 22%; }
+        .bubble-3 { top: 40%; }
+        .bubble-4 { top: 58%; }
         
         /* Convo 2: Taj(left), User(right), Taj(left), User(right) */
-        .bubble-5 { top: 8%; left: 5%; animation: bubble1 24s ease-in-out infinite; animation-delay: 8s; }
-        .bubble-6 { top: 24%; right: 5%; animation: bubble2 24s ease-in-out infinite; animation-delay: 8s; }
-        .bubble-7 { top: 42%; left: 5%; animation: bubble3 24s ease-in-out infinite; animation-delay: 8s; }
-        .bubble-8 { top: 60%; right: 5%; animation: bubble4 24s ease-in-out infinite; animation-delay: 8s; }
+        .bubble-5 { top: 6%; }
+        .bubble-6 { top: 22%; }
+        .bubble-7 { top: 40%; }
+        .bubble-8 { top: 58%; }
         
         /* Convo 3: User(right), Taj(left), User(right), Taj(left) */
-        .bubble-9 { top: 8%; right: 5%; animation: bubble1 24s ease-in-out infinite; animation-delay: 16s; }
-        .bubble-10 { top: 24%; left: 5%; animation: bubble2 24s ease-in-out infinite; animation-delay: 16s; }
-        .bubble-11 { top: 42%; right: 5%; animation: bubble3 24s ease-in-out infinite; animation-delay: 16s; }
-        .bubble-12 { top: 60%; left: 5%; animation: bubble4 24s ease-in-out infinite; animation-delay: 16s; }
+        .bubble-9 { top: 6%; }
+        .bubble-10 { top: 22%; }
+        .bubble-11 { top: 40%; }
+        .bubble-12 { top: 58%; }
+        
+        /* Animations */
+        .bubble-1 { animation: bubble1 24s ease-in-out infinite; }
+        .bubble-2 { animation: bubble2 24s ease-in-out infinite; }
+        .bubble-3 { animation: bubble3 24s ease-in-out infinite; }
+        .bubble-4 { animation: bubble4 24s ease-in-out infinite; }
+        
+        .bubble-5 { animation: bubble1 24s ease-in-out infinite; animation-delay: 8s; }
+        .bubble-6 { animation: bubble2 24s ease-in-out infinite; animation-delay: 8s; }
+        .bubble-7 { animation: bubble3 24s ease-in-out infinite; animation-delay: 8s; }
+        .bubble-8 { animation: bubble4 24s ease-in-out infinite; animation-delay: 8s; }
+        
+        .bubble-9 { animation: bubble1 24s ease-in-out infinite; animation-delay: 16s; }
+        .bubble-10 { animation: bubble2 24s ease-in-out infinite; animation-delay: 16s; }
+        .bubble-11 { animation: bubble3 24s ease-in-out infinite; animation-delay: 16s; }
+        .bubble-12 { animation: bubble4 24s ease-in-out infinite; animation-delay: 16s; }
         
         /* 8s per conversation = 33% of 24s cycle, no overlap */
         @keyframes bubble1 {
