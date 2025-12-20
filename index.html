@@ -7350,9 +7350,21 @@
                 document.getElementById('newSpeakPage').style.display = 'block';
             } else if (page === 'connections') {
                 document.getElementById('newConnectionsPage').style.display = 'block';
+                // Reset tabs to "All" when showing page
+                const tabs = document.querySelectorAll('#newConnectionsPage .new-tab');
+                tabs.forEach(t => t.classList.remove('active'));
+                if (tabs[0]) tabs[0].classList.add('active');
+                // Reset sidebar sublinks
+                document.querySelectorAll('.new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+                const sublinks = document.querySelectorAll('.new-sidebar-sublink');
+                if (sublinks[0]) sublinks[0].classList.add('active');
                 loadNewConnections();
             } else if (page === 'opportunities') {
                 document.getElementById('newOpportunitiesPage').style.display = 'block';
+                // Reset tabs to "All" when showing page
+                const tabs = document.querySelectorAll('#newOpportunitiesPage .new-tab');
+                tabs.forEach(t => t.classList.remove('active'));
+                if (tabs[0]) tabs[0].classList.add('active');
                 loadNewOpportunities();
             } else if (page === 'referrals') {
                 document.getElementById('newReferralsPage').style.display = 'block';
@@ -7390,10 +7402,10 @@
         function setNewConnectionsTab(btn, tab) {
             document.querySelectorAll('#newConnectionsPage .new-tab').forEach(t => t.classList.remove('active'));
             btn.classList.add('active');
-            filterNewConnections(tab);
+            filterNewConnections(tab, true);
         }
         
-        function filterNewConnections(status) {
+        function filterNewConnections(status, fromHorizontalTab = false) {
             document.querySelectorAll('#newConnectionsList .new-feed-item').forEach(item => {
                 const itemStatus = item.dataset.status;
                 if (status === 'all') {
@@ -7409,6 +7421,15 @@
             if (status === 'all' && sublinks[0]) sublinks[0].classList.add('active');
             if (status === 'connected' && sublinks[1]) sublinks[1].classList.add('active');
             if (status === 'pending' && sublinks[2]) sublinks[2].classList.add('active');
+            
+            // Also update horizontal tabs when clicking from sidebar
+            if (!fromHorizontalTab) {
+                const tabs = document.querySelectorAll('#newConnectionsPage .new-tab');
+                tabs.forEach(t => t.classList.remove('active'));
+                if (status === 'all' && tabs[0]) tabs[0].classList.add('active');
+                if (status === 'connected' && tabs[1]) tabs[1].classList.add('active');
+                if (status === 'pending' && tabs[2]) tabs[2].classList.add('active');
+            }
         }
         
         async function loadNewOpportunities() {
