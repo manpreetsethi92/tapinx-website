@@ -1633,10 +1633,453 @@
         }
         
         /* ========================================
-           CONNECTIONS PAGE - WORLD CLASS
-           LinkedIn/X-level refinement
+           WORKSPACE LAYOUT SYSTEM
+           Shared by Connections & Attention pages
+           LinkedIn/Instagram-level density
            ======================================== */
         
+        /* Workspace Container */
+        .workspace-page {
+            background: #FFFFFF;
+        }
+        
+        .workspace-header {
+            border-bottom: none;
+        }
+        
+        .workspace-layout {
+            display: flex;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 88px 24px 40px;
+            gap: 0;
+        }
+        
+        /* Context Rail - Left sidebar */
+        .context-rail {
+            width: 200px;
+            flex-shrink: 0;
+            padding-right: 32px;
+            border-right: 1px solid #EAEAEA;
+            position: sticky;
+            top: 88px;
+            height: fit-content;
+        }
+        
+        .rail-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #EAEAEA;
+        }
+        
+        .rail-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #E5E5E5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888888;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        .rail-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .rail-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #111111;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .rail-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .rail-link {
+            display: block;
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #555555;
+            text-decoration: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        
+        .rail-link:hover {
+            background: #F5F5F5;
+            color: #111111;
+        }
+        
+        .rail-link.active {
+            background: #F5F5F5;
+            color: #111111;
+            font-weight: 500;
+        }
+        
+        .rail-link-count {
+            float: right;
+            font-size: 12px;
+            color: #888888;
+            font-weight: 400;
+        }
+        
+        .rail-link.has-action .rail-link-count {
+            color: #E50914;
+        }
+        
+        /* Main Content Area */
+        .workspace-main {
+            flex: 1;
+            min-width: 0;
+            padding-left: 32px;
+        }
+        
+        /* Page Header - Minimal */
+        .workspace-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111111;
+            margin-bottom: 16px;
+        }
+        
+        /* Controls Row */
+        .workspace-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .workspace-search {
+            flex: 1;
+            max-width: 280px;
+        }
+        
+        .workspace-search-input {
+            display: flex;
+            align-items: center;
+            background: #FFFFFF;
+            border: 1px solid #EAEAEA;
+            border-radius: 6px;
+            padding: 7px 10px;
+            gap: 8px;
+            transition: border-color 0.15s;
+        }
+        
+        .workspace-search-input:focus-within {
+            border-color: #111111;
+        }
+        
+        .workspace-search-input.subdued {
+            border-color: #F0F0F0;
+        }
+        
+        .workspace-search-input svg {
+            color: #AAAAAA;
+            flex-shrink: 0;
+            width: 14px;
+            height: 14px;
+        }
+        
+        .workspace-search-input input {
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 13px;
+            flex: 1;
+            font-family: inherit;
+            color: #111111;
+        }
+        
+        .workspace-search-input input::placeholder {
+            color: #AAAAAA;
+        }
+        
+        /* Tabs - Segmented Control */
+        .workspace-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid #EAEAEA;
+            margin-bottom: 0;
+        }
+        
+        .workspace-tab {
+            padding: 10px 14px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            color: #888888;
+            transition: color 0.1s;
+            margin-bottom: -1px;
+        }
+        
+        .workspace-tab:hover {
+            color: #555555;
+        }
+        
+        .workspace-tab.active {
+            color: #111111;
+            border-bottom-color: #111111;
+        }
+        
+        .workspace-tab.active.has-action {
+            color: #E50914;
+            border-bottom-color: #E50914;
+        }
+        
+        .workspace-tab-count {
+            font-size: 11px;
+            margin-left: 4px;
+            font-weight: 400;
+        }
+        
+        /* List Container - Always visible */
+        .workspace-list {
+            min-height: 200px;
+        }
+        
+        /* Row - LinkedIn density */
+        .workspace-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid #EAEAEA;
+            transition: background 0.1s;
+        }
+        
+        .workspace-row:hover {
+            background: #FAFAFA;
+            margin: 0 -16px;
+            padding: 14px 16px;
+        }
+        
+        .workspace-row:last-child {
+            border-bottom: 1px solid #EAEAEA;
+        }
+        
+        .workspace-row-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #E5E5E5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888888;
+            font-weight: 600;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        
+        .workspace-row-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .workspace-row-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111111;
+            margin-bottom: 2px;
+        }
+        
+        .workspace-row-context {
+            font-size: 13px;
+            color: #555555;
+            margin-bottom: 2px;
+            line-height: 1.3;
+        }
+        
+        .workspace-row-meta {
+            font-size: 12px;
+            color: #888888;
+        }
+        
+        .workspace-row-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+            align-items: center;
+        }
+        
+        .workspace-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.1s;
+            border: none;
+        }
+        
+        .workspace-btn-primary {
+            background: #111111;
+            color: #FFFFFF;
+        }
+        
+        .workspace-btn-primary:hover {
+            background: #333333;
+        }
+        
+        .workspace-btn-secondary {
+            background: none;
+            color: #555555;
+            border: 1px solid #DDDDDD;
+        }
+        
+        .workspace-btn-secondary:hover {
+            background: #F5F5F5;
+        }
+        
+        /* Empty State - Inside list, left-aligned */
+        .workspace-empty {
+            padding: 48px 0 24px;
+        }
+        
+        .workspace-empty-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111111;
+            margin-bottom: 8px;
+        }
+        
+        .workspace-empty-text {
+            font-size: 13px;
+            color: #555555;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        
+        .workspace-empty-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #E50914;
+            color: #FFFFFF;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: opacity 0.1s;
+            margin-bottom: 12px;
+        }
+        
+        .workspace-empty-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .workspace-empty-note {
+            font-size: 12px;
+            color: #AAAAAA;
+        }
+        
+        /* Skeleton Row */
+        .workspace-skeleton {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 0;
+            opacity: 0.06;
+            pointer-events: none;
+        }
+        
+        .skeleton-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #CCCCCC;
+        }
+        
+        .skeleton-content {
+            flex: 1;
+        }
+        
+        .skeleton-line {
+            height: 10px;
+            background: #CCCCCC;
+            border-radius: 3px;
+            margin-bottom: 6px;
+        }
+        
+        .skeleton-line.short { width: 35%; }
+        .skeleton-line.medium { width: 55%; }
+        
+        .skeleton-btn {
+            width: 60px;
+            height: 28px;
+            background: #CCCCCC;
+            border-radius: 4px;
+        }
+        
+        /* Toast */
+        .workspace-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #111111;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.25s ease;
+        }
+        
+        .workspace-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        
+        /* Mobile: Hide rail, full width content */
+        @media (max-width: 768px) {
+            .workspace-layout {
+                padding: 80px 16px 40px;
+            }
+            
+            .context-rail {
+                display: none;
+            }
+            
+            .workspace-main {
+                padding-left: 0;
+            }
+            
+            .workspace-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .workspace-search {
+                max-width: none;
+            }
+        }
+        
+        /* ========== CONNECTIONS PAGE SPECIFICS ========== */
         #connectionsPage {
             background: #FFFFFF;
         }
@@ -1645,161 +2088,147 @@
             border-bottom: none;
         }
         
-        .connections-main {
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 100px 24px 60px;
+        /* Hide old styles */
+        .connections-main,
+        .conn-page-header,
+        .conn-page-title,
+        .conn-page-subtitle,
+        .conn-page-meta,
+        .conn-page-divider,
+        .conn-controls,
+        .conn-search-container,
+        .conn-search-bar,
+        .conn-status-tabs,
+        .conn-status-tab,
+        .conn-list,
+        .conn-section,
+        .conn-empty,
+        .conn-filter-pills,
+        .conn-pill,
+        .connection-row,
+        .row-avatar,
+        .row-content,
+        .row-name,
+        .row-context,
+        .row-intro-meta,
+        .row-actions,
+        .row-btn {
+            /* Old styles will be overridden by workspace system */
         }
         
-        /* Page Header - Anchor */
-        .conn-page-header {
-            margin-bottom: 0;
+        /* ========== ATTENTION PAGE SPECIFICS ========== */
+        #attentionPage {
+            background: #FFFFFF;
         }
         
-        .conn-page-title {
-            font-size: 24px;
+        .attention-header {
+            border-bottom: none;
+        }
+        
+        /* Attention Row - Inbox style */
+        .attn-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid #EAEAEA;
+            transition: background 0.1s;
+        }
+        
+        .attn-row:hover {
+            background: #FAFAFA;
+            margin: 0 -16px;
+            padding: 14px 16px;
+        }
+        
+        .attn-row-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #E5E5E5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888888;
+            font-weight: 600;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        
+        .attn-row-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .attn-row-name {
+            font-size: 14px;
             font-weight: 600;
             color: #111111;
-            margin-bottom: 8px;
+            margin-bottom: 2px;
         }
         
-        .conn-page-subtitle {
-            display: none;
-        }
-        
-        .conn-page-meta {
-            font-size: 14px;
-            color: #555555;
-            margin-bottom: 24px;
-        }
-        
-        .conn-page-divider {
-            height: 1px;
-            background: #EAEAEA;
-            margin-bottom: 24px;
-        }
-        
-        /* Search & Filter Controls */
-        .conn-controls {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        
-        .conn-search-container {
-            flex: 1;
-        }
-        
-        .conn-search-bar {
-            display: flex;
-            align-items: center;
-            background: #FFFFFF;
-            border: 1px solid #DDDDDD;
-            border-radius: 8px;
-            padding: 10px 14px;
-            gap: 10px;
-            transition: all 0.15s;
-        }
-        
-        .conn-search-bar:focus-within {
-            border-color: #111111;
-        }
-        
-        /* Search de-emphasized when empty */
-        .conn-search-bar.subdued {
-            border-color: #EAEAEA;
-            padding: 8px 12px;
-        }
-        
-        .conn-search-bar.subdued input {
+        .attn-row-reason {
             font-size: 13px;
+            color: #555555;
+            margin-bottom: 2px;
+            line-height: 1.3;
         }
         
-        .conn-search-bar.subdued .conn-search-svg {
-            opacity: 0.5;
-        }
-        
-        .conn-search-svg {
-            color: #888888;
-            flex-shrink: 0;
-            width: 16px;
-            height: 16px;
-        }
-        
-        .conn-search-bar input {
-            border: none;
-            background: none;
-            outline: none;
-            font-size: 14px;
-            flex: 1;
-            font-family: inherit;
-            color: #111111;
-        }
-        
-        .conn-search-bar input::placeholder {
+        .attn-row-meta {
+            font-size: 12px;
             color: #888888;
         }
         
-        .conn-search-shortcut {
-            display: none;
-        }
-        
-        /* Segmented Control - Conditional Red */
-        .conn-status-tabs {
+        .attn-row-actions {
             display: flex;
-            gap: 0;
-            border-bottom: 1px solid #EAEAEA;
-            margin-bottom: 0;
+            gap: 6px;
+            flex-shrink: 0;
         }
         
-        .conn-status-tab {
-            padding: 12px 16px;
-            background: none;
-            border: none;
-            border-bottom: 2px solid transparent;
-            font-size: 14px;
+        .attn-btn {
+            padding: 6px 12px;
+            font-size: 12px;
             font-weight: 500;
+            border-radius: 4px;
             cursor: pointer;
             font-family: inherit;
-            color: #888888;
-            transition: color 0.15s;
-            margin-bottom: -1px;
+            transition: all 0.1s;
+            border: none;
         }
         
-        .conn-status-tab:hover {
+        .attn-btn-interested {
+            background: #111111;
+            color: #FFFFFF;
+        }
+        
+        .attn-btn-interested:hover {
+            background: #333333;
+        }
+        
+        .attn-btn-pass {
+            background: none;
+            color: #888888;
+            border: 1px solid #DDDDDD;
+        }
+        
+        .attn-btn-pass:hover {
+            background: #F5F5F5;
             color: #555555;
         }
         
-        /* Active state - gray by default */
-        .conn-status-tab.active {
-            color: #111111;
-            border-bottom-color: #111111;
-        }
-        
-        /* Red ONLY when action exists (pending > 0) */
-        .conn-status-tab.active.has-action {
-            color: #E50914;
-            border-bottom-color: #E50914;
-        }
-        
-        /* Softened when all counts are zero */
-        .conn-status-tab.softened {
-            color: #CCCCCC;
-        }
-        
-        .conn-status-tab.softened:hover {
-            color: #AAAAAA;
-        }
-        
-        .conn-status-count {
-            font-size: 12px;
-            margin-left: 4px;
-            font-weight: 400;
-        }
-        
-        .conn-status-tab.active.has-action .conn-status-count {
-            color: #E50914;
+        /* Hide old attention page styles */
+        .attention-main,
+        .attn-page-header,
+        .attn-page-title,
+        .attn-page-subtitle,
+        .attn-status-tabs,
+        .attn-status-tab,
+        .attn-filter-tabs,
+        .attn-tab,
+        .attn-proposals,
+        .proposal-card,
+        .attn-empty {
+            display: none !important;
         }
         
         /* Remove filter pills - not needed */
@@ -3040,6 +3469,1035 @@
                 display: none;
             }
         }
+        
+        /* ========== NEW X.COM-STYLE APP LAYOUT ========== */
+        .new-app-container {
+            display: flex;
+            max-width: 1280px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+        
+        /* New Sidebar */
+        .new-sidebar {
+            width: 275px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            border-right: 1px solid #eff3f4;
+        }
+        
+        .new-sidebar-logo {
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .new-sidebar-logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: #E50914;
+            cursor: pointer;
+        }
+        
+        .new-sidebar-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow-y: auto;
+        }
+        
+        .new-sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            text-decoration: none;
+            color: #0f1419;
+        }
+        
+        .new-sidebar-link:hover {
+            background: rgba(15, 20, 25, 0.1);
+        }
+        
+        .new-sidebar-link.active {
+            font-weight: 700;
+        }
+        
+        .new-sidebar-icon {
+            width: 26px;
+            height: 26px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            flex-shrink: 0;
+        }
+        
+        .new-sidebar-label {
+            font-size: 20px;
+            letter-spacing: -0.2px;
+        }
+        
+        .new-sidebar-badge {
+            background: #E50914;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            margin-left: auto;
+        }
+        
+        .new-sidebar-expand {
+            padding-left: 54px;
+        }
+        
+        .new-sidebar-sublink {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            color: #536471;
+            font-size: 15px;
+        }
+        
+        .new-sidebar-sublink:hover {
+            background: rgba(15, 20, 25, 0.1);
+            color: #0f1419;
+        }
+        
+        .new-sidebar-sublink.active {
+            color: #0f1419;
+            font-weight: 600;
+        }
+        
+        .new-sidebar-cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 32px;
+            margin: 16px 8px;
+            background: #E50914;
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            font-size: 17px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            text-decoration: none;
+        }
+        
+        .new-sidebar-cta:hover {
+            opacity: 0.9;
+        }
+        
+        .new-sidebar-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            margin-top: auto;
+        }
+        
+        .new-sidebar-profile:hover {
+            background: rgba(15, 20, 25, 0.1);
+        }
+        
+        .new-sidebar-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        
+        .new-sidebar-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .new-sidebar-profile-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .new-sidebar-profile-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f1419;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .new-sidebar-profile-handle {
+            font-size: 15px;
+            color: #536471;
+        }
+        
+        /* Main Column */
+        .new-main-column {
+            flex: 1;
+            max-width: 600px;
+            border-right: 1px solid #eff3f4;
+            min-height: 100vh;
+        }
+        
+        .new-main-header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            padding: 0 16px;
+            height: 53px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eff3f4;
+        }
+        
+        .new-main-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f1419;
+        }
+        
+        /* Right Column */
+        .new-right-column {
+            width: 350px;
+            padding: 12px 24px;
+        }
+        
+        .new-right-card {
+            background: #f7f9f9;
+            border-radius: 16px;
+            padding: 12px 0;
+            margin-bottom: 16px;
+        }
+        
+        .new-right-card-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0f1419;
+            padding: 12px 16px;
+        }
+        
+        .new-right-card-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .new-right-card-item:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        
+        .new-right-card-item-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f1419;
+        }
+        
+        .new-right-card-item-desc {
+            font-size: 13px;
+            color: #536471;
+        }
+        
+        /* Tabs */
+        .new-tabs {
+            display: flex;
+            border-bottom: 1px solid #eff3f4;
+        }
+        
+        .new-tab {
+            flex: 1;
+            padding: 16px 0;
+            font-size: 15px;
+            font-weight: 500;
+            color: #536471;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            position: relative;
+            transition: background 0.2s;
+        }
+        
+        .new-tab:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        
+        .new-tab.active {
+            color: #0f1419;
+            font-weight: 700;
+        }
+        
+        .new-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 56px;
+            height: 4px;
+            background: #E50914;
+            border-radius: 2px;
+        }
+        
+        /* Speak to Taj Page */
+        .new-speak-content {
+            padding: 32px 16px;
+        }
+        
+        .new-speak-title {
+            font-size: 31px;
+            font-weight: 800;
+            color: #0f1419;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+        
+        .new-speak-subtitle {
+            font-size: 15px;
+            color: #536471;
+            line-height: 1.5;
+            margin-bottom: 32px;
+        }
+        
+        .new-speak-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: #0f1419;
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            font-size: 17px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            text-decoration: none;
+            margin-bottom: 24px;
+        }
+        
+        .new-speak-cta:hover {
+            opacity: 0.9;
+        }
+        
+        .new-speak-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .new-speak-meta-line {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            color: #536471;
+        }
+        
+        .new-speak-meta-line svg {
+            width: 20px;
+            height: 20px;
+            stroke: #536471;
+            flex-shrink: 0;
+        }
+        
+        /* Feed Items */
+        .new-feed-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            border-bottom: 1px solid #eff3f4;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .new-feed-item:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        
+        .new-feed-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .new-feed-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .new-feed-header {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 2px;
+        }
+        
+        .new-feed-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f1419;
+        }
+        
+        .new-feed-status {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
+        
+        .new-feed-status.connected {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .new-feed-status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .new-feed-text {
+            font-size: 15px;
+            color: #0f1419;
+            line-height: 1.4;
+            margin-top: 4px;
+        }
+        
+        .new-feed-context {
+            font-size: 15px;
+            color: #536471;
+            line-height: 1.4;
+        }
+        
+        .new-feed-time {
+            font-size: 13px;
+            color: #536471;
+            margin-top: 8px;
+        }
+        
+        .new-feed-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .new-feed-btn {
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: inherit;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .new-feed-btn.primary {
+            background: #0f1419;
+            color: white;
+            border: none;
+        }
+        
+        .new-feed-btn.primary:hover {
+            opacity: 0.9;
+        }
+        
+        .new-feed-btn.secondary {
+            background: transparent;
+            color: #0f1419;
+            border: 1px solid #cfd9de;
+        }
+        
+        .new-feed-btn.secondary:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Empty States */
+        .new-empty-state {
+            padding: 48px 32px;
+            text-align: center;
+        }
+        
+        .new-empty-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            stroke: #536471;
+        }
+        
+        .new-empty-title {
+            font-size: 31px;
+            font-weight: 800;
+            color: #0f1419;
+            margin-bottom: 8px;
+        }
+        
+        .new-empty-text {
+            font-size: 15px;
+            color: #536471;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        
+        .new-empty-cta {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #E50914;
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        
+        .new-empty-cta:hover {
+            opacity: 0.9;
+        }
+        
+        /* Referrals Page */
+        .new-referral-intro {
+            padding: 24px 16px;
+            border-bottom: 1px solid #eff3f4;
+        }
+        
+        .new-referral-intro-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f1419;
+            margin-bottom: 4px;
+        }
+        
+        .new-referral-intro-text {
+            font-size: 15px;
+            color: #536471;
+        }
+        
+        .new-referral-form {
+            padding: 16px;
+            border-bottom: 1px solid #eff3f4;
+        }
+        
+        .new-referral-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: #fff;
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            color: #0f1419;
+            outline: none;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+        
+        .new-referral-input:focus {
+            border-color: #E50914;
+            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.1);
+        }
+        
+        .new-referral-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .new-referral-submit {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #0f1419;
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .new-referral-submit:hover {
+            opacity: 0.9;
+        }
+        
+        /* Settings Page */
+        .new-settings-section {
+            border-bottom: 1px solid #eff3f4;
+        }
+        
+        .new-settings-section-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0f1419;
+            padding: 12px 16px;
+        }
+        
+        .new-settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .new-settings-item:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        
+        .new-settings-item-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: #0f1419;
+        }
+        
+        .new-settings-item-desc {
+            font-size: 13px;
+            color: #536471;
+            margin-top: 2px;
+        }
+        
+        .new-settings-toggle {
+            width: 44px;
+            height: 24px;
+            background: #cfd9de;
+            border-radius: 9999px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .new-settings-toggle.active {
+            background: #E50914;
+        }
+        
+        .new-settings-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+        
+        .new-settings-toggle.active::after {
+            transform: translateX(20px);
+        }
+        
+        .new-settings-arrow {
+            color: #536471;
+        }
+        
+        /* Profile Modal */
+        .new-profile-modal {
+            max-width: 480px;
+            border-radius: 12px;
+        }
+        
+        .new-profile-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid #eff3f4;
+        }
+        
+        .new-profile-modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f1419;
+        }
+        
+        .new-profile-modal-close {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: none;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #536471;
+            transition: background 0.2s;
+        }
+        
+        .new-profile-modal-close:hover {
+            background: #eff3f4;
+        }
+        
+        .new-profile-modal-body {
+            padding: 24px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .new-profile-photo-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .new-profile-photo-large {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 600;
+            color: white;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .new-profile-photo-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .new-profile-change-photo {
+            margin-top: 12px;
+            background: none;
+            border: none;
+            color: #E50914;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+        }
+        
+        .new-profile-section {
+            margin-bottom: 24px;
+        }
+        
+        .new-profile-section-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #536471;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+        
+        .new-profile-form-row {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .new-profile-form-group {
+            margin-bottom: 16px;
+        }
+        
+        .new-profile-form-group.flex-1 {
+            flex: 1;
+        }
+        
+        .new-profile-field-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #0f1419;
+            margin-bottom: 8px;
+        }
+        
+        .new-profile-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: #fff;
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            color: #0f1419;
+            outline: none;
+            transition: all 0.2s;
+        }
+        
+        .new-profile-input:focus {
+            border-color: #E50914;
+            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.1);
+        }
+        
+        .new-profile-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .new-profile-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23536471' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+            cursor: pointer;
+        }
+        
+        .new-profile-link-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .new-profile-link-icon {
+            font-size: 16px;
+        }
+        
+        .new-profile-required {
+            margin-left: auto;
+            font-size: 12px;
+            color: #E50914;
+            font-weight: 500;
+        }
+        
+        .new-profile-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 24px;
+            border-top: 1px solid #eff3f4;
+        }
+        
+        .new-profile-btn-cancel {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            color: #536471;
+            font-size: 15px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+        
+        .new-profile-btn-save {
+            padding: 10px 24px;
+            background: #e1e4e8;
+            border: none;
+            color: #8b98a5;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: not-allowed;
+            border-radius: 8px;
+        }
+        
+        .new-profile-btn-save.enabled {
+            background: #0f1419;
+            color: white;
+            cursor: pointer;
+        }
+        
+        /* Intent Selector */
+        .new-intent-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .new-intent-option {
+            flex: 1;
+            padding: 10px 16px;
+            background: transparent;
+            border: 1px solid #cfd9de;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            color: #536471;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .new-intent-option:hover {
+            border-color: #0f1419;
+            color: #0f1419;
+        }
+        
+        .new-intent-option.active {
+            background: #0f1419;
+            border-color: #0f1419;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .new-intent-helper {
+            font-size: 13px;
+            color: #536471;
+            margin-bottom: 8px;
+        }
+        
+        .new-intent-refine-btn {
+            background: none;
+            border: none;
+            color: #E50914;
+            font-size: 13px;
+            font-family: inherit;
+            cursor: pointer;
+            padding: 0;
+            margin-bottom: 12px;
+        }
+        
+        .new-intent-refine-panel {
+            padding: 16px;
+            background: #f7f9f9;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .new-collab-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .new-collab-tag {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid #cfd9de;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #536471;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .new-collab-tag:hover {
+            border-color: #0f1419;
+            color: #0f1419;
+        }
+        
+        .new-collab-tag.active {
+            background: #eff3f4;
+            border-color: #0f1419;
+            color: #0f1419;
+        }
+        
+        /* Match type badges */
+        .new-match-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+        
+        .new-match-type.professional {
+            background: rgba(29, 155, 240, 0.15);
+            color: #1d9bf0;
+        }
+        
+        .new-match-type.community {
+            background: rgba(0, 186, 124, 0.15);
+            color: #00ba7c;
+        }
+        
+        /* New App Mobile Styles */
+        @media (max-width: 1024px) {
+            .new-right-column {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .new-app-container {
+                flex-direction: column;
+            }
+            
+            .new-sidebar {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: auto;
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 8px 0;
+                border-right: none;
+                border-top: 1px solid #eff3f4;
+                background: white;
+                z-index: 100;
+            }
+            
+            .new-sidebar-logo,
+            .new-sidebar-label,
+            .new-sidebar-profile,
+            .new-sidebar-cta,
+            .new-sidebar-expand,
+            .new-sidebar-sublink {
+                display: none;
+            }
+            
+            .new-sidebar-nav {
+                flex-direction: row;
+                justify-content: space-around;
+                width: 100%;
+            }
+            
+            .new-sidebar-link {
+                padding: 12px;
+            }
+            
+            .new-main-column {
+                max-width: 100%;
+                border-right: none;
+                padding-bottom: 72px;
+            }
+        }
     </style>
     <link rel="stylesheet" href="mobile-fix.css">
 </head>
@@ -3171,77 +4629,272 @@
     
     <!-- ========== DASHBOARD PAGE ========== -->
     <div class="page" id="dashboardPage">
-        <header class="header">
-            <span class="logo" onclick="showPage('landing')">T</span>
-            <div class="profile-btn" onclick="toggleDropdown(event)">
-                <div class="avatar">
-                    <span id="dashAvatarInitial">T</span>
-                    <img id="dashAvatarImg" style="display: none;">
+        <div class="new-app-container">
+            <!-- Left Sidebar -->
+            <aside class="new-sidebar">
+                <div class="new-sidebar-logo">
+                    <span class="new-sidebar-logo-text" onclick="showPage('landing')">T</span>
                 </div>
-                <span class="profile-name" id="dashHeaderName">User</span>
-                <span class="dropdown-arrow">▼</span>
                 
-                <div class="dropdown" id="dashDropdown">
-                    <div class="dropdown-item" onclick="openEditProfileModal()">
-                        Edit Profile
+                <nav class="new-sidebar-nav">
+                    <div class="new-sidebar-section">
+                        <div class="new-sidebar-link active" id="navSpeak" onclick="showNewAppPage('speak')">
+                            <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                            <span class="new-sidebar-label">Speak to Taj</span>
+                        </div>
                     </div>
-                    <div class="dropdown-item" onclick="showPage('connections')">
-                        Connections
+                    
+                    <div class="new-sidebar-section">
+                        <div class="new-sidebar-link" id="navConnections" onclick="showNewAppPage('connections')">
+                            <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            <span class="new-sidebar-label">My Connections</span>
+                        </div>
+                        <div class="new-sidebar-expand" id="connectionsExpand">
+                            <div class="new-sidebar-sublink active" onclick="filterNewConnections('all')">All</div>
+                            <div class="new-sidebar-sublink" onclick="filterNewConnections('connected')">Connected</div>
+                            <div class="new-sidebar-sublink" onclick="filterNewConnections('pending')">Pending</div>
+                        </div>
                     </div>
-                    <div class="dropdown-item" onclick="showPage('attention')">
-                        Attention Required
+                    
+                    <div class="new-sidebar-section">
+                        <div class="new-sidebar-link" id="navOpportunities" onclick="showNewAppPage('opportunities')">
+                            <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                            </svg>
+                            <span class="new-sidebar-label">Opportunities</span>
+                            <span class="new-sidebar-badge" id="opportunitiesBadge" style="display: none;">0</span>
+                        </div>
                     </div>
-                    <a href="https://t.me/TapinXBot" target="_blank" class="dropdown-item">
-                        Speak to Taj
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-item" onclick="logout()">
-                        Logout
+                    
+                    <div class="new-sidebar-section">
+                        <div class="new-sidebar-link" id="navReferrals" onclick="showNewAppPage('referrals')">
+                            <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                                <polyline points="16 6 12 2 8 6"/>
+                                <line x1="12" y1="2" x2="12" y2="15"/>
+                            </svg>
+                            <span class="new-sidebar-label">Referrals</span>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </header>
-        
-        <main class="dashboard-main">
-            <div class="welcome-section">
-                <h1 class="welcome-title">Welcome, <span id="welcomeName">User</span>!</h1>
-                <p class="welcome-subtitle">Your profile is ready. Start making connections.</p>
-            </div>
-            
-            <div class="profile-card" onclick="openEditProfileModal()">
-                <div class="profile-avatar-large">
-                    <span id="dashProfileInitial">T</span>
-                    <img id="dashProfileImg" style="display: none;">
-                </div>
-                <h2 class="profile-card-name" id="dashProfileName">User</h2>
-                <p class="profile-card-bio" id="dashProfileBio">No bio yet</p>
-                <div class="profile-socials" id="dashProfileSocials"></div>
-            </div>
-            
-            <div class="action-cards">
-                <div class="action-card" id="attentionCard" onclick="showPage('attention')">
-                    <h3 class="action-title">Attention Required!!</h3>
-                    <p class="action-desc">6 opportunities waiting</p>
-                </div>
-                <a href="https://t.me/TapinXBot" target="_blank" class="action-card">
-                    <h3 class="action-title">Speak to Taj</h3>
-                    <p class="action-desc">Tell Taj who you want to meet</p>
+                    
+                    <div class="new-sidebar-section">
+                        <div class="new-sidebar-link" id="navSettings" onclick="showNewAppPage('settings')">
+                            <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            </svg>
+                            <span class="new-sidebar-label">Settings</span>
+                        </div>
+                    </div>
+                </nav>
+                
+                <a href="https://t.me/TapinXBot" target="_blank" class="new-sidebar-cta">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                    Start Texting
                 </a>
-                <div class="action-card" id="connectionsCard" onclick="showPage('connections')">
-                    <h3 class="action-title">My Connections</h3>
-                    <p class="action-desc">View your network</p>
+                
+                <div class="new-sidebar-profile" onclick="openNewEditProfile()">
+                    <div class="new-sidebar-avatar">
+                        <span id="newSidebarAvatarInitial">T</span>
+                        <img id="newSidebarAvatarImg" style="display: none;">
+                    </div>
+                    <div class="new-sidebar-profile-info">
+                        <div class="new-sidebar-profile-name" id="newSidebarName">User</div>
+                        <div class="new-sidebar-profile-handle">Edit profile</div>
+                    </div>
                 </div>
-                <div class="action-card" onclick="window.open('https://t.me/TapinXBot', '_blank')">
-                    <h3 class="action-title">Invite Friends</h3>
-                    <p class="action-desc">Grow your network</p>
+            </aside>
+            
+            <!-- Main Column -->
+            <main class="new-main-column">
+                <!-- Speak to Taj Page -->
+                <div id="newSpeakPage">
+                    <header class="new-main-header">
+                        <h1 class="new-main-title">Speak to Taj</h1>
+                    </header>
+                    <div class="new-speak-content">
+                        <h2 class="new-speak-title">One message.<br>Real introductions.</h2>
+                        <p class="new-speak-subtitle">Tell Taj who you're looking for and get introduced to the right people.</p>
+                        <a href="https://t.me/TapinXBot" target="_blank" class="new-speak-cta">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                            </svg>
+                            Message Taj on Telegram
+                        </a>
+                        <div class="new-speak-meta">
+                            <div class="new-speak-meta-line">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                                <span>Private and secure</span>
+                            </div>
+                            <div class="new-speak-meta-line">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                                <span>Responses within 24 hours</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </main>
+                
+                <!-- My Connections Page -->
+                <div id="newConnectionsPage" style="display: none;">
+                    <header class="new-main-header">
+                        <h1 class="new-main-title">My Connections</h1>
+                    </header>
+                    <div class="new-tabs">
+                        <button class="new-tab active" onclick="setNewConnectionsTab(this, 'all')">All</button>
+                        <button class="new-tab" onclick="setNewConnectionsTab(this, 'connected')">Connected</button>
+                        <button class="new-tab" onclick="setNewConnectionsTab(this, 'pending')">Pending</button>
+                    </div>
+                    <div id="newConnectionsList"></div>
+                    <div class="new-empty-state" id="newConnectionsEmpty">
+                        <svg class="new-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        <h3 class="new-empty-title">No connections yet</h3>
+                        <p class="new-empty-text">When Taj introduces you to someone, they'll appear here.</p>
+                        <a href="https://t.me/TapinXBot" target="_blank" class="new-empty-cta">Message Taj</a>
+                    </div>
+                </div>
+                
+                <!-- Opportunities Page -->
+                <div id="newOpportunitiesPage" style="display: none;">
+                    <header class="new-main-header">
+                        <h1 class="new-main-title">Opportunities</h1>
+                    </header>
+                    <div class="new-tabs">
+                        <button class="new-tab active" onclick="filterNewOpportunities('all', this)">All</button>
+                        <button class="new-tab" onclick="filterNewOpportunities('professional', this)">Professional</button>
+                        <button class="new-tab" onclick="filterNewOpportunities('community', this)">Community</button>
+                        <button class="new-tab" onclick="filterNewOpportunities('saved', this)">Saved</button>
+                    </div>
+                    <div id="newOpportunitiesList"></div>
+                    <div class="new-empty-state" id="newOpportunitiesEmpty">
+                        <svg class="new-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                        <h3 class="new-empty-title">Nothing to review right now</h3>
+                        <p class="new-empty-text">Taj will surface opportunities aligned with your intent.</p>
+                    </div>
+                </div>
+                
+                <!-- Referrals Page -->
+                <div id="newReferralsPage" style="display: none;">
+                    <header class="new-main-header">
+                        <h1 class="new-main-title">Referrals</h1>
+                    </header>
+                    <div class="new-referral-intro">
+                        <div class="new-referral-intro-title">Know someone who'd benefit from TapinX?</div>
+                        <div class="new-referral-intro-text">We'll introduce them if it aligns with their intent.</div>
+                    </div>
+                    <div class="new-referral-form">
+                        <input type="text" class="new-referral-input" id="newReferralName" placeholder="Their name">
+                        <input type="text" class="new-referral-input" id="newReferralContact" placeholder="Phone or email">
+                        <textarea class="new-referral-input new-referral-textarea" id="newReferralContext" placeholder="Why would they benefit? What are they looking for?"></textarea>
+                        <button class="new-referral-submit" onclick="submitNewReferral()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                                <polyline points="16 6 12 2 8 6"/>
+                                <line x1="12" y1="2" x2="12" y2="15"/>
+                            </svg>
+                            Send Referral
+                        </button>
+                    </div>
+                    <div id="newReferralsList"></div>
+                </div>
+                
+                <!-- Settings Page -->
+                <div id="newSettingsPage" style="display: none;">
+                    <header class="new-main-header">
+                        <h1 class="new-main-title">Settings</h1>
+                    </header>
+                    
+                    <div class="new-settings-section">
+                        <div class="new-settings-section-title">Matching Preferences</div>
+                        <div class="new-settings-item" onclick="openNewEditProfile()">
+                            <div>
+                                <div class="new-settings-item-title">Primary Intent</div>
+                                <div class="new-settings-item-desc" id="newSettingsIntent">Professional</div>
+                            </div>
+                            <svg class="new-settings-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+                        </div>
+                        <div class="new-settings-item">
+                            <div>
+                                <div class="new-settings-item-title">Pause matching</div>
+                                <div class="new-settings-item-desc">Temporarily stop receiving opportunities</div>
+                            </div>
+                            <div class="new-settings-toggle" onclick="this.classList.toggle('active')"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="new-settings-section">
+                        <div class="new-settings-section-title">Notifications</div>
+                        <div class="new-settings-item">
+                            <div>
+                                <div class="new-settings-item-title">Push notifications</div>
+                                <div class="new-settings-item-desc">Get notified about new opportunities</div>
+                            </div>
+                            <div class="new-settings-toggle active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+                        <div class="new-settings-item">
+                            <div>
+                                <div class="new-settings-item-title">Email digest</div>
+                                <div class="new-settings-item-desc">Weekly summary of your connections</div>
+                            </div>
+                            <div class="new-settings-toggle" onclick="this.classList.toggle('active')"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="new-settings-section">
+                        <div class="new-settings-item" onclick="logout()" style="color: #f4212e;">
+                            <div>
+                                <div class="new-settings-item-title" style="color: #f4212e;">Log out</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            
+            <!-- Right Column -->
+            <aside class="new-right-column">
+                <div class="new-right-card">
+                    <div class="new-right-card-title">Getting started</div>
+                    <div class="new-right-card-item" onclick="showNewAppPage('speak')">
+                        <div class="new-right-card-item-title">Message Taj</div>
+                        <div class="new-right-card-item-desc">Tell Taj who you want to meet</div>
+                    </div>
+                    <div class="new-right-card-item" onclick="openNewEditProfile()">
+                        <div class="new-right-card-item-title">Complete your profile</div>
+                        <div class="new-right-card-item-desc">Help Taj make better matches</div>
+                    </div>
+                </div>
+            </aside>
+        </div>
     </div>
     
     <!-- ========== CONNECTIONS PAGE ========== -->
-    <div class="page" id="connectionsPage">
-        <header class="header connections-header">
+    <div class="page workspace-page" id="connectionsPage">
+        <header class="header workspace-header">
             <span class="logo" onclick="showPage('dashboard')">T</span>
             <div class="profile-btn" onclick="toggleConnectionsDropdown(event)">
                 <div class="avatar">
@@ -3272,79 +4925,76 @@
             </div>
         </header>
         
-        <main class="connections-main">
-            <button class="page-back-btn" onclick="showPage('dashboard')">← Back</button>
+        <div class="workspace-layout">
+            <!-- Context Rail -->
+            <aside class="context-rail">
+                <div class="rail-profile">
+                    <div class="rail-avatar">
+                        <span id="connRailInitial">T</span>
+                        <img id="connRailImg" style="display: none; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                    </div>
+                    <span class="rail-name" id="connRailName">User</span>
+                </div>
+                <nav class="rail-nav">
+                    <div class="rail-link active" onclick="showPage('connections')">
+                        My Connections
+                        <span class="rail-link-count" id="railConnCount">0</span>
+                    </div>
+                    <div class="rail-link" id="railAttnLink" onclick="showPage('attention')">
+                        Attention Required
+                        <span class="rail-link-count" id="railAttnCount">0</span>
+                    </div>
+                </nav>
+            </aside>
             
-            <!-- Page Header - Anchor -->
-            <div class="conn-page-header">
-                <h1 class="conn-page-title">My Connections</h1>
-                <p class="conn-page-meta">People Taj has introduced you to — and where things stand.</p>
-            </div>
-            
-            <div class="conn-page-divider"></div>
-            
-            <!-- Search & Filter Controls -->
-            <div class="conn-controls">
-                <div class="conn-search-container">
-                    <div class="conn-search-bar">
-                        <svg class="conn-search-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
-                        <input type="text" placeholder="Search connections..." id="connSearchInput" oninput="filterConnections()">
+            <!-- Main Content -->
+            <main class="workspace-main">
+                <h1 class="workspace-title">My Connections</h1>
+                
+                <!-- Controls -->
+                <div class="workspace-controls">
+                    <div class="workspace-search">
+                        <div class="workspace-search-input" id="connSearchBar">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+                            <input type="text" placeholder="Search connections..." id="connSearchInput" oninput="filterConnections()">
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Status Tabs (Segmented Control) -->
-            <div class="conn-status-tabs">
-                <button class="conn-status-tab active" onclick="setConnStatus(this, 'all')">All<span class="conn-status-count" id="connAllCount">0</span></button>
-                <button class="conn-status-tab" onclick="setConnStatus(this, 'pending')">Pending<span class="conn-status-count" id="connPendingCount">0</span></button>
-                <button class="conn-status-tab" onclick="setConnStatus(this, 'connected')">Connected<span class="conn-status-count" id="connConnectedCount">0</span></button>
-            </div>
-            
-            <!-- Connection List -->
-            <div class="conn-list" id="connList">
-                <!-- Pending Section -->
-                <div class="conn-section" id="pendingSection" style="display: none;"></div>
                 
-                <!-- Connected Section -->
-                <div class="conn-section" id="connectedSection"></div>
-            </div>
-            
-            <!-- Empty State -->
-            <div class="conn-empty" id="emptyConnections">
-                <h2 class="conn-empty-title">No introductions yet</h2>
-                <p class="conn-empty-text">When Taj connects you with someone, they'll appear here.</p>
-                <p class="conn-empty-meta">Introductions usually happen within 24–48 hours.</p>
-                <a href="https://t.me/TapinXBot" target="_blank" class="conn-empty-btn">Message Taj</a>
-                <p class="conn-empty-notify">You'll be notified when there's an update.</p>
-                
-                <!-- Skeleton Row - Future State Affordance -->
-                <div class="conn-skeleton-row">
-                    <div class="skeleton-avatar"></div>
-                    <div class="skeleton-content">
-                        <div class="skeleton-line short"></div>
-                        <div class="skeleton-line medium"></div>
-                    </div>
-                    <div class="skeleton-btn"></div>
+                <!-- Tabs -->
+                <div class="workspace-tabs">
+                    <button class="workspace-tab active" onclick="setConnStatus(this, 'all')">All<span class="workspace-tab-count" id="connAllCount">0</span></button>
+                    <button class="workspace-tab" onclick="setConnStatus(this, 'pending')">Pending<span class="workspace-tab-count" id="connPendingCount">0</span></button>
+                    <button class="workspace-tab" onclick="setConnStatus(this, 'connected')">Connected<span class="workspace-tab-count" id="connConnectedCount">0</span></button>
                 </div>
-            </div>
-            
-            <!-- Empty state for pending filter -->
-            <div class="conn-empty" id="emptyPending" style="display: none;">
-                <h2 class="conn-empty-title">No pending introductions</h2>
-                <p class="conn-empty-text">All caught up! Check back soon.</p>
-            </div>
-            
-            <!-- Empty state for connected filter -->
-            <div class="conn-empty" id="emptyConnected" style="display: none;">
-                <h2 class="conn-empty-title">No connections yet</h2>
-                <p class="conn-empty-text">When Taj connects you with someone, they'll appear here.</p>
-                <p class="conn-empty-meta">Introductions usually happen within 24–48 hours.</p>
-                <a href="https://t.me/TapinXBot" target="_blank" class="conn-empty-btn">Message Taj</a>
-            </div>
-            
-            <!-- Toast notification -->
-            <div class="conn-toast" id="connToast"></div>
-        </main>
+                
+                <!-- List Container -->
+                <div class="workspace-list" id="connList">
+                    <!-- Rows render here -->
+                </div>
+                
+                <!-- Empty State -->
+                <div class="workspace-empty" id="emptyConnections">
+                    <div class="workspace-empty-title">No introductions yet</div>
+                    <p class="workspace-empty-text">When Taj connects you with someone, they'll appear here.</p>
+                    <a href="https://t.me/TapinXBot" target="_blank" class="workspace-empty-btn">Message Taj</a>
+                    <p class="workspace-empty-note">You'll be notified when there's an update.</p>
+                    
+                    <!-- Skeleton -->
+                    <div class="workspace-skeleton">
+                        <div class="skeleton-avatar"></div>
+                        <div class="skeleton-content">
+                            <div class="skeleton-line short"></div>
+                            <div class="skeleton-line medium"></div>
+                        </div>
+                        <div class="skeleton-btn"></div>
+                    </div>
+                </div>
+                
+                <!-- Toast -->
+                <div class="workspace-toast" id="connToast"></div>
+            </main>
+        </div>
     </div>
     
     <!-- ========== ATTENTION REQUIRED PAGE ========== -->
@@ -3380,13 +5030,67 @@
             </div>
         </header>
         
-        <main class="attention-main">
-            <button class="page-back-btn" onclick="showPage('dashboard')">← Back</button>
+        <div class="workspace-layout">
+            <!-- Context Rail -->
+            <aside class="context-rail">
+                <div class="rail-profile">
+                    <div class="rail-avatar">
+                        <span id="attnRailInitial">T</span>
+                        <img id="attnRailImg" style="display: none; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                    </div>
+                    <span class="rail-name" id="attnRailName">User</span>
+                </div>
+                <nav class="rail-nav">
+                    <div class="rail-link" onclick="showPage('connections')">
+                        My Connections
+                        <span class="rail-link-count" id="attnRailConnCount">0</span>
+                    </div>
+                    <div class="rail-link active" id="attnRailAttnLink" onclick="showPage('attention')">
+                        Attention Required
+                        <span class="rail-link-count" id="attnRailAttnCount">0</span>
+                    </div>
+                </nav>
+            </aside>
             
-            <div class="attn-page-header">
-                <h1 class="attn-page-title">Attention Required</h1>
-                <p class="attn-page-subtitle">Opportunities from Taj waiting for your response</p>
-            </div>
+            <!-- Main Content -->
+            <main class="workspace-main">
+                <h1 class="workspace-title">Attention Required</h1>
+                
+                <!-- Tabs -->
+                <div class="workspace-tabs">
+                    <button class="workspace-tab active" id="attnTabNeeds" onclick="setAttnStatusNew(this, 'active')">Needs Response<span class="workspace-tab-count" id="attnNeedsCount">0</span></button>
+                    <button class="workspace-tab" onclick="setAttnStatusNew(this, 'interested')">Interested<span class="workspace-tab-count" id="attnInterestedCount">0</span></button>
+                    <button class="workspace-tab" onclick="setAttnStatusNew(this, 'passed')">Passed<span class="workspace-tab-count" id="attnPassedCount">0</span></button>
+                </div>
+                
+                <!-- List Container -->
+                <div class="workspace-list" id="attnList">
+                    <!-- Rows render here -->
+                </div>
+                
+                <!-- Empty State - Needs Response -->
+                <div class="workspace-empty" id="emptyAttnActive">
+                    <div class="workspace-empty-title">You're all caught up</div>
+                    <p class="workspace-empty-text">There are no introductions waiting right now.</p>
+                    <p class="workspace-empty-note">Taj will notify you when there's something to review.</p>
+                </div>
+                
+                <!-- Empty State - Interested -->
+                <div class="workspace-empty" id="emptyAttnInterested" style="display: none;">
+                    <div class="workspace-empty-title">No interested introductions</div>
+                    <p class="workspace-empty-text">When you express interest, they'll appear here.</p>
+                </div>
+                
+                <!-- Empty State - Passed -->
+                <div class="workspace-empty" id="emptyAttnPassed" style="display: none;">
+                    <div class="workspace-empty-title">No passed introductions</div>
+                    <p class="workspace-empty-text">Introductions you pass on will appear here.</p>
+                </div>
+                
+                <!-- Toast -->
+                <div class="workspace-toast" id="attnToast"></div>
+            </main>
+        </div>
             
             <!-- Status Tabs -->
             <div class="attn-status-tabs">
@@ -4980,6 +6684,7 @@
             const photo = localStorage.getItem('tapinx_user_photo');
             const initial = name.charAt(0).toUpperCase();
             
+            // Update header
             document.getElementById('connHeaderName').textContent = name;
             document.getElementById('connAvatarInitial').textContent = initial;
             
@@ -4989,14 +6694,27 @@
                 document.getElementById('connAvatarInitial').style.display = 'none';
             }
             
-            // Clear sections
-            const pendingSection = document.getElementById('pendingSection');
-            const connectedSection = document.getElementById('connectedSection');
-            const emptyConnections = document.getElementById('emptyConnections');
-            const searchBar = document.querySelector('.conn-search-bar');
+            // Update context rail
+            const railInitial = document.getElementById('connRailInitial');
+            const railImg = document.getElementById('connRailImg');
+            const railName = document.getElementById('connRailName');
             
-            pendingSection.innerHTML = '';
-            connectedSection.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">Loading...</div>';
+            if (railInitial) railInitial.textContent = initial;
+            if (railName) railName.textContent = name;
+            if (railImg && photo) {
+                railImg.src = photo;
+                railImg.style.display = 'block';
+                if (railInitial) railInitial.style.display = 'none';
+            }
+            
+            // Get elements
+            const connList = document.getElementById('connList');
+            const emptyConnections = document.getElementById('emptyConnections');
+            const searchBar = document.getElementById('connSearchBar');
+            
+            // Show loading
+            connList.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">Loading...</div>';
+            if (emptyConnections) emptyConnections.style.display = 'none';
             
             // Fetch real connections from API
             const { connections, count } = await fetchConnections();
@@ -5007,43 +6725,44 @@
             document.getElementById('connPendingCount').textContent = pendingCount;
             document.getElementById('connConnectedCount').textContent = count;
             
+            // Update rail counts
+            const railConnCount = document.getElementById('railConnCount');
+            if (railConnCount) railConnCount.textContent = count;
+            
             // Handle tabs - conditional red and softening
-            document.querySelectorAll('.conn-status-tab').forEach(tab => {
-                const countEl = tab.querySelector('.conn-status-count');
+            document.querySelectorAll('.workspace-tab').forEach(tab => {
+                const countEl = tab.querySelector('.workspace-tab-count');
                 const tabCount = countEl ? parseInt(countEl.textContent) : 0;
                 
                 // Remove all state classes first
-                tab.classList.remove('softened', 'has-action');
-                
-                // Soften if count is 0
-                if (tabCount === 0) {
-                    tab.classList.add('softened');
-                }
+                tab.classList.remove('has-action');
             });
             
             // Red only when pending > 0 (action required)
-            const pendingTab = document.querySelector('.conn-status-tab[onclick*="pending"]');
-            if (pendingTab && pendingCount > 0) {
-                pendingTab.classList.add('has-action');
-                pendingTab.classList.remove('softened');
+            if (pendingCount > 0) {
+                const pendingTab = document.querySelector('.workspace-tab[onclick*="pending"]');
+                if (pendingTab) {
+                    pendingTab.classList.add('has-action');
+                }
             }
             
             // De-emphasize search when empty
-            if (count === 0) {
-                searchBar.classList.add('subdued');
-            } else {
-                searchBar.classList.remove('subdued');
+            if (searchBar) {
+                if (count === 0) {
+                    searchBar.classList.add('subdued');
+                } else {
+                    searchBar.classList.remove('subdued');
+                }
             }
             
             if (count === 0) {
-                pendingSection.style.display = 'none';
-                connectedSection.style.display = 'none';
-                emptyConnections.style.display = 'block';
+                connList.innerHTML = '';
+                connList.style.display = 'none';
+                if (emptyConnections) emptyConnections.style.display = 'block';
             } else {
-                emptyConnections.style.display = 'none';
-                pendingSection.style.display = 'none';
-                connectedSection.style.display = 'block';
-                connectedSection.innerHTML = connections.map(c => renderConnectionRow(c)).join('');
+                if (emptyConnections) emptyConnections.style.display = 'none';
+                connList.style.display = 'block';
+                connList.innerHTML = connections.map(c => renderConnectionRow(c)).join('');
             }
         }
         
@@ -5053,16 +6772,16 @@
             const context = conn.role || conn.title || '';
             
             return `
-                <div class="connection-row" data-conn-status="connected" data-name="${conn.name || 'Unknown'}">
-                    <div class="row-avatar">${initial}</div>
-                    <div class="row-content">
-                        <div class="row-name">${conn.name || 'Unknown'}</div>
-                        <div class="row-context">${context}</div>
-                        <div class="row-intro-meta">Introduced by Taj · ${timeAgo}</div>
+                <div class="workspace-row" data-conn-status="connected" data-name="${conn.name || 'Unknown'}">
+                    <div class="workspace-row-avatar">${initial}</div>
+                    <div class="workspace-row-content">
+                        <div class="workspace-row-name">${conn.name || 'Unknown'}</div>
+                        <div class="workspace-row-context">${context}</div>
+                        <div class="workspace-row-meta">Introduced by Taj · ${timeAgo}</div>
                     </div>
-                    <div class="row-actions">
-                        <button class="row-btn row-btn-primary" onclick="messageConnection(this, '${conn.name}')">Message</button>
-                        ${conn.linkedin_url ? `<button class="row-btn row-btn-secondary" onclick="window.open('${conn.linkedin_url}', '_blank')">View</button>` : ''}
+                    <div class="workspace-row-actions">
+                        <button class="workspace-btn workspace-btn-primary" onclick="messageConnection(this, '${conn.name}')">Message</button>
+                        ${conn.linkedin_url ? `<button class="workspace-btn workspace-btn-secondary" onclick="window.open('${conn.linkedin_url}', '_blank')">View</button>` : ''}
                     </div>
                 </div>
             `;
@@ -5072,46 +6791,28 @@
         let currentConnStatus = 'all';
         
         function setConnStatus(btn, status) {
-            document.querySelectorAll('.conn-status-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('#connectionsPage .workspace-tab').forEach(t => t.classList.remove('active'));
             btn.classList.add('active');
             currentConnStatus = status;
             
-            const pendingSection = document.getElementById('pendingSection');
-            const connectedSection = document.getElementById('connectedSection');
-            const emptyPending = document.getElementById('emptyPending');
-            const emptyConnected = document.getElementById('emptyConnected');
+            const connList = document.getElementById('connList');
             const emptyConnections = document.getElementById('emptyConnections');
             
             // Count items
-            const pendingCount = document.querySelectorAll('.attention-card[data-conn-status="pending"]').length;
-            const connectedCount = document.querySelectorAll('.connection-row[data-conn-status="connected"]').length;
-            const totalCount = pendingCount + connectedCount;
+            const connectedCount = document.querySelectorAll('.workspace-row[data-conn-status="connected"]').length;
             
-            // Hide main empty state if there are any connections
-            if (totalCount > 0) {
-                emptyConnections.style.display = 'none';
-            }
-            
-            if (status === 'all') {
-                pendingSection.style.display = pendingCount > 0 ? 'block' : 'none';
-                connectedSection.style.display = connectedCount > 0 ? 'block' : 'none';
-                emptyPending.style.display = 'none';
-                emptyConnected.style.display = 'none';
-                if (totalCount === 0) {
-                    emptyConnections.style.display = 'block';
+            if (status === 'all' || status === 'connected') {
+                if (connectedCount > 0) {
+                    connList.style.display = 'block';
+                    if (emptyConnections) emptyConnections.style.display = 'none';
+                } else {
+                    connList.style.display = 'none';
+                    if (emptyConnections) emptyConnections.style.display = 'block';
                 }
             } else if (status === 'pending') {
-                pendingSection.style.display = pendingCount > 0 ? 'block' : 'none';
-                connectedSection.style.display = 'none';
-                emptyPending.style.display = pendingCount === 0 ? 'block' : 'none';
-                emptyConnected.style.display = 'none';
-                emptyConnections.style.display = 'none';
-            } else if (status === 'connected') {
-                pendingSection.style.display = 'none';
-                connectedSection.style.display = connectedCount > 0 ? 'block' : 'none';
-                emptyPending.style.display = 'none';
-                emptyConnected.style.display = connectedCount === 0 ? 'block' : 'none';
-                emptyConnections.style.display = 'none';
+                // No pending items yet - show empty
+                connList.style.display = 'none';
+                if (emptyConnections) emptyConnections.style.display = 'block';
             }
         }
         
@@ -5122,9 +6823,9 @@
         function filterConnections() {
             const query = document.getElementById('connSearchInput').value.toLowerCase();
             
-            document.querySelectorAll('.connection-row').forEach(row => {
+            document.querySelectorAll('.workspace-row').forEach(row => {
                 const name = row.dataset.name ? row.dataset.name.toLowerCase() : '';
-                const context = row.querySelector('.row-context');
+                const context = row.querySelector('.workspace-row-context');
                 const contextText = context ? context.textContent.toLowerCase() : '';
                 
                 if (name.includes(query) || contextText.includes(query)) {
@@ -5133,25 +6834,13 @@
                     row.style.display = 'none';
                 }
             });
-            
-            document.querySelectorAll('.attention-card').forEach(card => {
-                const name = card.dataset.name ? card.dataset.name.toLowerCase() : '';
-                
-                if (name.includes(query)) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
         }
         
         function updateConnCounts() {
-            const pendingCount = document.querySelectorAll('.attention-card[data-conn-status="pending"]').length;
-            const connectedCount = document.querySelectorAll('.connection-row[data-conn-status="connected"]').length;
-            const totalCount = pendingCount + connectedCount;
+            const connectedCount = document.querySelectorAll('.workspace-row[data-conn-status="connected"]').length;
             
-            document.getElementById('connAllCount').textContent = totalCount;
-            document.getElementById('connPendingCount').textContent = pendingCount;
+            document.getElementById('connAllCount').textContent = connectedCount;
+            document.getElementById('connPendingCount').textContent = 0;
             document.getElementById('connConnectedCount').textContent = connectedCount;
             document.getElementById('pendingBadge').textContent = pendingCount;
         }
@@ -5218,17 +6907,16 @@
         }
         
         function checkConnEmptyState() {
-            const pendingCount = document.querySelectorAll('.attention-card[data-conn-status="pending"]').length;
-            const connectedCount = document.querySelectorAll('.connection-row[data-conn-status="connected"]').length;
+            const connectedCount = document.querySelectorAll('.workspace-row[data-conn-status="connected"]').length;
+            const connList = document.getElementById('connList');
+            const emptyConnections = document.getElementById('emptyConnections');
             
-            const pendingSection = document.getElementById('pendingSection');
-            const emptyPending = document.getElementById('emptyPending');
-            
-            if (currentConnStatus === 'all') {
-                pendingSection.style.display = pendingCount > 0 ? 'block' : 'none';
-            } else if (currentConnStatus === 'pending') {
-                pendingSection.style.display = pendingCount > 0 ? 'block' : 'none';
-                emptyPending.style.display = pendingCount === 0 ? 'block' : 'none';
+            if (connectedCount === 0) {
+                if (connList) connList.style.display = 'none';
+                if (emptyConnections) emptyConnections.style.display = 'block';
+            } else {
+                if (connList) connList.style.display = 'block';
+                if (emptyConnections) emptyConnections.style.display = 'none';
             }
         }
         
@@ -5247,6 +6935,7 @@
             const photo = localStorage.getItem('tapinx_user_photo');
             const initial = name.charAt(0).toUpperCase();
             
+            // Update header
             document.getElementById('attnHeaderName').textContent = name;
             document.getElementById('attnAvatarInitial').textContent = initial;
             
@@ -5256,56 +6945,159 @@
                 document.getElementById('attnAvatarInitial').style.display = 'none';
             }
             
-            // Clear demo data and load real data
-            const proposalsContainer = document.getElementById('attnProposals');
-            proposalsContainer.innerHTML = '<div style="text-align:center;padding:40px;color:#666;">Loading...</div>';
+            // Update context rail
+            const railInitial = document.getElementById('attnRailInitial');
+            const railImg = document.getElementById('attnRailImg');
+            const railName = document.getElementById('attnRailName');
+            
+            if (railInitial) railInitial.textContent = initial;
+            if (railName) railName.textContent = name;
+            if (railImg && photo) {
+                railImg.src = photo;
+                railImg.style.display = 'block';
+                if (railInitial) railInitial.style.display = 'none';
+            }
+            
+            // Get elements
+            const attnList = document.getElementById('attnList');
+            const emptyAttnActive = document.getElementById('emptyAttnActive');
+            
+            // Show loading
+            if (attnList) attnList.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">Loading...</div>';
+            if (emptyAttnActive) emptyAttnActive.style.display = 'none';
             
             // Fetch real matches from API
             const { matches, count } = await fetchMatches();
             
             // Update counts
-            document.getElementById('activeCount').textContent = count;
-            document.getElementById('interestedCount').textContent = '0';
-            document.getElementById('passedCount').textContent = '0';
+            const needsCount = document.getElementById('attnNeedsCount');
+            const interestedCount = document.getElementById('attnInterestedCount');
+            const passedCount = document.getElementById('attnPassedCount');
             
-            // Update filter tab count
-            const allTabCount = document.querySelector('.attn-tab.active .attn-tab-count');
-            if (allTabCount) allTabCount.textContent = count;
+            if (needsCount) needsCount.textContent = count;
+            if (interestedCount) interestedCount.textContent = '0';
+            if (passedCount) passedCount.textContent = '0';
+            
+            // Update rail counts
+            const railAttnCount = document.getElementById('attnRailAttnCount');
+            if (railAttnCount) railAttnCount.textContent = count;
+            
+            // Handle red tab when action required
+            const needsTab = document.getElementById('attnTabNeeds');
+            if (needsTab) {
+                if (count > 0) {
+                    needsTab.classList.add('has-action');
+                } else {
+                    needsTab.classList.remove('has-action');
+                }
+            }
             
             if (count === 0) {
-                proposalsContainer.innerHTML = '';
-                document.getElementById('emptyActive').style.display = 'block';
-                document.querySelector('.attn-filter-tabs').style.display = 'none';
+                if (attnList) attnList.innerHTML = '';
+                if (attnList) attnList.style.display = 'none';
+                if (emptyAttnActive) emptyAttnActive.style.display = 'block';
             } else {
-                proposalsContainer.innerHTML = '';
-                document.getElementById('emptyActive').style.display = 'none';
-                document.querySelector('.attn-filter-tabs').style.display = 'flex';
-                matches.forEach(match => {
-                    proposalsContainer.innerHTML += renderProposalCard(match);
-                });
+                if (emptyAttnActive) emptyAttnActive.style.display = 'none';
+                if (attnList) {
+                    attnList.style.display = 'block';
+                    attnList.innerHTML = matches.map(m => renderAttnRow(m)).join('');
+                }
             }
         }
         
-        function renderProposalCard(match) {
+        function renderAttnRow(match) {
+            const initial = match.other_name ? match.other_name.charAt(0).toUpperCase() : 'T';
             const timeAgo = formatTimeAgo(match.created_at);
+            
             return `
-                <div class="proposal-card" data-type="intro" data-status="active" data-id="${match.id}">
-                    <div class="proposal-badge job">Introduction</div>
-                    <div class="proposal-header">
-                        <div class="proposal-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">T</div>
-                        <div class="proposal-meta">
-                            <div class="proposal-from">From <strong>Taj</strong> • ${timeAgo}</div>
-                        </div>
+                <div class="workspace-row" data-status="active" data-id="${match.id}">
+                    <div class="workspace-row-avatar">${initial}</div>
+                    <div class="workspace-row-content">
+                        <div class="workspace-row-name">${match.other_name || 'New Connection'}</div>
+                        <div class="workspace-row-context">${match.intro_message || 'Taj wants to introduce you'}</div>
+                        <div class="workspace-row-meta">Introduced by Taj · ${timeAgo}</div>
                     </div>
-                    <h3 class="proposal-title">Connect with ${match.other_name || 'someone'}</h3>
-                    <p class="proposal-desc">${match.intro_message || 'Taj wants to introduce you to someone in the network.'}</p>
-                    <div class="proposal-actions">
-                        <button class="proposal-btn primary" onclick="markInterested(this)">I'm Interested</button>
-                        <button class="proposal-btn secondary" onclick="markPassed(this)">Not for me</button>
-                        <button class="proposal-btn tertiary" onclick="askTajMore(this, 'this connection')">Ask Taj more</button>
+                    <div class="workspace-row-actions">
+                        <button class="workspace-btn workspace-btn-primary" onclick="markInterestedNew(this)">Interested</button>
+                        <button class="workspace-btn workspace-btn-secondary" onclick="markPassedNew(this)">Pass</button>
                     </div>
                 </div>
             `;
+        }
+        
+        function setAttnStatusNew(btn, status) {
+            document.querySelectorAll('#attentionPage .workspace-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const attnList = document.getElementById('attnList');
+            const emptyActive = document.getElementById('emptyAttnActive');
+            const emptyInterested = document.getElementById('emptyAttnInterested');
+            const emptyPassed = document.getElementById('emptyAttnPassed');
+            
+            // Hide all empty states
+            if (emptyActive) emptyActive.style.display = 'none';
+            if (emptyInterested) emptyInterested.style.display = 'none';
+            if (emptyPassed) emptyPassed.style.display = 'none';
+            
+            // Show appropriate empty state based on status
+            if (status === 'active') {
+                const activeRows = document.querySelectorAll('.workspace-row[data-status="active"]');
+                if (activeRows.length === 0 && emptyActive) emptyActive.style.display = 'block';
+            } else if (status === 'interested') {
+                if (emptyInterested) emptyInterested.style.display = 'block';
+            } else if (status === 'passed') {
+                if (emptyPassed) emptyPassed.style.display = 'block';
+            }
+        }
+        
+        function markInterestedNew(btn) {
+            const row = btn.closest('.workspace-row');
+            row.style.opacity = '0.5';
+            setTimeout(() => {
+                row.remove();
+                showWorkspaceToast('Marked as interested');
+                updateAttnCounts();
+            }, 200);
+        }
+        
+        function markPassedNew(btn) {
+            const row = btn.closest('.workspace-row');
+            row.style.opacity = '0.5';
+            setTimeout(() => {
+                row.remove();
+                showWorkspaceToast('Passed');
+                updateAttnCounts();
+            }, 200);
+        }
+        
+        function updateAttnCounts() {
+            const activeCount = document.querySelectorAll('#attnList .workspace-row[data-status="active"]').length;
+            const needsCount = document.getElementById('attnNeedsCount');
+            if (needsCount) needsCount.textContent = activeCount;
+            
+            // Update rail
+            const railAttnCount = document.getElementById('attnRailAttnCount');
+            if (railAttnCount) railAttnCount.textContent = activeCount;
+            
+            // Show empty state if no more
+            if (activeCount === 0) {
+                const emptyActive = document.getElementById('emptyAttnActive');
+                if (emptyActive) emptyActive.style.display = 'block';
+            }
+        }
+        
+        function showWorkspaceToast(message) {
+            const toast = document.getElementById('attnToast') || document.getElementById('connToast');
+            if (toast) {
+                toast.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2500);
+            }
+        }
+        
+        // Keep old functions for compatibility
+        function renderProposalCard(match) {
+            return renderAttnRow(match);
         }
         
         function formatTimeAgo(dateString) {
@@ -5531,6 +7323,228 @@
                 words[currentIndex].classList.add('active');
             }, 3000);
         })();
+        
+        // ========== NEW X.COM-STYLE APP FUNCTIONS ==========
+        let currentNewAppPage = 'speak';
+        
+        function showNewAppPage(page) {
+            currentNewAppPage = page;
+            
+            // Update sidebar nav
+            document.querySelectorAll('.new-sidebar-link').forEach(l => l.classList.remove('active'));
+            const navLink = document.getElementById('nav' + page.charAt(0).toUpperCase() + page.slice(1));
+            if (navLink) navLink.classList.add('active');
+            
+            // Hide all pages
+            document.getElementById('newSpeakPage').style.display = 'none';
+            document.getElementById('newConnectionsPage').style.display = 'none';
+            document.getElementById('newOpportunitiesPage').style.display = 'none';
+            document.getElementById('newReferralsPage').style.display = 'none';
+            document.getElementById('newSettingsPage').style.display = 'none';
+            
+            // Show/hide connections expand
+            document.getElementById('connectionsExpand').style.display = page === 'connections' ? 'block' : 'none';
+            
+            // Show selected page
+            if (page === 'speak') {
+                document.getElementById('newSpeakPage').style.display = 'block';
+            } else if (page === 'connections') {
+                document.getElementById('newConnectionsPage').style.display = 'block';
+                loadNewConnections();
+            } else if (page === 'opportunities') {
+                document.getElementById('newOpportunitiesPage').style.display = 'block';
+                loadNewOpportunities();
+            } else if (page === 'referrals') {
+                document.getElementById('newReferralsPage').style.display = 'block';
+            } else if (page === 'settings') {
+                document.getElementById('newSettingsPage').style.display = 'block';
+            }
+        }
+        
+        async function loadNewConnections() {
+            const { connections: conns, count } = await fetchConnections();
+            const list = document.getElementById('newConnectionsList');
+            const empty = document.getElementById('newConnectionsEmpty');
+            
+            if (count === 0) {
+                list.innerHTML = '';
+                empty.style.display = 'block';
+            } else {
+                empty.style.display = 'none';
+                list.innerHTML = conns.map(c => `
+                    <div class="new-feed-item" data-status="${c.status || 'connected'}">
+                        <div class="new-feed-avatar">${(c.name || 'U').charAt(0).toUpperCase()}</div>
+                        <div class="new-feed-content">
+                            <div class="new-feed-header">
+                                <span class="new-feed-name">${c.name || 'Unknown'}</span>
+                                <span class="new-feed-status ${c.status || 'connected'}">${(c.status || 'Connected').charAt(0).toUpperCase() + (c.status || 'connected').slice(1)}</span>
+                            </div>
+                            <div class="new-feed-context">${c.role || c.title || 'Introduction from Taj'}</div>
+                            <div class="new-feed-time">${formatNewDate(c.connected_at)}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function setNewConnectionsTab(btn, tab) {
+            document.querySelectorAll('#newConnectionsPage .new-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            filterNewConnections(tab);
+        }
+        
+        function filterNewConnections(status) {
+            document.querySelectorAll('#newConnectionsList .new-feed-item').forEach(item => {
+                const itemStatus = item.dataset.status;
+                if (status === 'all') {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = itemStatus === status ? 'flex' : 'none';
+                }
+            });
+            
+            // Update sidebar sublinks
+            document.querySelectorAll('.new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+            const sublinks = document.querySelectorAll('.new-sidebar-sublink');
+            if (status === 'all' && sublinks[0]) sublinks[0].classList.add('active');
+            if (status === 'connected' && sublinks[1]) sublinks[1].classList.add('active');
+            if (status === 'pending' && sublinks[2]) sublinks[2].classList.add('active');
+        }
+        
+        async function loadNewOpportunities() {
+            const { matches, count } = await fetchMatches();
+            const list = document.getElementById('newOpportunitiesList');
+            const empty = document.getElementById('newOpportunitiesEmpty');
+            
+            // Update badge
+            const badge = document.getElementById('opportunitiesBadge');
+            if (count > 0) {
+                badge.textContent = count;
+                badge.style.display = 'inline';
+            } else {
+                badge.style.display = 'none';
+            }
+            
+            if (count === 0) {
+                list.innerHTML = '';
+                empty.style.display = 'block';
+            } else {
+                empty.style.display = 'none';
+                const matchTypes = ['professional', 'community'];
+                const matchLabels = { professional: 'Professional match', community: 'Community-relevant' };
+                
+                list.innerHTML = matches.map(m => {
+                    const matchType = m.match_type || matchTypes[Math.floor(Math.random() * matchTypes.length)];
+                    return `
+                    <div class="new-feed-item" data-id="${m.id}" data-type="${matchType}">
+                        <div class="new-feed-avatar">${(m.other_name || 'T').charAt(0).toUpperCase()}</div>
+                        <div class="new-feed-content">
+                            <div class="new-feed-header">
+                                <span class="new-feed-name">${m.other_name || 'New opportunity'}</span>
+                                <span class="new-match-type ${matchType}">${matchLabels[matchType]}</span>
+                            </div>
+                            <div class="new-feed-text">Taj wants to introduce you to ${m.other_name || 'someone'}${m.intro_reason ? ' for ' + m.intro_reason : ''}</div>
+                            <div class="new-feed-time">${formatNewTimeAgo(m.created_at)}</div>
+                            <div class="new-feed-actions">
+                                <button class="new-feed-btn primary" onclick="acceptNewOpportunity('${m.id}')">Approve</button>
+                                <button class="new-feed-btn secondary" onclick="declineNewOpportunity('${m.id}')">Decline</button>
+                            </div>
+                        </div>
+                    </div>
+                `}).join('');
+            }
+        }
+        
+        function filterNewOpportunities(type, btn) {
+            document.querySelectorAll('#newOpportunitiesPage .new-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            
+            document.querySelectorAll('#newOpportunitiesList .new-feed-item').forEach(item => {
+                const itemType = item.dataset.type;
+                if (type === 'all') {
+                    item.style.display = 'flex';
+                } else if (type === 'saved') {
+                    item.style.display = item.dataset.saved === 'true' ? 'flex' : 'none';
+                } else {
+                    item.style.display = itemType === type ? 'flex' : 'none';
+                }
+            });
+        }
+        
+        async function acceptNewOpportunity(id) {
+            await respondToMatch(id, 'accept');
+            showNewToast('Introduction accepted!');
+            loadNewOpportunities();
+        }
+        
+        async function declineNewOpportunity(id) {
+            await respondToMatch(id, 'decline');
+            showNewToast('Passed');
+            loadNewOpportunities();
+        }
+        
+        function submitNewReferral() {
+            const name = document.getElementById('newReferralName').value;
+            const contact = document.getElementById('newReferralContact').value;
+            if (name && contact) {
+                showNewToast('Referral sent!');
+                document.getElementById('newReferralName').value = '';
+                document.getElementById('newReferralContact').value = '';
+                document.getElementById('newReferralContext').value = '';
+            }
+        }
+        
+        function openNewEditProfile() {
+            openEditProfileModal();
+        }
+        
+        function formatNewDate(dateStr) {
+            if (!dateStr) return '';
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+        
+        function formatNewTimeAgo(dateStr) {
+            if (!dateStr) return '';
+            const now = new Date();
+            const d = new Date(dateStr);
+            const diffMs = now - d;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            return `${diffDays}d ago`;
+        }
+        
+        function showNewToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'conn-toast show';
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        // Update sidebar with user data
+        function updateNewSidebar() {
+            const name = localStorage.getItem('tapinx_name') || 'User';
+            const photo = localStorage.getItem('tapinx_photo');
+            
+            document.getElementById('newSidebarName').textContent = name;
+            document.getElementById('newSidebarAvatarInitial').textContent = name.charAt(0).toUpperCase();
+            
+            if (photo) {
+                document.getElementById('newSidebarAvatarImg').src = photo;
+                document.getElementById('newSidebarAvatarImg').style.display = 'block';
+                document.getElementById('newSidebarAvatarInitial').style.display = 'none';
+            }
+        }
+        
+        // Call when page loads
+        if (document.getElementById('dashboardPage')) {
+            updateNewSidebar();
+        }
     </script>
 </body>
 </html>
