@@ -4010,10 +4010,11 @@
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             z-index: 100;
-            padding: 0 16px;
-            height: 53px;
+            padding: 12px 16px;
+            min-height: 53px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            justify-content: center;
             border-bottom: 1px solid #eff3f4;
             flex-shrink: 0;
         }
@@ -4022,6 +4023,12 @@
             font-size: 20px;
             font-weight: 700;
             color: #0f1419;
+        }
+        
+        .new-main-subtitle {
+            font-size: 13px;
+            color: #536471;
+            margin-top: 2px;
         }
         
         /* CENTERED CANVAS - For action/empty state pages */
@@ -4755,6 +4762,110 @@
         
         .new-empty-cta:hover {
             opacity: 0.9;
+        }
+        
+        /* ========== MY REQUESTS ROW STYLES ========== */
+        .new-request-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border-bottom: 1px solid #eff3f4;
+            transition: background-color 0.15s;
+        }
+        
+        .new-request-row:hover {
+            background-color: #f7f9f9;
+        }
+        
+        .new-request-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .new-request-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+        }
+        
+        .new-request-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0f1419;
+        }
+        
+        .new-request-badges {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .new-request-intent {
+            font-size: 12px;
+            color: #536471;
+            background: #eff3f4;
+            padding: 2px 8px;
+            border-radius: 9999px;
+        }
+        
+        .new-request-status {
+            font-size: 12px;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: 9999px;
+        }
+        
+        .new-request-status.active,
+        .new-request-status.waiting {
+            color: #1d9bf0;
+            background: rgba(29, 155, 240, 0.1);
+        }
+        
+        .new-request-status.matched {
+            color: #00ba7c;
+            background: rgba(0, 186, 124, 0.1);
+        }
+        
+        .new-request-status.completed {
+            color: #536471;
+            background: #eff3f4;
+        }
+        
+        .new-request-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .new-request-time {
+            font-size: 13px;
+            color: #536471;
+        }
+        
+        .new-request-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .new-request-action {
+            font-size: 13px;
+            color: #536471;
+            background: none;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: inherit;
+            transition: background-color 0.15s, color 0.15s;
+        }
+        
+        .new-request-action:hover {
+            background: #eff3f4;
+            color: #0f1419;
         }
         
         /* Referrals Page - CENTERED CANVAS when empty */
@@ -5803,6 +5914,7 @@
                 <div id="newRequestsPage" style="display: none;">
                     <header class="new-main-header">
                         <h1 class="new-main-title">My Requests</h1>
+                        <p class="new-main-subtitle">Track all the introductions you've asked Taj to make.</p>
                     </header>
                     <div class="new-tabs">
                         <button class="new-tab active" onclick="filterRequests('all', this)">All</button>
@@ -5817,11 +5929,10 @@
                             <polyline points="14 2 14 8 20 8"/>
                             <line x1="16" y1="13" x2="8" y2="13"/>
                             <line x1="16" y1="17" x2="8" y2="17"/>
-                            <polyline points="10 9 9 9 8 9"/>
                         </svg>
-                        <h3 class="new-empty-title">No requests yet</h3>
-                        <p class="new-empty-text">When you ask Taj to find someone, your requests will appear here so you can track their status.</p>
-                        <a href="https://t.me/TapinXBot" target="_blank" class="new-empty-cta">Make your first request</a>
+                        <h3 class="new-empty-title">You haven't made any requests yet</h3>
+                        <p class="new-empty-text">Tell Taj who you're looking to meet and your requests will appear here.</p>
+                        <a href="https://t.me/TapinXBot" target="_blank" class="new-empty-cta">Message Taj</a>
                     </div>
                 </div>
                 </div>
@@ -9104,48 +9215,81 @@
                 empty.style.display = 'block';
             } else {
                 empty.style.display = 'none';
-                const statusColors = {
-                    'active': '#E50914',
-                    'matched': '#10B981',
-                    'completed': '#6B7280',
-                    'cancelled': '#9CA3AF'
-                };
+                
+                // Status styling
                 const statusLabels = {
-                    'active': 'Searching',
-                    'matched': 'Match found',
-                    'completed': 'Completed',
-                    'cancelled': 'Cancelled'
+                    'active': 'In progress',
+                    'waiting': 'Waiting',
+                    'matched': 'Matched',
+                    'completed': 'Completed'
                 };
                 
-                list.innerHTML = requests.map(r => `
-                    <div class="new-feed-item" data-id="${r.id}" data-status="${r.status || 'active'}">
-                        <div class="new-feed-avatar" style="background: ${statusColors[r.status] || statusColors.active};">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="20" height="20">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                <polyline points="14 2 14 8 20 8"/>
-                            </svg>
+                // Intent badge styling
+                const intentLabels = {
+                    'professional': 'Professional',
+                    'community': 'Community',
+                    'personal': 'Personal'
+                };
+                
+                list.innerHTML = requests.map(r => {
+                    const status = r.status || 'active';
+                    const intent = r.intent || 'professional';
+                    const timestamp = r.created_at ? formatRequestTime(r.created_at) : 'Just now';
+                    
+                    // Determine actions based on status
+                    let actions = '';
+                    if (status === 'active' || status === 'waiting') {
+                        actions = `
+                            <button class="new-request-action" onclick="viewRequestDetails('${r.id}')">View details</button>
+                            <button class="new-request-action" onclick="followUpRequest('${r.id}')">Follow up</button>
+                        `;
+                    } else if (status === 'matched') {
+                        actions = `
+                            <button class="new-request-action" onclick="viewRequestDetails('${r.id}')">View details</button>
+                        `;
+                    } else if (status === 'completed') {
+                        actions = `
+                            <button class="new-request-action" onclick="viewRequestDetails('${r.id}')">View details</button>
+                            <button class="new-request-action" onclick="archiveRequest('${r.id}')">Archive</button>
+                        `;
+                    }
+                    
+                    return `
+                    <div class="new-feed-item new-request-row" data-id="${r.id}" data-status="${status}">
+                        <div class="new-request-content">
+                            <div class="new-request-header">
+                                <span class="new-request-title">${r.title || r.description || 'Introduction request'}</span>
+                                <div class="new-request-badges">
+                                    <span class="new-request-intent">${intentLabels[intent] || 'Professional'}</span>
+                                    <span class="new-request-status ${status}">${statusLabels[status] || 'In progress'}</span>
+                                </div>
+                            </div>
+                            <div class="new-request-meta">
+                                <span class="new-request-time">Requested ${timestamp}</span>
+                            </div>
                         </div>
-                        <div class="new-feed-content">
-                            <div class="new-feed-header">
-                                <span class="new-feed-name">${r.title || r.description || 'Request'}</span>
-                                <span class="new-feed-status" style="color: ${statusColors[r.status] || statusColors.active};">${statusLabels[r.status] || 'Active'}</span>
-                            </div>
-                            <div class="new-feed-context">${r.description || 'Looking for a connection...'}</div>
-                            <div class="new-feed-time">${formatNewTimeAgo(r.created_at) || 'Just now'}</div>
-                            ${r.status === 'matched' ? `
-                            <div class="new-feed-actions">
-                                <button class="new-feed-btn primary" onclick="viewRequestMatch('${r.id}')">View Match</button>
-                            </div>
-                            ` : ''}
-                            ${r.status === 'active' ? `
-                            <div class="new-feed-actions">
-                                <button class="new-feed-btn secondary" onclick="cancelRequest('${r.id}')">Cancel</button>
-                            </div>
-                            ` : ''}
+                        <div class="new-request-actions">
+                            ${actions}
                         </div>
                     </div>
-                `).join('');
+                `}).join('');
             }
+        }
+        
+        function formatRequestTime(dateStr) {
+            if (!dateStr) return 'Just now';
+            const now = new Date();
+            const d = new Date(dateStr);
+            const diffMs = now - d;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 60) return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
+            if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+            if (diffDays === 1) return 'yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
         
         function filterRequests(status, btn) {
@@ -9195,9 +9339,24 @@
             if (status === 'completed' && sublinks[3]) sublinks[3].classList.add('active');
         }
         
-        function viewRequestMatch(requestId) {
-            showNewAppPage('opportunities');
-            showNewToast('Viewing match for your request');
+        function viewRequestDetails(requestId) {
+            // Show request details - could open a modal or navigate
+            showNewToast('Opening request details...');
+        }
+        
+        function followUpRequest(requestId) {
+            // Open Telegram to follow up with Taj
+            window.open('https://t.me/TapinXBot', '_blank');
+            showNewToast('Following up with Taj...');
+        }
+        
+        function archiveRequest(requestId) {
+            // Archive the request
+            let requests = JSON.parse(localStorage.getItem('tapinx_requests') || '[]');
+            requests = requests.filter(r => r.id !== requestId);
+            localStorage.setItem('tapinx_requests', JSON.stringify(requests));
+            loadNewRequests();
+            showNewToast('Request archived');
         }
         
         function cancelRequest(requestId) {
