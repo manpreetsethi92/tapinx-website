@@ -3682,7 +3682,7 @@
             }
             
             .phone-frame img.frame {
-                max-height: 55vh;
+                max-height: 70vh;
             }
             
             /* Scale and position bubbles to fit inside phone on mobile */
@@ -3700,20 +3700,23 @@
             }
             
             /* Space bubbles out more vertically inside the phone */
-            .bubble-1 { top: 18%; right: 20%; }
-            .bubble-2 { top: 32%; left: 20%; }
-            .bubble-3 { top: 48%; right: 20%; }
-            .bubble-4 { top: 64%; left: 20%; }
+            /* Convo 1: User(right), Taj(left), User(right), Taj(left) */
+            .bubble-1 { top: 18%; right: 20%; left: auto; }
+            .bubble-2 { top: 32%; left: 20%; right: auto; }
+            .bubble-3 { top: 48%; right: 20%; left: auto; }
+            .bubble-4 { top: 64%; left: 20%; right: auto; }
             
-            .bubble-5 { top: 18%; left: 20%; }
-            .bubble-6 { top: 32%; right: 20%; }
-            .bubble-7 { top: 48%; left: 20%; }
-            .bubble-8 { top: 64%; right: 20%; }
+            /* Convo 2: Taj(left), User(right), Taj(left), User(right) */
+            .bubble-5 { top: 18%; left: 20%; right: auto; }
+            .bubble-6 { top: 32%; right: 20%; left: auto; }
+            .bubble-7 { top: 48%; left: 20%; right: auto; }
+            .bubble-8 { top: 64%; right: 20%; left: auto; }
             
-            .bubble-9 { top: 18%; right: 20%; }
-            .bubble-10 { top: 32%; left: 20%; }
-            .bubble-11 { top: 48%; right: 20%; }
-            .bubble-12 { top: 64%; left: 20%; }
+            /* Convo 3: User(right), Taj(left), User(right), Taj(left) */
+            .bubble-9 { top: 18%; right: 20%; left: auto; }
+            .bubble-10 { top: 32%; left: 20%; right: auto; }
+            .bubble-11 { top: 48%; right: 20%; left: auto; }
+            .bubble-12 { top: 64%; left: 20%; right: auto; }
             
             .action-cards {
                 grid-template-columns: 1fr;
