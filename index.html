@@ -3682,13 +3682,17 @@
             }
             
             .phone-frame img.frame {
-                max-height: 50vh;
+                max-height: 45vh;
             }
             
+            /* Hide animated bubbles on mobile - they crowd the space */
             .message-bubble {
-                font-size: 12px;
-                padding: 8px 12px;
-                max-width: 160px;
+                display: none;
+            }
+            
+            .phone-container {
+                display: flex;
+                justify-content: center;
             }
             
             .action-cards {
