@@ -3821,6 +3821,189 @@
             margin-top: 2px;
         }
         
+        /* Tasks System */
+        .new-right-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+        }
+        
+        .new-task-add-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #536471;
+            transition: all 0.15s ease;
+        }
+        
+        .new-task-add-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #0f1419;
+        }
+        
+        .new-task-input-wrapper {
+            padding: 0 16px 12px;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .new-task-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #eff3f4;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.15s ease;
+        }
+        
+        .new-task-input:focus {
+            border-color: #E50914;
+        }
+        
+        .new-task-input-btn {
+            padding: 10px 16px;
+            background: #0f1419;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.15s ease;
+        }
+        
+        .new-task-input-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .new-tasks-list {
+            padding: 0;
+        }
+        
+        .new-task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+        
+        .new-task-item:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        
+        .new-task-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cfd9de;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1px;
+            transition: all 0.15s ease;
+            font-size: 12px;
+            color: transparent;
+        }
+        
+        .new-task-item:hover .new-task-checkbox {
+            border-color: #E50914;
+        }
+        
+        .new-task-item.done .new-task-checkbox {
+            background: #00ba7c;
+            border-color: #00ba7c;
+            color: white;
+        }
+        
+        .new-task-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .new-task-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #0f1419;
+            transition: all 0.15s ease;
+        }
+        
+        .new-task-item.done .new-task-title {
+            color: #536471;
+            text-decoration: line-through;
+        }
+        
+        .new-task-meta {
+            font-size: 12px;
+            color: #536471;
+            margin-top: 2px;
+        }
+        
+        .new-task-type {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 500;
+            color: #536471;
+            background: #eff3f4;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-top: 4px;
+        }
+        
+        .new-task-type.system {
+            background: rgba(229, 9, 20, 0.08);
+            color: #E50914;
+        }
+        
+        .new-task-dismiss {
+            opacity: 0;
+            padding: 4px;
+            background: none;
+            border: none;
+            color: #536471;
+            cursor: pointer;
+            transition: opacity 0.15s ease;
+        }
+        
+        .new-task-item:hover .new-task-dismiss {
+            opacity: 1;
+        }
+        
+        .new-task-dismiss:hover {
+            color: #f4212e;
+        }
+        
+        .new-tasks-empty {
+            padding: 24px 16px;
+            text-align: center;
+        }
+        
+        .new-tasks-empty p {
+            font-size: 14px;
+            color: #536471;
+            margin: 0;
+        }
+        
+        .new-tasks-divider {
+            font-size: 12px;
+            font-weight: 600;
+            color: #536471;
+            padding: 8px 16px 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
         /* Referral Note */
         .new-referral-note {
             font-size: 13px;
@@ -4276,64 +4459,36 @@
             transform: translateX(20px);
         }
         
-        /* Intent Selector in Settings */
-        .new-settings-intent {
-            padding: 16px;
-        }
-        
-        .intent-selector {
+        /* Intent Segmented Control */
+        .intent-segmented {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            background: #eff3f4;
+            border-radius: 8px;
+            padding: 3px;
+            gap: 2px;
         }
         
-        .intent-option {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            padding: 16px;
-            background: #fff;
-            border: 2px solid #e1e4e8;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
-            font-family: inherit;
-        }
-        
-        .intent-option:hover {
-            border-color: #cfd9de;
-            background: #f7f9f9;
-        }
-        
-        .intent-option.active {
-            border-color: #E50914;
-            background: rgba(229, 9, 20, 0.03);
-        }
-        
-        .intent-option svg {
-            flex-shrink: 0;
-            margin-top: 2px;
-            stroke: #536471;
-        }
-        
-        .intent-option.active svg {
-            stroke: #E50914;
-        }
-        
-        .intent-label {
-            display: block;
-            font-size: 15px;
-            font-weight: 600;
-            color: #0f1419;
-            margin-bottom: 2px;
-        }
-        
-        .intent-desc {
-            display: block;
+        .intent-seg-btn {
+            padding: 8px 16px;
             font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
             color: #536471;
-            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        
+        .intent-seg-btn:hover {
+            color: #0f1419;
+        }
+        
+        .intent-seg-btn.active {
+            background: #fff;
+            color: #0f1419;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         
         .new-settings-arrow {
@@ -5055,28 +5210,18 @@
                     <div class="new-settings-section">
                         <div class="new-settings-section-title">Matching Preferences</div>
                         
-                        <!-- Primary Intent Selector -->
-                        <div class="new-settings-intent">
-                            <div class="new-settings-item-title">Primary Intent</div>
-                            <div class="new-settings-item-desc" style="margin-bottom: 16px;">What type of connections are you looking for?</div>
-                            <div class="intent-selector">
-                                <button class="intent-option active" data-intent="professional" onclick="setIntent('professional', this)">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                                    </svg>
-                                    <span class="intent-label">Professional</span>
-                                    <span class="intent-desc">Career, business, industry connections</span>
+                        <!-- Primary Intent Selector - Segmented Control -->
+                        <div class="new-settings-item">
+                            <div>
+                                <div class="new-settings-item-title">Primary Intent</div>
+                                <div class="new-settings-item-desc">What type of connections are you looking for?</div>
+                            </div>
+                            <div class="intent-segmented">
+                                <button class="intent-seg-btn active" data-intent="professional" onclick="setIntent('professional', this)">
+                                    Professional
                                 </button>
-                                <button class="intent-option" data-intent="community" onclick="setIntent('community', this)">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                                        <circle cx="9" cy="7" r="4"/>
-                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                                    </svg>
-                                    <span class="intent-label">Community</span>
-                                    <span class="intent-desc">Friends, hobbies, shared interests</span>
+                                <button class="intent-seg-btn" data-intent="community" onclick="setIntent('community', this)">
+                                    Community
                                 </button>
                             </div>
                         </div>
@@ -5153,24 +5298,30 @@
             <!-- Right Column -->
             <aside class="new-right-column">
                 <div class="new-right-card">
-                    <div class="new-right-card-title">Getting started</div>
-                    <div class="new-right-card-item" onclick="showNewAppPage('speak')" id="gettingStartedMessage">
-                        <div class="new-right-card-item-row">
-                            <span class="new-right-card-check" id="checkMessage">○</span>
-                            <div>
-                                <div class="new-right-card-item-title">Message Taj</div>
-                                <div class="new-right-card-item-desc">Tell Taj who you want to meet</div>
-                            </div>
-                        </div>
+                    <div class="new-right-card-header">
+                        <div class="new-right-card-title">Tasks</div>
+                        <button class="new-task-add-btn" onclick="showAddTaskInput()" title="Add task">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                        </button>
                     </div>
-                    <div class="new-right-card-item" onclick="openNewEditProfile()" id="gettingStartedProfile">
-                        <div class="new-right-card-item-row">
-                            <span class="new-right-card-check" id="checkProfile">○</span>
-                            <div>
-                                <div class="new-right-card-item-title">Complete your profile</div>
-                                <div class="new-right-card-item-desc">Help Taj make better matches</div>
-                            </div>
-                        </div>
+                    
+                    <!-- Add Task Input (hidden by default) -->
+                    <div class="new-task-input-wrapper" id="taskInputWrapper" style="display: none;">
+                        <input type="text" class="new-task-input" id="newTaskInput" placeholder="Add a task..." onkeypress="handleTaskKeypress(event)">
+                        <button class="new-task-input-btn" onclick="addCustomTask()">Add</button>
+                    </div>
+                    
+                    <!-- Dynamic Tasks List -->
+                    <div class="new-tasks-list" id="tasksList">
+                        <!-- System tasks will be injected here -->
+                    </div>
+                    
+                    <!-- Empty state -->
+                    <div class="new-tasks-empty" id="tasksEmpty" style="display: none;">
+                        <p>You're all caught up!</p>
                     </div>
                 </div>
             </aside>
@@ -7855,6 +8006,205 @@
             }
         }
         
+        // ========== TASKS SYSTEM ==========
+        let tasks = [];
+        
+        function initTasks() {
+            // Load saved tasks from localStorage
+            const saved = localStorage.getItem('tapinx_tasks');
+            if (saved) {
+                tasks = JSON.parse(saved);
+            }
+            
+            // Add system tasks based on state
+            generateSystemTasks();
+            renderTasks();
+        }
+        
+        function generateSystemTasks() {
+            // Remove old system tasks
+            tasks = tasks.filter(t => t.type !== 'system');
+            
+            // Check profile completion
+            const hasProfile = localStorage.getItem('tapinx_user_linkedin');
+            if (!hasProfile) {
+                tasks.unshift({
+                    id: 'sys_profile',
+                    title: 'Complete your profile',
+                    meta: 'Help Taj make better matches',
+                    type: 'system',
+                    action: 'openNewEditProfile()',
+                    done: false
+                });
+            }
+            
+            // Check if user has messaged Taj
+            const hasMessaged = localStorage.getItem('tapinx_has_messaged');
+            if (!hasMessaged) {
+                tasks.unshift({
+                    id: 'sys_message',
+                    title: 'Message Taj',
+                    meta: 'Tell Taj who you want to meet',
+                    type: 'system',
+                    action: "window.open('https://t.me/TapinXBot', '_blank')",
+                    done: false
+                });
+            }
+            
+            // Check for pending opportunities (mock - would be real data)
+            const pendingCount = parseInt(localStorage.getItem('tapinx_pending_opps') || '0');
+            if (pendingCount > 0) {
+                tasks.unshift({
+                    id: 'sys_opportunities',
+                    title: `Review ${pendingCount} new ${pendingCount === 1 ? 'opportunity' : 'opportunities'}`,
+                    meta: 'Pending introductions',
+                    type: 'system',
+                    action: "showNewAppPage('opportunities')",
+                    done: false
+                });
+            }
+        }
+        
+        function renderTasks() {
+            const list = document.getElementById('tasksList');
+            const empty = document.getElementById('tasksEmpty');
+            
+            if (!list) return;
+            
+            // Filter out done tasks that are older than 5 seconds (auto-dismiss)
+            const activeTasks = tasks.filter(t => !t.done || (t.doneAt && Date.now() - t.doneAt < 5000));
+            
+            if (activeTasks.length === 0) {
+                list.innerHTML = '';
+                if (empty) empty.style.display = 'block';
+                return;
+            }
+            
+            if (empty) empty.style.display = 'none';
+            
+            // Separate system and custom tasks
+            const systemTasks = activeTasks.filter(t => t.type === 'system');
+            const customTasks = activeTasks.filter(t => t.type === 'custom');
+            
+            let html = '';
+            
+            // System tasks
+            if (systemTasks.length > 0) {
+                html += '<div class="new-tasks-divider">To do</div>';
+                systemTasks.forEach(task => {
+                    html += renderTaskItem(task);
+                });
+            }
+            
+            // Custom tasks
+            if (customTasks.length > 0) {
+                if (systemTasks.length > 0) {
+                    html += '<div class="new-tasks-divider">My tasks</div>';
+                }
+                customTasks.forEach(task => {
+                    html += renderTaskItem(task);
+                });
+            }
+            
+            list.innerHTML = html;
+        }
+        
+        function renderTaskItem(task) {
+            const doneClass = task.done ? 'done' : '';
+            const checkmark = task.done ? '✓' : '';
+            const typeClass = task.type === 'system' ? 'system' : '';
+            
+            return `
+                <div class="new-task-item ${doneClass}" onclick="handleTaskClick('${task.id}')" data-id="${task.id}">
+                    <div class="new-task-checkbox">${checkmark}</div>
+                    <div class="new-task-content">
+                        <div class="new-task-title">${task.title}</div>
+                        ${task.meta ? `<div class="new-task-meta">${task.meta}</div>` : ''}
+                    </div>
+                    <button class="new-task-dismiss" onclick="event.stopPropagation(); dismissTask('${task.id}')" title="Dismiss">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            `;
+        }
+        
+        function handleTaskClick(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+            
+            if (task.done) return; // Already done
+            
+            // If it has an action, execute it
+            if (task.action) {
+                eval(task.action);
+            }
+            
+            // Mark as done
+            task.done = true;
+            task.doneAt = Date.now();
+            saveTasks();
+            renderTasks();
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                renderTasks();
+            }, 3000);
+        }
+        
+        function dismissTask(taskId) {
+            tasks = tasks.filter(t => t.id !== taskId);
+            saveTasks();
+            renderTasks();
+        }
+        
+        function showAddTaskInput() {
+            const wrapper = document.getElementById('taskInputWrapper');
+            const input = document.getElementById('newTaskInput');
+            if (wrapper.style.display === 'none') {
+                wrapper.style.display = 'flex';
+                input.focus();
+            } else {
+                wrapper.style.display = 'none';
+            }
+        }
+        
+        function handleTaskKeypress(e) {
+            if (e.key === 'Enter') {
+                addCustomTask();
+            }
+        }
+        
+        function addCustomTask() {
+            const input = document.getElementById('newTaskInput');
+            const title = input.value.trim();
+            
+            if (!title) return;
+            
+            tasks.push({
+                id: 'custom_' + Date.now(),
+                title: title,
+                type: 'custom',
+                done: false,
+                createdAt: Date.now()
+            });
+            
+            saveTasks();
+            renderTasks();
+            
+            input.value = '';
+            document.getElementById('taskInputWrapper').style.display = 'none';
+            showNewToast('Task added');
+        }
+        
+        function saveTasks() {
+            // Only save custom tasks
+            const customTasks = tasks.filter(t => t.type === 'custom');
+            localStorage.setItem('tapinx_tasks', JSON.stringify(customTasks));
+        }
+        
         function openNewEditProfile() {
             openEditProfileModal();
         }
@@ -7882,7 +8232,7 @@
         // Intent selector
         function setIntent(intent, btn) {
             // Update UI
-            document.querySelectorAll('.intent-option').forEach(opt => opt.classList.remove('active'));
+            document.querySelectorAll('.intent-seg-btn').forEach(opt => opt.classList.remove('active'));
             btn.classList.add('active');
             
             // Save to localStorage
@@ -7895,9 +8245,9 @@
         // Load saved intent on page load
         function loadSavedIntent() {
             const savedIntent = localStorage.getItem('tapinx_user_intent') || 'professional';
-            const intentBtn = document.querySelector(`.intent-option[data-intent="${savedIntent}"]`);
+            const intentBtn = document.querySelector(`.intent-seg-btn[data-intent="${savedIntent}"]`);
             if (intentBtn) {
-                document.querySelectorAll('.intent-option').forEach(opt => opt.classList.remove('active'));
+                document.querySelectorAll('.intent-seg-btn').forEach(opt => opt.classList.remove('active'));
                 intentBtn.classList.add('active');
             }
         }
@@ -7927,29 +8277,9 @@
                 document.getElementById('newSidebarAvatarInitial').style.display = 'flex';
             }
             
-            // Update getting started progress
-            updateGettingStarted();
-        }
-        
-        function updateGettingStarted() {
-            const hasProfile = localStorage.getItem('tapinx_user_linkedin');
-            const hasMessaged = localStorage.getItem('tapinx_has_messaged');
-            
-            const checkProfile = document.getElementById('checkProfile');
-            const checkMessage = document.getElementById('checkMessage');
-            const profileItem = document.getElementById('gettingStartedProfile');
-            const messageItem = document.getElementById('gettingStartedMessage');
-            
-            if (checkProfile && hasProfile) {
-                checkProfile.textContent = '✓';
-                checkProfile.classList.add('done');
-                if (profileItem) profileItem.classList.add('done');
-            }
-            
-            if (checkMessage && hasMessaged) {
-                checkMessage.textContent = '✓';
-                checkMessage.classList.add('done');
-                if (messageItem) messageItem.classList.add('done');
+            // Refresh tasks when sidebar updates
+            if (typeof initTasks === 'function') {
+                initTasks();
             }
         }
         
@@ -7957,6 +8287,7 @@
         if (document.getElementById('dashboardPage')) {
             updateNewSidebar();
             loadSavedIntent();
+            initTasks();
         }
     </script>
 </body>
