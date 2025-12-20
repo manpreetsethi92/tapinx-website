@@ -3702,27 +3702,27 @@
             
             /* 
              * Mobile bubble positioning - INSIDE the phone screen
-             * Phone screen: ~18% from top (below notch), ~78% from top (above input)
-             * Horizontal: ~18% from edges to stay inside phone screen
+             * User messages (outgoing/light) = RIGHT side
+             * Taj messages (incoming/dark) = LEFT side
              */
             
             /* Convo 1: User(right), Taj(left), User(right), Taj(left) */
-            .bubble-1 { top: 20%; right: 18%; left: auto; }
-            .bubble-2 { top: 32%; left: 18%; right: auto; }
-            .bubble-3 { top: 46%; right: 18%; left: auto; }
-            .bubble-4 { top: 60%; left: 18%; right: auto; }
+            .bubble-1 { top: 20%; right: 22% !important; left: auto !important; }
+            .bubble-2 { top: 33%; left: 22% !important; right: auto !important; }
+            .bubble-3 { top: 48%; right: 22% !important; left: auto !important; }
+            .bubble-4 { top: 63%; left: 22% !important; right: auto !important; }
             
             /* Convo 2: Taj(left), User(right), Taj(left), User(right) */
-            .bubble-5 { top: 20%; left: 18%; right: auto; }
-            .bubble-6 { top: 32%; right: 18%; left: auto; }
-            .bubble-7 { top: 46%; left: 18%; right: auto; }
-            .bubble-8 { top: 60%; right: 18%; left: auto; }
+            .bubble-5 { top: 20%; left: 22% !important; right: auto !important; }
+            .bubble-6 { top: 33%; right: 22% !important; left: auto !important; }
+            .bubble-7 { top: 48%; left: 22% !important; right: auto !important; }
+            .bubble-8 { top: 63%; right: 22% !important; left: auto !important; }
             
             /* Convo 3: User(right), Taj(left), User(right), Taj(left) */
-            .bubble-9 { top: 20%; right: 18%; left: auto; }
-            .bubble-10 { top: 32%; left: 18%; right: auto; }
-            .bubble-11 { top: 46%; right: 18%; left: auto; }
-            .bubble-12 { top: 60%; left: 18%; right: auto; }
+            .bubble-9 { top: 20%; right: 22% !important; left: auto !important; }
+            .bubble-10 { top: 33%; left: 22% !important; right: auto !important; }
+            .bubble-11 { top: 48%; right: 22% !important; left: auto !important; }
+            .bubble-12 { top: 63%; left: 22% !important; right: auto !important; }
             
             .action-cards {
                 grid-template-columns: 1fr;
@@ -3750,25 +3750,15 @@
             }
         }
         
-        /* Extra small phones - further adjust bubbles */
+        /* Extra small phones - adjust bubble size only, positioning inherited from 900px */
         @media (max-width: 480px) {
             .message-bubble {
-                font-size: 10px;
-                padding: 6px 10px;
-                max-width: 100px;
-                line-height: 1.25;
+                font-size: 9px;
+                padding: 5px 8px;
+                max-width: 90px;
+                line-height: 1.2;
                 border-radius: 10px;
             }
-            
-            /* Tighter vertical positioning for small screens, stay inside phone */
-            .bubble-1, .bubble-5, .bubble-9 { top: 22%; }
-            .bubble-2, .bubble-6, .bubble-10 { top: 34%; }
-            .bubble-3, .bubble-7, .bubble-11 { top: 48%; }
-            .bubble-4, .bubble-8, .bubble-12 { top: 62%; }
-            
-            /* Keep bubbles inside phone screen - 20% from edges */
-            .bubble-1, .bubble-3, .bubble-6, .bubble-8, .bubble-9, .bubble-11 { right: 20%; left: auto; }
-            .bubble-2, .bubble-4, .bubble-5, .bubble-7, .bubble-10, .bubble-12 { left: 20%; right: auto; }
         }
         
         /* ========== NEW X.COM-STYLE APP LAYOUT ========== */
