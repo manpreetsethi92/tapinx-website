@@ -5589,6 +5589,26 @@
                     </div>
                     
                     <div class="new-sidebar-section">
+                        <div class="new-sidebar-link" id="navRequests" onclick="showNewAppPage('requests'); closeMobileMenu();">
+                            <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10 9 9 9 8 9"/>
+                            </svg>
+                            <span class="new-sidebar-label">My Requests</span>
+                            <span class="new-sidebar-badge" id="requestsBadge" style="display: none;">0</span>
+                        </div>
+                        <div class="new-sidebar-expand" id="requestsExpand" style="display: none;">
+                            <div class="new-sidebar-sublink active" onclick="filterRequests('all')">All</div>
+                            <div class="new-sidebar-sublink" onclick="filterRequests('active')">Active</div>
+                            <div class="new-sidebar-sublink" onclick="filterRequests('matched')">Matched</div>
+                            <div class="new-sidebar-sublink" onclick="filterRequests('completed')">Completed</div>
+                        </div>
+                    </div>
+                    
+                    <div class="new-sidebar-section">
                         <div class="new-sidebar-link" id="navConnections" onclick="showNewAppPage('connections'); closeMobileMenu();">
                             <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -5778,6 +5798,32 @@
                             </div>
                         </div>
                     </div>
+                
+                <!-- My Requests Page -->
+                <div id="newRequestsPage" style="display: none;">
+                    <header class="new-main-header">
+                        <h1 class="new-main-title">My Requests</h1>
+                    </header>
+                    <div class="new-tabs">
+                        <button class="new-tab active" onclick="filterRequests('all', this)">All</button>
+                        <button class="new-tab" onclick="filterRequests('active', this)">Active</button>
+                        <button class="new-tab" onclick="filterRequests('matched', this)">Matched</button>
+                        <button class="new-tab" onclick="filterRequests('completed', this)">Completed</button>
+                    </div>
+                    <div id="newRequestsList"></div>
+                    <div class="new-empty-state" id="newRequestsEmpty">
+                        <svg class="new-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                        <h3 class="new-empty-title">No requests yet</h3>
+                        <p class="new-empty-text">When you ask Taj to find someone, your requests will appear here so you can track their status.</p>
+                        <a href="https://t.me/TapinXBot" target="_blank" class="new-empty-cta">Make your first request</a>
+                    </div>
+                </div>
                 </div>
                 
                 <!-- Settings Page - TOP-ALIGNED -->
@@ -8776,6 +8822,7 @@
             // Update mobile header title
             const titles = {
                 'speak': 'Speak to Taj',
+                'requests': 'My Requests',
                 'connections': 'My Connections',
                 'opportunities': 'Opportunities',
                 'referrals': 'Referrals',
@@ -8790,18 +8837,31 @@
             
             // Hide all pages
             document.getElementById('newSpeakPage').style.display = 'none';
+            document.getElementById('newRequestsPage').style.display = 'none';
             document.getElementById('newConnectionsPage').style.display = 'none';
             document.getElementById('newOpportunitiesPage').style.display = 'none';
             document.getElementById('newReferralsPage').style.display = 'none';
             document.getElementById('newSettingsPage').style.display = 'none';
             
             // Show/hide expand sections
+            document.getElementById('requestsExpand').style.display = page === 'requests' ? 'block' : 'none';
             document.getElementById('connectionsExpand').style.display = page === 'connections' ? 'block' : 'none';
             document.getElementById('opportunitiesExpand').style.display = page === 'opportunities' ? 'block' : 'none';
             
             // Show selected page
             if (page === 'speak') {
                 document.getElementById('newSpeakPage').style.display = 'block';
+            } else if (page === 'requests') {
+                document.getElementById('newRequestsPage').style.display = 'block';
+                // Reset tabs to "All" when showing page
+                const tabs = document.querySelectorAll('#newRequestsPage .new-tab');
+                tabs.forEach(t => t.classList.remove('active'));
+                if (tabs[0]) tabs[0].classList.add('active');
+                // Reset sidebar sublinks for requests
+                document.querySelectorAll('#requestsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+                const sublinks = document.querySelectorAll('#requestsExpand .new-sidebar-sublink');
+                if (sublinks[0]) sublinks[0].classList.add('active');
+                loadNewRequests();
             } else if (page === 'connections') {
                 document.getElementById('newConnectionsPage').style.display = 'block';
                 // Reset tabs to "All" when showing page
@@ -9003,6 +9063,134 @@
                 document.getElementById('newReferralContext').value = '';
             }
         }
+        
+        // ========== MY REQUESTS FUNCTIONS ==========
+        async function loadNewRequests() {
+            const list = document.getElementById('newRequestsList');
+            const empty = document.getElementById('newRequestsEmpty');
+            
+            // Try to fetch from API
+            let requests = [];
+            try {
+                const userId = localStorage.getItem('tapinx_user_id');
+                if (userId) {
+                    const response = await fetch(`https://api.anthropic.com/tapinx/requests?user_id=${userId}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        requests = data.requests || [];
+                    }
+                }
+            } catch (e) {
+                console.log('Could not fetch requests from API, using local storage');
+            }
+            
+            // Fallback to localStorage for demo
+            if (requests.length === 0) {
+                requests = JSON.parse(localStorage.getItem('tapinx_requests') || '[]');
+            }
+            
+            // Update badge
+            const activeCount = requests.filter(r => r.status === 'active' || r.status === 'matched').length;
+            const badge = document.getElementById('requestsBadge');
+            if (activeCount > 0) {
+                badge.textContent = activeCount;
+                badge.style.display = 'inline';
+            } else {
+                badge.style.display = 'none';
+            }
+            
+            if (requests.length === 0) {
+                list.innerHTML = '';
+                empty.style.display = 'block';
+            } else {
+                empty.style.display = 'none';
+                const statusColors = {
+                    'active': '#E50914',
+                    'matched': '#10B981',
+                    'completed': '#6B7280',
+                    'cancelled': '#9CA3AF'
+                };
+                const statusLabels = {
+                    'active': 'Searching',
+                    'matched': 'Match found',
+                    'completed': 'Completed',
+                    'cancelled': 'Cancelled'
+                };
+                
+                list.innerHTML = requests.map(r => `
+                    <div class="new-feed-item" data-id="${r.id}" data-status="${r.status || 'active'}">
+                        <div class="new-feed-avatar" style="background: ${statusColors[r.status] || statusColors.active};">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="20" height="20">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                        </div>
+                        <div class="new-feed-content">
+                            <div class="new-feed-header">
+                                <span class="new-feed-name">${r.title || r.description || 'Request'}</span>
+                                <span class="new-feed-status" style="color: ${statusColors[r.status] || statusColors.active};">${statusLabels[r.status] || 'Active'}</span>
+                            </div>
+                            <div class="new-feed-context">${r.description || 'Looking for a connection...'}</div>
+                            <div class="new-feed-time">${formatNewTimeAgo(r.created_at) || 'Just now'}</div>
+                            ${r.status === 'matched' ? `
+                            <div class="new-feed-actions">
+                                <button class="new-feed-btn primary" onclick="viewRequestMatch('${r.id}')">View Match</button>
+                            </div>
+                            ` : ''}
+                            ${r.status === 'active' ? `
+                            <div class="new-feed-actions">
+                                <button class="new-feed-btn secondary" onclick="cancelRequest('${r.id}')">Cancel</button>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function filterRequests(status, btn) {
+            if (btn) {
+                document.querySelectorAll('#newRequestsPage .new-tab').forEach(t => t.classList.remove('active'));
+                btn.classList.add('active');
+            }
+            
+            document.querySelectorAll('#newRequestsList .new-feed-item').forEach(item => {
+                const itemStatus = item.dataset.status;
+                if (status === 'all') {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = itemStatus === status ? 'flex' : 'none';
+                }
+            });
+            
+            // Update sidebar sublinks
+            document.querySelectorAll('#requestsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+            const sublinks = document.querySelectorAll('#requestsExpand .new-sidebar-sublink');
+            if (status === 'all' && sublinks[0]) sublinks[0].classList.add('active');
+            if (status === 'active' && sublinks[1]) sublinks[1].classList.add('active');
+            if (status === 'matched' && sublinks[2]) sublinks[2].classList.add('active');
+            if (status === 'completed' && sublinks[3]) sublinks[3].classList.add('active');
+        }
+        
+        function viewRequestMatch(requestId) {
+            showNewAppPage('opportunities');
+            showNewToast('Viewing match for your request');
+        }
+        
+        function cancelRequest(requestId) {
+            // Update in localStorage
+            let requests = JSON.parse(localStorage.getItem('tapinx_requests') || '[]');
+            requests = requests.map(r => {
+                if (r.id === requestId) {
+                    r.status = 'cancelled';
+                }
+                return r;
+            });
+            localStorage.setItem('tapinx_requests', JSON.stringify(requests));
+            loadNewRequests();
+            showNewToast('Request cancelled');
+        }
+        // ========== END MY REQUESTS FUNCTIONS ==========
         
         function showBlockedContacts() {
             // For now, show a toast - can be expanded to a modal later
