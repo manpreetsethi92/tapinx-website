@@ -3663,6 +3663,8 @@
             max-width: 600px;
             border-right: 1px solid #eff3f4;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         
         .new-main-header {
@@ -3676,12 +3678,37 @@
             display: flex;
             align-items: center;
             border-bottom: 1px solid #eff3f4;
+            flex-shrink: 0;
         }
         
         .new-main-title {
             font-size: 20px;
             font-weight: 700;
             color: #0f1419;
+        }
+        
+        /* CENTERED CANVAS - For action/empty state pages */
+        .centered-canvas {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 32px;
+            text-align: center;
+            min-height: calc(100vh - 53px);
+        }
+        
+        .centered-canvas-inner {
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        /* TOP-ALIGNED CANVAS - For lists/browse pages */
+        .top-canvas {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
         
         /* Right Column */
@@ -3766,18 +3793,30 @@
             border-radius: 2px;
         }
         
-        /* Speak to Taj Page */
+        /* Speak to Taj Page - CENTERED CANVAS */
         .new-speak-content {
-            padding: 32px 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 32px;
+            text-align: center;
+            min-height: calc(100vh - 53px);
+        }
+        
+        .new-speak-inner {
+            max-width: 400px;
+            width: 100%;
         }
         
         .new-speak-title {
-            font-size: 31px;
-            font-weight: 800;
+            font-size: 28px;
+            font-weight: 700;
             color: #0f1419;
             margin-bottom: 12px;
             letter-spacing: -0.5px;
-            line-height: 1.2;
+            line-height: 1.3;
         }
         
         .new-speak-subtitle {
@@ -3813,19 +3852,20 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            align-items: center;
         }
         
         .new-speak-meta-line {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 15px;
+            gap: 10px;
+            font-size: 14px;
             color: #536471;
         }
         
         .new-speak-meta-line svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             stroke: #536471;
             flex-shrink: 0;
         }
@@ -3948,22 +3988,29 @@
             background: rgba(0, 0, 0, 0.05);
         }
         
-        /* Empty States */
+        /* Empty States - Centered within content area */
         .new-empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             padding: 48px 32px;
             text-align: center;
+            min-height: 400px;
         }
         
         .new-empty-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 16px;
-            stroke: #536471;
+            width: 56px;
+            height: 56px;
+            margin-bottom: 20px;
+            stroke: #cfd9de;
+            stroke-width: 1.5;
         }
         
         .new-empty-title {
-            font-size: 31px;
-            font-weight: 800;
+            font-size: 24px;
+            font-weight: 700;
             color: #0f1419;
             margin-bottom: 8px;
         }
@@ -3973,6 +4020,7 @@
             color: #536471;
             margin-bottom: 24px;
             line-height: 1.5;
+            max-width: 320px;
         }
         
         .new-empty-cta {
@@ -3994,17 +4042,32 @@
             opacity: 0.9;
         }
         
-        /* Referrals Page */
+        /* Referrals Page - CENTERED CANVAS when empty */
+        .new-referral-centered {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 32px;
+            text-align: center;
+            min-height: calc(100vh - 53px);
+        }
+        
+        .new-referral-inner {
+            max-width: 400px;
+            width: 100%;
+        }
+        
         .new-referral-intro {
-            padding: 24px 16px;
-            border-bottom: 1px solid #eff3f4;
+            margin-bottom: 32px;
         }
         
         .new-referral-intro-title {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 700;
             color: #0f1419;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
         }
         
         .new-referral-intro-text {
@@ -4014,15 +4077,20 @@
         
         .new-referral-form {
             padding: 16px;
-            border-bottom: 1px solid #eff3f4;
+            font-size: 15px;
+            color: #536471;
+        }
+        
+        .new-referral-form {
+            text-align: left;
         }
         
         .new-referral-input {
             width: 100%;
-            padding: 12px 14px;
+            padding: 14px 16px;
             background: #fff;
             border: 1px solid #e1e4e8;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 15px;
             font-family: inherit;
             color: #0f1419;
@@ -4037,24 +4105,27 @@
         }
         
         .new-referral-textarea {
-            min-height: 80px;
+            min-height: 100px;
             resize: vertical;
         }
         
         .new-referral-submit {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            padding: 12px 24px;
-            background: #0f1419;
+            width: 100%;
+            padding: 14px 24px;
+            background: #E50914;
             color: white;
             border: none;
             border-radius: 9999px;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
             font-family: inherit;
             cursor: pointer;
             transition: opacity 0.2s;
+            margin-top: 8px;
         }
         
         .new-referral-submit:hover {
@@ -4718,41 +4789,43 @@
             
             <!-- Main Column -->
             <main class="new-main-column">
-                <!-- Speak to Taj Page -->
+                <!-- Speak to Taj Page - CENTERED CANVAS -->
                 <div id="newSpeakPage">
                     <header class="new-main-header">
                         <h1 class="new-main-title">Speak to Taj</h1>
                     </header>
                     <div class="new-speak-content">
-                        <h2 class="new-speak-title">One message.<br>Real introductions.</h2>
-                        <p class="new-speak-subtitle">Tell Taj who you're looking for and get introduced to the right people.</p>
-                        <a href="https://t.me/TapinXBot" target="_blank" class="new-speak-cta">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                            </svg>
-                            Message Taj on Telegram
-                        </a>
-                        <div class="new-speak-meta">
-                            <div class="new-speak-meta-line">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        <div class="new-speak-inner">
+                            <h2 class="new-speak-title">One message.<br>Real introductions.</h2>
+                            <p class="new-speak-subtitle">Tell Taj who you're looking for. Taj finds the right person and makes the introduction.</p>
+                            <a href="https://t.me/TapinXBot" target="_blank" class="new-speak-cta">
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
                                 </svg>
-                                <span>Private and secure</span>
-                            </div>
-                            <div class="new-speak-meta-line">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <polyline points="12 6 12 12 16 14"/>
-                                </svg>
-                                <span>Responses within 24 hours</span>
+                                Message Taj on Telegram
+                            </a>
+                            <div class="new-speak-meta">
+                                <div class="new-speak-meta-line">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                    </svg>
+                                    <span>Secure on Telegram</span>
+                                </div>
+                                <div class="new-speak-meta-line">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <polyline points="12 6 12 12 16 14"/>
+                                    </svg>
+                                    <span>Typically responds within 24 hours</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- My Connections Page -->
-                <div id="newConnectionsPage" style="display: none;">
+                <!-- My Connections Page - TOP-ALIGNED -->
+                <div id="newConnectionsPage" class="top-canvas" style="display: none;">
                     <header class="new-main-header">
                         <h1 class="new-main-title">My Connections</h1>
                     </header>
@@ -4798,33 +4871,36 @@
                     </div>
                 </div>
                 
-                <!-- Referrals Page -->
+                <!-- Referrals Page - CENTERED CANVAS -->
                 <div id="newReferralsPage" style="display: none;">
                     <header class="new-main-header">
                         <h1 class="new-main-title">Referrals</h1>
                     </header>
-                    <div class="new-referral-intro">
-                        <div class="new-referral-intro-title">Know someone who'd benefit from TapinX?</div>
-                        <div class="new-referral-intro-text">We'll introduce them if it aligns with their intent.</div>
+                    <div class="new-referral-centered">
+                        <div class="new-referral-inner">
+                            <div class="new-referral-intro">
+                                <div class="new-referral-intro-title">Know someone who'd benefit?</div>
+                                <div class="new-referral-intro-text">Refer a friend and we'll connect them with the right people.</div>
+                            </div>
+                            <div class="new-referral-form">
+                                <input type="text" class="new-referral-input" id="newReferralName" placeholder="Their name">
+                                <input type="text" class="new-referral-input" id="newReferralContact" placeholder="Phone or email">
+                                <textarea class="new-referral-input new-referral-textarea" id="newReferralContext" placeholder="Why would they benefit? What are they looking for?"></textarea>
+                                <button class="new-referral-submit" onclick="submitNewReferral()">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                                        <polyline points="16 6 12 2 8 6"/>
+                                        <line x1="12" y1="2" x2="12" y2="15"/>
+                                    </svg>
+                                    Send Referral
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="new-referral-form">
-                        <input type="text" class="new-referral-input" id="newReferralName" placeholder="Their name">
-                        <input type="text" class="new-referral-input" id="newReferralContact" placeholder="Phone or email">
-                        <textarea class="new-referral-input new-referral-textarea" id="newReferralContext" placeholder="Why would they benefit? What are they looking for?"></textarea>
-                        <button class="new-referral-submit" onclick="submitNewReferral()">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-                                <polyline points="16 6 12 2 8 6"/>
-                                <line x1="12" y1="2" x2="12" y2="15"/>
-                            </svg>
-                            Send Referral
-                        </button>
-                    </div>
-                    <div id="newReferralsList"></div>
                 </div>
                 
-                <!-- Settings Page -->
-                <div id="newSettingsPage" style="display: none;">
+                <!-- Settings Page - TOP-ALIGNED -->
+                <div id="newSettingsPage" class="top-canvas" style="display: none;">
                     <header class="new-main-header">
                         <h1 class="new-main-title">Settings</h1>
                     </header>
