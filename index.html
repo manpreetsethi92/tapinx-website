@@ -6413,9 +6413,40 @@
         // ========== API CONFIGURATION ==========
         const API_URL = 'https://tapinx-backend-production.up.railway.app/api';
         
+        // Fetch and sync profile from backend
+        async function fetchProfileFromBackend() {
+            const phone = localStorage.getItem('tapinx_user_phone');
+            if (!phone) return null;
+            
+            try {
+                const response = await fetch(`${API_URL}/users/${encodeURIComponent(phone)}/profile`);
+                if (!response.ok) return null;
+                
+                const profile = await response.json();
+                
+                // Sync to localStorage
+                if (profile.name) localStorage.setItem('tapinx_user_name', profile.name);
+                if (profile.age) localStorage.setItem('tapinx_user_age', profile.age);
+                if (profile.bio) localStorage.setItem('tapinx_user_bio', profile.bio);
+                if (profile.linkedin) localStorage.setItem('tapinx_user_linkedin', profile.linkedin);
+                if (profile.instagram) localStorage.setItem('tapinx_user_instagram', profile.instagram);
+                if (profile.twitter) localStorage.setItem('tapinx_user_twitter', profile.twitter);
+                if (profile.soundcloud) localStorage.setItem('tapinx_user_soundcloud', profile.soundcloud);
+                if (profile.imdb) localStorage.setItem('tapinx_user_imdb', profile.imdb);
+                if (profile.photo) localStorage.setItem('tapinx_user_photo', profile.photo);
+                if (profile.skills) localStorage.setItem('tapinx_user_skills', JSON.stringify(profile.skills));
+                
+                console.log('[TapinX] Profile synced from backend');
+                return profile;
+            } catch (error) {
+                console.error('[TapinX] Error fetching profile:', error);
+                return null;
+            }
+        }
+        
         // Fetch matches (Attention Required) from API
         async function fetchMatches() {
-            const phone = localStorage.getItem('tapinx_phone');
+            const phone = localStorage.getItem('tapinx_user_phone');
             if (!phone) return { matches: [], count: 0 };
             
             try {
@@ -6432,7 +6463,7 @@
         
         // Fetch connections from API
         async function fetchConnections() {
-            const phone = localStorage.getItem('tapinx_phone');
+            const phone = localStorage.getItem('tapinx_user_phone');
             if (!phone) return { connections: [], count: 0 };
             
             try {
@@ -6449,7 +6480,7 @@
         
         // Respond to a match (accept/decline)
         async function respondToMatch(matchId, action) {
-            const phone = localStorage.getItem('tapinx_phone');
+            const phone = localStorage.getItem('tapinx_user_phone');
             if (!phone) return false;
             
             try {
@@ -7097,12 +7128,17 @@
                                 
                                 localStorage.setItem('tapinx_user_name', name);
                                 localStorage.setItem('tapinx_user_age', age);
-                                localStorage.setItem('tapinx_phone', phone);
+                                localStorage.setItem('tapinx_user_phone', phone);
                                 
                                 // Clean up signup data
                                 localStorage.removeItem('tapinx_signup_name');
                                 localStorage.removeItem('tapinx_signup_age');
                                 localStorage.removeItem('tapinx_signup_phone');
+                                
+                                // Sync profile from backend (in case they have existing data)
+                                fetchProfileFromBackend().then(() => {
+                                    updateNewSidebar();
+                                });
                                 
                                 showPage('dashboard');
                                 setTimeout(() => openEditProfileModal(), 300);
@@ -7333,24 +7369,39 @@
             
             if (!name || validateEditUrl(instagram, 'instagram') !== 'valid') return;
             
-            // Save all data
-            localStorage.setItem('tapinx_logged_in', 'true');
-            localStorage.setItem('tapinx_user_name', name);
-            localStorage.setItem('tapinx_user_age', document.getElementById('editAgeInput').value);
-            localStorage.setItem('tapinx_user_bio', document.getElementById('editBioInput').value);
-            localStorage.setItem('tapinx_user_linkedin', document.getElementById('editLinkedinInput').value);
-            localStorage.setItem('tapinx_user_instagram', instagram);
-            localStorage.setItem('tapinx_user_twitter', document.getElementById('editTwitterInput').value);
-            localStorage.setItem('tapinx_user_soundcloud', document.getElementById('editSoundcloudInput').value);
-            localStorage.setItem('tapinx_user_imdb', document.getElementById('editImdbInput').value);
+            // Gather all profile data
+            const profileData = {
+                name: name,
+                age: document.getElementById('editAgeInput').value,
+                bio: document.getElementById('editBioInput').value,
+                linkedin: document.getElementById('editLinkedinInput').value,
+                instagram: instagram,
+                twitter: document.getElementById('editTwitterInput').value,
+                soundcloud: document.getElementById('editSoundcloudInput').value,
+                imdb: document.getElementById('editImdbInput').value,
+                skills: selectedSkills,
+                photo: document.getElementById('editPhotoPreview').style.display === 'block' 
+                    ? document.getElementById('editPhotoPreview').src 
+                    : null
+            };
             
-            const photo = document.getElementById('editPhotoPreview');
-            if (photo.style.display === 'block') {
-                localStorage.setItem('tapinx_user_photo', photo.src);
+            // Save to localStorage (immediate)
+            localStorage.setItem('tapinx_logged_in', 'true');
+            localStorage.setItem('tapinx_user_name', profileData.name);
+            localStorage.setItem('tapinx_user_age', profileData.age);
+            localStorage.setItem('tapinx_user_bio', profileData.bio);
+            localStorage.setItem('tapinx_user_linkedin', profileData.linkedin);
+            localStorage.setItem('tapinx_user_instagram', profileData.instagram);
+            localStorage.setItem('tapinx_user_twitter', profileData.twitter);
+            localStorage.setItem('tapinx_user_soundcloud', profileData.soundcloud);
+            localStorage.setItem('tapinx_user_imdb', profileData.imdb);
+            localStorage.setItem('tapinx_user_skills', JSON.stringify(profileData.skills));
+            if (profileData.photo) {
+                localStorage.setItem('tapinx_user_photo', profileData.photo);
             }
             
-            // Save skills
-            localStorage.setItem('tapinx_user_skills', JSON.stringify(selectedSkills));
+            // Save to backend database
+            saveProfileToBackend(profileData);
             
             // Close modal and show toast
             closeEditProfileModal();
@@ -7365,9 +7416,47 @@
             }
             
             // Trigger profile scraping webhook if Instagram was added
-            const instagramUrl = document.getElementById('editInstagramInput').value;
-            if (instagramUrl && validateEditUrl(instagramUrl, 'instagram') === 'valid') {
-                triggerProfileScrape(instagramUrl);
+            if (instagram && validateEditUrl(instagram, 'instagram') === 'valid') {
+                triggerProfileScrape(instagram);
+            }
+        }
+        
+        // Save profile to backend database
+        async function saveProfileToBackend(profileData) {
+            const phone = localStorage.getItem('tapinx_user_phone');
+            if (!phone) {
+                console.log('No phone number - skipping backend save');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/users/${encodeURIComponent(phone)}/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        full_name: profileData.name,
+                        age: profileData.age,
+                        bio: profileData.bio,
+                        linkedin_url: profileData.linkedin,
+                        instagram_url: profileData.instagram,
+                        twitter_url: profileData.twitter,
+                        soundcloud_url: profileData.soundcloud,
+                        imdb_url: profileData.imdb,
+                        skills: profileData.skills,
+                        photo_url: profileData.photo
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('[TapinX] Profile saved to backend');
+                } else {
+                    console.error('[TapinX] Failed to save profile to backend:', response.status);
+                }
+            } catch (error) {
+                console.error('[TapinX] Error saving profile to backend:', error);
+                // Don't show error to user - localStorage save already succeeded
             }
         }
         
