@@ -5210,46 +5210,151 @@
                 flex-direction: column;
             }
             
+            /* Hide sidebar by default on mobile - slides in from right */
             .new-sidebar {
                 position: fixed;
-                bottom: 0;
-                left: 0;
+                top: 0;
                 right: 0;
-                top: auto;
-                width: 100%;
-                height: auto;
-                flex-direction: row;
-                justify-content: space-around;
-                padding: 8px 0 calc(8px + env(safe-area-inset-bottom, 0px));
+                left: auto;
+                bottom: 0;
+                width: 280px;
+                height: 100%;
+                flex-direction: column;
+                justify-content: flex-start;
+                padding: 20px;
+                border-left: 1px solid #eff3f4;
                 border-right: none;
-                border-top: 1px solid #eff3f4;
                 background: white;
-                z-index: 100;
+                z-index: 1000;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
             }
             
-            .new-sidebar-logo,
-            .new-sidebar-label,
-            .new-sidebar-profile,
-            .new-sidebar-cta,
-            .new-sidebar-expand,
-            .new-sidebar-sublink {
+            .new-sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            
+            /* Show all sidebar elements when open */
+            .new-sidebar .new-sidebar-logo,
+            .new-sidebar .new-sidebar-label,
+            .new-sidebar .new-sidebar-profile,
+            .new-sidebar .new-sidebar-cta,
+            .new-sidebar .new-sidebar-sublink,
+            .new-sidebar .new-sidebar-bottom {
+                display: flex;
+            }
+            
+            .new-sidebar-logo {
+                display: none;
+            }
+            
+            .new-sidebar-expand {
                 display: none;
             }
             
             .new-sidebar-nav {
-                flex-direction: row;
-                justify-content: space-around;
+                flex-direction: column;
                 width: 100%;
             }
             
             .new-sidebar-link {
-                padding: 12px;
+                padding: 14px 12px;
+            }
+            
+            .new-sidebar-label {
+                display: inline !important;
+            }
+            
+            .new-sidebar-bottom {
+                margin-top: auto;
+                display: flex !important;
+                flex-direction: column;
+            }
+            
+            .new-sidebar-cta {
+                display: flex !important;
+            }
+            
+            .new-sidebar-profile {
+                display: flex !important;
             }
             
             .new-main-column {
                 max-width: 100%;
                 border-right: none;
-                padding-bottom: 72px;
+                padding-bottom: 20px;
+            }
+            
+            /* Mobile header with hamburger */
+            .mobile-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 12px 16px;
+                background: white;
+                border-bottom: 1px solid #eff3f4;
+                position: sticky;
+                top: 0;
+                z-index: 99;
+            }
+            
+            .mobile-hamburger {
+                width: 40px;
+                height: 40px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 5px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 8px;
+                order: 2;
+            }
+            
+            .mobile-hamburger span {
+                display: block;
+                width: 22px;
+                height: 2px;
+                background: #0f1419;
+                border-radius: 2px;
+                transition: all 0.3s ease;
+            }
+            
+            .mobile-header-title {
+                font-size: 18px;
+                font-weight: 700;
+                color: #0f1419;
+                order: 1;
+            }
+            
+            .mobile-header-spacer {
+                display: none;
+            }
+            
+            /* Overlay when menu is open */
+            .mobile-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+            }
+            
+            .mobile-overlay.active {
+                display: block;
+            }
+        }
+        
+        /* Hide mobile header on desktop */
+        @media (min-width: 769px) {
+            .mobile-header,
+            .mobile-overlay {
+                display: none !important;
             }
         }
     </style>
@@ -5384,15 +5489,29 @@
     <!-- ========== DASHBOARD PAGE ========== -->
     <div class="page" id="dashboardPage">
         <div class="new-app-container">
+            <!-- Mobile Overlay -->
+            <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileMenu()"></div>
+            
+            <!-- Mobile Header -->
+            <div class="mobile-header">
+                <button class="mobile-hamburger" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <span class="mobile-header-title" id="mobileHeaderTitle">Speak to Taj</span>
+                <div class="mobile-header-spacer"></div>
+            </div>
+            
             <!-- Left Sidebar -->
-            <aside class="new-sidebar">
+            <aside class="new-sidebar" id="mobileSidebar">
                 <div class="new-sidebar-logo">
                     <span class="new-sidebar-logo-text" onclick="showPage('landing')">T</span>
                 </div>
                 
                 <nav class="new-sidebar-nav">
                     <div class="new-sidebar-section">
-                        <div class="new-sidebar-link active" id="navSpeak" onclick="showNewAppPage('speak')">
+                        <div class="new-sidebar-link active" id="navSpeak" onclick="showNewAppPage('speak'); closeMobileMenu();">
                             <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                             </svg>
@@ -5401,7 +5520,7 @@
                     </div>
                     
                     <div class="new-sidebar-section">
-                        <div class="new-sidebar-link" id="navConnections" onclick="showNewAppPage('connections')">
+                        <div class="new-sidebar-link" id="navConnections" onclick="showNewAppPage('connections'); closeMobileMenu();">
                             <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                                 <circle cx="9" cy="7" r="4"/>
@@ -5418,7 +5537,7 @@
                     </div>
                     
                     <div class="new-sidebar-section">
-                        <div class="new-sidebar-link" id="navOpportunities" onclick="showNewAppPage('opportunities')">
+                        <div class="new-sidebar-link" id="navOpportunities" onclick="showNewAppPage('opportunities'); closeMobileMenu();">
                             <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 2L2 7l10 5 10-5-10-5z"/>
                                 <path d="M2 17l10 5 10-5"/>
@@ -5436,7 +5555,7 @@
                     </div>
                     
                     <div class="new-sidebar-section">
-                        <div class="new-sidebar-link" id="navReferrals" onclick="showNewAppPage('referrals')">
+                        <div class="new-sidebar-link" id="navReferrals" onclick="showNewAppPage('referrals'); closeMobileMenu();">
                             <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
                                 <polyline points="16 6 12 2 8 6"/>
@@ -5447,7 +5566,7 @@
                     </div>
                     
                     <div class="new-sidebar-section">
-                        <div class="new-sidebar-link" id="navSettings" onclick="showNewAppPage('settings')">
+                        <div class="new-sidebar-link" id="navSettings" onclick="showNewAppPage('settings'); closeMobileMenu();">
                             <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="3"/>
                                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -8562,8 +8681,38 @@
         // ========== NEW X.COM-STYLE APP FUNCTIONS ==========
         let currentNewAppPage = 'speak';
         
+        // Mobile menu functions
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('mobileSidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
+        }
+        
+        function closeMobileMenu() {
+            const sidebar = document.getElementById('mobileSidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            if (sidebar) sidebar.classList.remove('mobile-open');
+            if (overlay) overlay.classList.remove('active');
+        }
+        
+        function updateMobileHeader(title) {
+            const headerTitle = document.getElementById('mobileHeaderTitle');
+            if (headerTitle) headerTitle.textContent = title;
+        }
+        
         function showNewAppPage(page) {
             currentNewAppPage = page;
+            
+            // Update mobile header title
+            const titles = {
+                'speak': 'Speak to Taj',
+                'connections': 'My Connections',
+                'opportunities': 'Opportunities',
+                'referrals': 'Referrals',
+                'settings': 'Settings'
+            };
+            updateMobileHeader(titles[page] || 'TapinX');
             
             // Update sidebar nav
             document.querySelectorAll('.new-sidebar-link').forEach(l => l.classList.remove('active'));
