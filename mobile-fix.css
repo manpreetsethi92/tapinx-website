@@ -80,29 +80,30 @@
      * CONVERSATION 1: User looking for producer
      * User (outgoing/light) = RIGHT side
      * Taj (incoming/dark) = LEFT side
+     * Pushed down to not cover phone header
      */
-    .bubble-1 { top: 15% !important; right: 8% !important; left: auto !important; }   /* User: "I need a producer..." */
-    .bubble-2 { top: 30% !important; left: 8% !important; right: auto !important; }   /* Taj: "What's your budget?" */
-    .bubble-3 { top: 47% !important; right: 8% !important; left: auto !important; }   /* User: "$2-3k..." */
-    .bubble-4 { top: 64% !important; left: 8% !important; right: auto !important; }   /* Taj: "Found 2 producers..." */
+    .bubble-1 { top: 22% !important; right: 8% !important; left: auto !important; }   /* User: "I need a producer..." */
+    .bubble-2 { top: 36% !important; left: 8% !important; right: auto !important; }   /* Taj: "What's your budget?" */
+    .bubble-3 { top: 51% !important; right: 8% !important; left: auto !important; }   /* User: "$2-3k..." */
+    .bubble-4 { top: 66% !important; left: 8% !important; right: auto !important; }   /* Taj: "Found 2 producers..." */
     
     /* 
      * CONVERSATION 2: Taj offers makeup gig
      * Taj starts this one
      */
-    .bubble-5 { top: 15% !important; left: 8% !important; right: auto !important; display: block !important; }  /* Taj: "Makeup artist needed..." */
-    .bubble-6 { top: 30% !important; right: 8% !important; left: auto !important; }   /* User: "When's the shoot?" */
-    .bubble-7 { top: 47% !important; left: 8% !important; right: auto !important; }   /* Taj: "This Saturday" */
-    .bubble-8 { top: 64% !important; right: 8% !important; left: auto !important; }   /* User: "I'm in" */
+    .bubble-5 { top: 22% !important; left: 8% !important; right: auto !important; display: block !important; }  /* Taj: "Makeup artist needed..." */
+    .bubble-6 { top: 36% !important; right: 8% !important; left: auto !important; }   /* User: "When's the shoot?" */
+    .bubble-7 { top: 51% !important; left: 8% !important; right: auto !important; }   /* Taj: "This Saturday" */
+    .bubble-8 { top: 66% !important; right: 8% !important; left: auto !important; }   /* User: "I'm in" */
     
     /* 
      * CONVERSATION 3: User looking for video editor
      * User starts this one
      */
-    .bubble-9 { top: 15% !important; right: 8% !important; left: auto !important; }   /* User: "Looking for video editor..." */
-    .bubble-10 { top: 30% !important; left: 8% !important; right: auto !important; }  /* Taj: "What type of content?" */
-    .bubble-11 { top: 47% !important; right: 8% !important; left: auto !important; }  /* User: "Vlogs, 10-15 min..." */
-    .bubble-12 { top: 64% !important; left: 8% !important; right: auto !important; }  /* Taj: "Got 3 editors..." */
+    .bubble-9 { top: 22% !important; right: 8% !important; left: auto !important; }   /* User: "Looking for video editor..." */
+    .bubble-10 { top: 36% !important; left: 8% !important; right: auto !important; }  /* Taj: "What type of content?" */
+    .bubble-11 { top: 51% !important; right: 8% !important; left: auto !important; }  /* User: "Vlogs, 10-15 min..." */
+    .bubble-12 { top: 66% !important; left: 8% !important; right: auto !important; }  /* Taj: "Got 3 editors..." */
     
     /* Hero text */
     .hero-text {
