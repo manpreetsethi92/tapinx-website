@@ -3488,6 +3488,7 @@
             flex-direction: column;
             padding: 12px;
             border-right: 1px solid #eff3f4;
+            background: linear-gradient(180deg, #fafafa 0%, #ffffff 50%, #fafafa 100%);
         }
         
         /* TOP ZONE - Logo (fixed at top) */
@@ -3501,6 +3502,11 @@
             font-weight: 700;
             color: #E50914;
             cursor: pointer;
+            transition: opacity 0.15s ease;
+        }
+        
+        .new-sidebar-logo-text:hover {
+            opacity: 0.8;
         }
         
         /* MIDDLE ZONE - Nav (vertically centered) */
@@ -3509,7 +3515,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 4px;
+            gap: 2px;
             padding: 24px 0;
         }
         
@@ -3520,36 +3526,56 @@
         .new-sidebar-link {
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 14px 12px;
-            border-radius: 12px;
+            gap: 14px;
+            padding: 12px 12px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: all 0.15s ease;
             text-decoration: none;
-            color: #0f1419;
+            color: #536471;
+            position: relative;
         }
         
         .new-sidebar-link:hover {
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(0, 0, 0, 0.04);
+            color: #0f1419;
         }
         
         .new-sidebar-link.active {
-            font-weight: 700;
-            background: rgba(0, 0, 0, 0.05);
+            color: #0f1419;
+            font-weight: 600;
+            background: transparent;
+        }
+        
+        .new-sidebar-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 24px;
+            background: #E50914;
+            border-radius: 0 3px 3px 0;
         }
         
         .new-sidebar-icon {
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
             stroke: currentColor;
-            stroke-width: 2;
+            stroke-width: 1.75;
             fill: none;
             flex-shrink: 0;
+            transition: stroke 0.15s ease;
+        }
+        
+        .new-sidebar-link.active .new-sidebar-icon {
+            stroke-width: 2;
         }
         
         .new-sidebar-label {
-            font-size: 16px;
-            letter-spacing: -0.2px;
+            font-size: 15px;
+            letter-spacing: -0.1px;
         }
         
         .new-sidebar-badge {
@@ -3754,22 +3780,53 @@
         .new-right-card-item {
             padding: 12px 16px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.15s ease;
         }
         
         .new-right-card-item:hover {
             background: rgba(0, 0, 0, 0.03);
         }
         
+        .new-right-card-item-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .new-right-card-check {
+            font-size: 16px;
+            color: #cfd9de;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .new-right-card-check.done {
+            color: #00ba7c;
+        }
+        
         .new-right-card-item-title {
             font-size: 15px;
-            font-weight: 700;
+            font-weight: 600;
             color: #0f1419;
+        }
+        
+        .new-right-card-item.done .new-right-card-item-title {
+            color: #536471;
+            text-decoration: line-through;
         }
         
         .new-right-card-item-desc {
             font-size: 13px;
             color: #536471;
+            margin-top: 2px;
+        }
+        
+        /* Referral Note */
+        .new-referral-note {
+            font-size: 13px;
+            color: #536471;
+            text-align: center;
+            margin-top: 16px;
         }
         
         /* Tabs */
@@ -4931,8 +4988,8 @@
                             <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
                             <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                         </svg>
-                        <h3 class="new-empty-title">No connections yet</h3>
-                        <p class="new-empty-text">When Taj introduces you to someone, they'll appear here.</p>
+                        <h3 class="new-empty-title">Your network starts here</h3>
+                        <p class="new-empty-text">Tell Taj who you're looking to meet. Once an introduction is made, your connections will appear here.</p>
                         <a href="https://t.me/TapinXBot" target="_blank" class="new-empty-cta">Message Taj</a>
                     </div>
                 </div>
@@ -4955,8 +5012,8 @@
                             <path d="M2 17l10 5 10-5"/>
                             <path d="M2 12l10 5 10-5"/>
                         </svg>
-                        <h3 class="new-empty-title">Nothing to review right now</h3>
-                        <p class="new-empty-text">Taj will surface opportunities aligned with your intent.</p>
+                        <h3 class="new-empty-title">You're all caught up</h3>
+                        <p class="new-empty-text">Taj will surface opportunities aligned with your intent. Check back soon or update your preferences in Settings.</p>
                     </div>
                 </div>
                 
@@ -4969,12 +5026,12 @@
                         <div class="new-referral-inner">
                             <div class="new-referral-intro">
                                 <div class="new-referral-intro-title">Know someone who'd benefit?</div>
-                                <div class="new-referral-intro-text">Refer a friend and we'll connect them with the right people.</div>
+                                <div class="new-referral-intro-text">We'll introduce them if it aligns with their intent.</div>
                             </div>
                             <div class="new-referral-form">
                                 <input type="text" class="new-referral-input" id="newReferralName" placeholder="Their name">
-                                <input type="text" class="new-referral-input" id="newReferralContact" placeholder="Phone or email">
-                                <textarea class="new-referral-input new-referral-textarea" id="newReferralContext" placeholder="Why would they benefit? What are they looking for?"></textarea>
+                                <input type="text" class="new-referral-input" id="newReferralContact" placeholder="Phone number">
+                                <textarea class="new-referral-input new-referral-textarea" id="newReferralContext" placeholder="What are they looking for? How can Taj help them?"></textarea>
                                 <button class="new-referral-submit" onclick="submitNewReferral()">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
@@ -4983,6 +5040,7 @@
                                     </svg>
                                     Send Referral
                                 </button>
+                                <p class="new-referral-note">Taj will reach out to them directly via text.</p>
                             </div>
                         </div>
                     </div>
@@ -5096,13 +5154,23 @@
             <aside class="new-right-column">
                 <div class="new-right-card">
                     <div class="new-right-card-title">Getting started</div>
-                    <div class="new-right-card-item" onclick="showNewAppPage('speak')">
-                        <div class="new-right-card-item-title">Message Taj</div>
-                        <div class="new-right-card-item-desc">Tell Taj who you want to meet</div>
+                    <div class="new-right-card-item" onclick="showNewAppPage('speak')" id="gettingStartedMessage">
+                        <div class="new-right-card-item-row">
+                            <span class="new-right-card-check" id="checkMessage">○</span>
+                            <div>
+                                <div class="new-right-card-item-title">Message Taj</div>
+                                <div class="new-right-card-item-desc">Tell Taj who you want to meet</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="new-right-card-item" onclick="openNewEditProfile()">
-                        <div class="new-right-card-item-title">Complete your profile</div>
-                        <div class="new-right-card-item-desc">Help Taj make better matches</div>
+                    <div class="new-right-card-item" onclick="openNewEditProfile()" id="gettingStartedProfile">
+                        <div class="new-right-card-item-row">
+                            <span class="new-right-card-check" id="checkProfile">○</span>
+                            <div>
+                                <div class="new-right-card-item-title">Complete your profile</div>
+                                <div class="new-right-card-item-desc">Help Taj make better matches</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </aside>
@@ -7857,6 +7925,31 @@
             } else {
                 document.getElementById('newSidebarAvatarImg').style.display = 'none';
                 document.getElementById('newSidebarAvatarInitial').style.display = 'flex';
+            }
+            
+            // Update getting started progress
+            updateGettingStarted();
+        }
+        
+        function updateGettingStarted() {
+            const hasProfile = localStorage.getItem('tapinx_user_linkedin');
+            const hasMessaged = localStorage.getItem('tapinx_has_messaged');
+            
+            const checkProfile = document.getElementById('checkProfile');
+            const checkMessage = document.getElementById('checkMessage');
+            const profileItem = document.getElementById('gettingStartedProfile');
+            const messageItem = document.getElementById('gettingStartedMessage');
+            
+            if (checkProfile && hasProfile) {
+                checkProfile.textContent = '✓';
+                checkProfile.classList.add('done');
+                if (profileItem) profileItem.classList.add('done');
+            }
+            
+            if (checkMessage && hasMessaged) {
+                checkMessage.textContent = '✓';
+                checkMessage.classList.add('done');
+                if (messageItem) messageItem.classList.add('done');
             }
         }
         
