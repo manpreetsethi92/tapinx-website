@@ -7243,9 +7243,11 @@
             const twitter = localStorage.getItem('tapinx_user_twitter') || '';
             const soundcloud = localStorage.getItem('tapinx_user_soundcloud') || '';
             const imdb = localStorage.getItem('tapinx_user_imdb') || '';
+            const savedSkills = localStorage.getItem('tapinx_user_skills');
+            const skills = savedSkills ? JSON.parse(savedSkills) : [];
             
-            // Store original data for comparison
-            originalProfileData = { name, age, bio, photo, linkedin, instagram, twitter, soundcloud, imdb };
+            // Store original data for comparison (including skills)
+            originalProfileData = { name, age, bio, photo, linkedin, instagram, twitter, soundcloud, imdb, skills };
             
             // Populate form
             document.getElementById('editNameInput').value = name;
@@ -7342,25 +7344,11 @@
             const instagram = document.getElementById('editInstagramInput').value;
             const instagramValid = validateEditUrl(instagram, 'instagram') === 'valid';
             
-            // Check if there are any changes
-            const currentData = {
-                name: document.getElementById('editNameInput').value,
-                age: document.getElementById('editAgeInput').value,
-                bio: document.getElementById('editBioInput').value,
-                linkedin: document.getElementById('editLinkedinInput').value,
-                instagram: document.getElementById('editInstagramInput').value,
-                twitter: document.getElementById('editTwitterInput').value,
-                soundcloud: document.getElementById('editSoundcloudInput').value,
-                imdb: document.getElementById('editImdbInput').value
-            };
-            
-            const photoEl = document.getElementById('editPhotoPreview');
-            const hasNewPhoto = photoEl.style.display === 'block' && photoEl.src !== originalProfileData.photo;
-            
-            const hasChanges = hasNewPhoto || Object.keys(currentData).some(key => currentData[key] !== originalProfileData[key]);
-            
             const saveBtn = document.getElementById('editSaveBtn');
-            saveBtn.disabled = !(name && instagramValid && hasChanges);
+            if (saveBtn) {
+                // Just require name and valid Instagram - no change detection
+                saveBtn.disabled = !(name && instagramValid);
+            }
         }
         
         function saveEditProfile() {
