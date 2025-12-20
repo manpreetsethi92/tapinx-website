@@ -3478,7 +3478,7 @@
             min-height: 100vh;
         }
         
-        /* New Sidebar */
+        /* New Sidebar - Instagram-style with centered nav */
         .new-sidebar {
             width: 275px;
             height: 100vh;
@@ -3490,9 +3490,10 @@
             border-right: 1px solid #eff3f4;
         }
         
+        /* TOP ZONE - Logo (fixed at top) */
         .new-sidebar-logo {
-            padding: 12px;
-            margin-bottom: 8px;
+            padding: 16px 12px;
+            flex-shrink: 0;
         }
         
         .new-sidebar-logo-text {
@@ -3502,20 +3503,26 @@
             cursor: pointer;
         }
         
+        /* MIDDLE ZONE - Nav (vertically centered) */
         .new-sidebar-nav {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            overflow-y: auto;
+            justify-content: center;
+            gap: 4px;
+            padding: 24px 0;
+        }
+        
+        .new-sidebar-section {
+            margin-bottom: 2px;
         }
         
         .new-sidebar-link {
             display: flex;
             align-items: center;
             gap: 16px;
-            padding: 12px;
-            border-radius: 9999px;
+            padding: 14px 12px;
+            border-radius: 12px;
             cursor: pointer;
             transition: background 0.2s ease;
             text-decoration: none;
@@ -3523,11 +3530,12 @@
         }
         
         .new-sidebar-link:hover {
-            background: rgba(15, 20, 25, 0.1);
+            background: rgba(0, 0, 0, 0.05);
         }
         
         .new-sidebar-link.active {
             font-weight: 700;
+            background: rgba(0, 0, 0, 0.05);
         }
         
         .new-sidebar-icon {
@@ -3540,7 +3548,7 @@
         }
         
         .new-sidebar-label {
-            font-size: 20px;
+            font-size: 16px;
             letter-spacing: -0.2px;
         }
         
@@ -3556,21 +3564,22 @@
         
         .new-sidebar-expand {
             padding-left: 54px;
+            margin-top: 2px;
         }
         
         .new-sidebar-sublink {
             display: flex;
             align-items: center;
             padding: 10px 12px;
-            border-radius: 9999px;
+            border-radius: 10px;
             cursor: pointer;
             transition: background 0.2s ease;
             color: #536471;
-            font-size: 15px;
+            font-size: 14px;
         }
         
         .new-sidebar-sublink:hover {
-            background: rgba(15, 20, 25, 0.1);
+            background: rgba(0, 0, 0, 0.05);
             color: #0f1419;
         }
         
@@ -3579,27 +3588,39 @@
             font-weight: 600;
         }
         
+        /* BOTTOM ZONE - CTA + Profile (fixed at bottom) */
+        .new-sidebar-bottom {
+            flex-shrink: 0;
+            padding-top: 16px;
+        }
+        
         .new-sidebar-cta {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 16px 32px;
-            margin: 16px 8px;
+            padding: 14px 24px;
+            margin: 0 0 12px 0;
             background: #E50914;
             color: white;
             border: none;
-            border-radius: 9999px;
-            font-size: 17px;
-            font-weight: 700;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
             font-family: inherit;
             cursor: pointer;
             transition: opacity 0.2s;
             text-decoration: none;
+            width: 100%;
         }
         
         .new-sidebar-cta:hover {
             opacity: 0.9;
+        }
+        
+        .new-sidebar-cta svg {
+            width: 20px;
+            height: 20px;
         }
         
         .new-sidebar-profile {
@@ -3607,14 +3628,13 @@
             align-items: center;
             gap: 12px;
             padding: 12px;
-            border-radius: 9999px;
+            border-radius: 12px;
             cursor: pointer;
             transition: background 0.2s ease;
-            margin-top: auto;
         }
         
         .new-sidebar-profile:hover {
-            background: rgba(15, 20, 25, 0.1);
+            background: rgba(0, 0, 0, 0.05);
         }
         
         .new-sidebar-avatar {
@@ -3644,8 +3664,8 @@
         }
         
         .new-sidebar-profile-name {
-            font-size: 15px;
-            font-weight: 700;
+            font-size: 14px;
+            font-weight: 600;
             color: #0f1419;
             white-space: nowrap;
             overflow: hidden;
@@ -4768,21 +4788,24 @@
                     </div>
                 </nav>
                 
-                <a href="https://t.me/TapinXBot" target="_blank" class="new-sidebar-cta">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                    </svg>
-                    Start Texting
-                </a>
-                
-                <div class="new-sidebar-profile" onclick="openNewEditProfile()">
-                    <div class="new-sidebar-avatar">
-                        <span id="newSidebarAvatarInitial">T</span>
-                        <img id="newSidebarAvatarImg" style="display: none;">
-                    </div>
-                    <div class="new-sidebar-profile-info">
-                        <div class="new-sidebar-profile-name" id="newSidebarName">User</div>
-                        <div class="new-sidebar-profile-handle">Edit profile</div>
+                <!-- BOTTOM ZONE - CTA + Profile (fixed at bottom) -->
+                <div class="new-sidebar-bottom">
+                    <a href="https://t.me/TapinXBot" target="_blank" class="new-sidebar-cta">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                        </svg>
+                        Start Texting
+                    </a>
+                    
+                    <div class="new-sidebar-profile" onclick="openNewEditProfile()">
+                        <div class="new-sidebar-avatar">
+                            <span id="newSidebarAvatarInitial">T</span>
+                            <img id="newSidebarAvatarImg" style="display: none;">
+                        </div>
+                        <div class="new-sidebar-profile-info">
+                            <div class="new-sidebar-profile-name" id="newSidebarName">User</div>
+                            <div class="new-sidebar-profile-handle">Edit profile</div>
+                        </div>
                     </div>
                 </div>
             </aside>
