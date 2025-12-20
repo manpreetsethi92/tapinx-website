@@ -1632,9 +1632,13 @@
             color: #666;
         }
         
-        /* ========== CONNECTIONS PAGE ========== */
+        /* ========================================
+           CONNECTIONS PAGE - WORLD CLASS
+           LinkedIn/X-level refinement
+           ======================================== */
+        
         #connectionsPage {
-            background: #fff;
+            background: #FFFFFF;
         }
         
         .connections-header {
@@ -1642,82 +1646,538 @@
         }
         
         .connections-main {
-            max-width: 600px;
+            max-width: 720px;
             margin: 0 auto;
-            padding: 100px 16px 60px;
+            padding: 100px 24px 60px;
         }
         
+        /* Page Header - Anchor */
         .conn-page-header {
-            text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 0;
         }
         
         .conn-page-title {
-            font-size: 28px;
-            font-weight: 700;
-            color: #000;
+            font-size: 24px;
+            font-weight: 600;
+            color: #111111;
             margin-bottom: 8px;
         }
         
         .conn-page-subtitle {
-            font-size: 15px;
-            color: #666;
+            display: none;
+        }
+        
+        .conn-page-meta {
+            font-size: 14px;
+            color: #555555;
+            margin-bottom: 24px;
+        }
+        
+        .conn-page-divider {
+            height: 1px;
+            background: #EAEAEA;
+            margin-bottom: 24px;
+        }
+        
+        /* Search & Filter Controls */
+        .conn-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
         }
         
         .conn-search-container {
-            margin-bottom: 24px;
+            flex: 1;
         }
         
         .conn-search-bar {
             display: flex;
             align-items: center;
-            background: #f5f5f5;
-            border-radius: 12px;
-            padding: 16px 20px;
-            gap: 12px;
-            transition: all 0.2s;
-            border: 2px solid transparent;
+            background: #FFFFFF;
+            border: 1px solid #DDDDDD;
+            border-radius: 8px;
+            padding: 10px 14px;
+            gap: 10px;
+            transition: all 0.15s;
         }
         
         .conn-search-bar:focus-within {
-            background: #fff;
-            border-color: #E50914;
-            box-shadow: 0 4px 20px rgba(229, 9, 20, 0.1);
+            border-color: #111111;
+        }
+        
+        /* Search de-emphasized when empty */
+        .conn-search-bar.subdued {
+            border-color: #EAEAEA;
+            padding: 8px 12px;
+        }
+        
+        .conn-search-bar.subdued input {
+            font-size: 13px;
+        }
+        
+        .conn-search-bar.subdued .conn-search-svg {
+            opacity: 0.5;
         }
         
         .conn-search-svg {
-            color: #999;
+            color: #888888;
             flex-shrink: 0;
+            width: 16px;
+            height: 16px;
         }
         
         .conn-search-bar input {
             border: none;
             background: none;
             outline: none;
-            font-size: 16px;
+            font-size: 14px;
             flex: 1;
             font-family: inherit;
+            color: #111111;
         }
         
         .conn-search-bar input::placeholder {
-            color: #999;
+            color: #888888;
         }
         
         .conn-search-shortcut {
-            background: #eee;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            color: #666;
+            display: none;
         }
         
+        /* Segmented Control - Conditional Red */
+        .conn-status-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid #EAEAEA;
+            margin-bottom: 0;
+        }
+        
+        .conn-status-tab {
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            color: #888888;
+            transition: color 0.15s;
+            margin-bottom: -1px;
+        }
+        
+        .conn-status-tab:hover {
+            color: #555555;
+        }
+        
+        /* Active state - gray by default */
+        .conn-status-tab.active {
+            color: #111111;
+            border-bottom-color: #111111;
+        }
+        
+        /* Red ONLY when action exists (pending > 0) */
+        .conn-status-tab.active.has-action {
+            color: #E50914;
+            border-bottom-color: #E50914;
+        }
+        
+        /* Softened when all counts are zero */
+        .conn-status-tab.softened {
+            color: #CCCCCC;
+        }
+        
+        .conn-status-tab.softened:hover {
+            color: #AAAAAA;
+        }
+        
+        .conn-status-count {
+            font-size: 12px;
+            margin-left: 4px;
+            font-weight: 400;
+        }
+        
+        .conn-status-tab.active.has-action .conn-status-count {
+            color: #E50914;
+        }
+        
+        /* Remove filter pills - not needed */
         .conn-filter-pills {
+            display: none;
+        }
+        
+        /* Connection List */
+        .conn-list {
+            margin-top: 0;
+        }
+        
+        .conn-section {
+            margin-bottom: 0;
+        }
+        
+        .conn-section-header {
+            display: none;
+        }
+        
+        /* Connection Row - LinkedIn Grade */
+        .connection-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 20px 0;
+            border-bottom: 1px solid #EAEAEA;
+            cursor: default;
+            transition: background 0.15s;
+            margin: 0;
+            border-radius: 0;
+        }
+        
+        .connection-row:hover {
+            background: #FAFAFA;
+            margin: 0 -24px;
+            padding: 20px 24px;
+        }
+        
+        .connection-row:last-child {
+            border-bottom: 1px solid #EAEAEA;
+        }
+        
+        .row-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #E5E5E5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888888;
+            font-weight: 600;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .row-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .row-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111111;
+            margin-bottom: 2px;
+        }
+        
+        .row-context {
+            font-size: 14px;
+            color: #555555;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+        
+        .row-intro-meta {
+            font-size: 13px;
+            color: #888888;
+        }
+        
+        .row-actions {
             display: flex;
             gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 8px;
+            flex-shrink: 0;
+            align-items: center;
+        }
+        
+        .row-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s;
+            border: none;
+        }
+        
+        .row-btn-primary {
+            background: #E50914;
+            color: #FFFFFF;
+        }
+        
+        .row-btn-primary:hover {
+            opacity: 0.9;
+        }
+        
+        .row-btn-secondary {
+            background: none;
+            color: #555555;
+            border: 1px solid #DDDDDD;
+        }
+        
+        .row-btn-secondary:hover {
+            background: #F5F5F5;
+            border-color: #CCCCCC;
+        }
+        
+        /* Status indicators */
+        .row-status {
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+        
+        .row-status.pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+        
+        .row-status.connected {
+            color: #888888;
+        }
+        
+        /* Remove old styles */
+        .row-info,
+        .row-title,
+        .row-meta,
+        .row-time,
+        .row-tag,
+        .row-action,
+        .conn-time-header,
+        .conn-section-title,
+        .conn-section-badge,
+        .conn-section-link {
+            display: none;
+        }
+        
+        /* Empty State - Critical */
+        .conn-empty {
+            text-align: center;
+            padding: 60px 40px 32px;
+        }
+        
+        .conn-empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111111;
+            margin-bottom: 10px;
+        }
+        
+        .conn-empty-text {
+            font-size: 14px;
+            color: #555555;
+            margin-bottom: 6px;
+            line-height: 1.5;
+        }
+        
+        .conn-empty-meta {
+            font-size: 13px;
+            color: #888888;
             margin-bottom: 24px;
-            -webkit-overflow-scrolling: touch;
+        }
+        
+        .conn-empty-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #E50914;
+            color: #FFFFFF;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: opacity 0.15s;
+            margin-bottom: 16px;
+        }
+        
+        .conn-empty-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .conn-empty-notify {
+            font-size: 12px;
+            color: #AAAAAA;
+            margin-bottom: 0;
+        }
+        
+        /* Skeleton Row - Future State Affordance */
+        .conn-skeleton-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 20px 0;
+            opacity: 0.08;
+            pointer-events: none;
+            margin-top: 24px;
+        }
+        
+        .skeleton-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #E5E5E5;
+        }
+        
+        .skeleton-content {
+            flex: 1;
+        }
+        
+        .skeleton-line {
+            height: 12px;
+            background: #E5E5E5;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        
+        .skeleton-line.short {
+            width: 40%;
+        }
+        
+        .skeleton-line.medium {
+            width: 60%;
+        }
+        
+        .skeleton-btn {
+            width: 70px;
+            height: 32px;
+            background: #E5E5E5;
+            border-radius: 6px;
+        }
+        
+        /* Pending Section */
+        #pendingSection {
+            margin-bottom: 0;
+        }
+        
+        .attention-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 20px 0;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #EAEAEA;
+            border-radius: 0;
+            margin-bottom: 0;
+            cursor: default;
+            transition: background 0.15s;
+        }
+        
+        .attention-card:hover {
+            background: #FAFAFA;
+            margin: 0 -24px;
+            padding: 20px 24px;
+            box-shadow: none;
+        }
+        
+        .attention-card.intro {
+            background: transparent;
+            border-color: #EAEAEA;
+        }
+        
+        .attention-card.intro:hover {
+            background: #FAFAFA;
+            border-color: #EAEAEA;
+        }
+        
+        .attention-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #E5E5E5;
+            color: #888888;
+        }
+        
+        .attention-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .attention-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111111;
+            margin-bottom: 4px;
+        }
+        
+        .attention-context {
+            font-size: 14px;
+            color: #555555;
+            margin-bottom: 4px;
+        }
+        
+        .attention-text {
+            font-size: 13px;
+            color: #888888;
+        }
+        
+        .attention-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .attention-action {
+            padding: 8px 16px;
+            background: #E50914;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            white-space: nowrap;
+            transition: opacity 0.15s;
+        }
+        
+        .attention-action:hover {
+            opacity: 0.9;
+            background: #E50914;
+        }
+        
+        .attention-action.secondary {
+            background: none;
+            color: #555555;
+            border: 1px solid #DDDDDD;
+        }
+        
+        .attention-action.secondary:hover {
+            background: #F5F5F5;
+            opacity: 1;
+        }
+        
+        .attention-action.decline {
+            background: none;
+            color: #888888;
+            border: 1px solid #DDDDDD;
+        }
+        
+        .attention-action.decline:hover {
+            background: #F5F5F5;
+            color: #555555;
+        }
+        
+        /* Toast */
+        .conn-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #111111;
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .conn-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
         }
         
         .conn-filter-pills::-webkit-scrollbar {
@@ -2815,227 +3275,71 @@
         <main class="connections-main">
             <button class="page-back-btn" onclick="showPage('dashboard')">← Back</button>
             
+            <!-- Page Header - Anchor -->
             <div class="conn-page-header">
                 <h1 class="conn-page-title">My Connections</h1>
-                <p class="conn-page-subtitle">Your network of collaborators, investors, and friends</p>
+                <p class="conn-page-meta">People Taj has introduced you to — and where things stand.</p>
             </div>
             
-            <div class="conn-search-container">
-                <div class="conn-search-bar">
-                    <svg class="conn-search-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
-                    <input type="text" placeholder="Search connections..." id="connSearchInput" oninput="filterConnections()">
-                    <span class="conn-search-shortcut">⌘K</span>
+            <div class="conn-page-divider"></div>
+            
+            <!-- Search & Filter Controls -->
+            <div class="conn-controls">
+                <div class="conn-search-container">
+                    <div class="conn-search-bar">
+                        <svg class="conn-search-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+                        <input type="text" placeholder="Search connections..." id="connSearchInput" oninput="filterConnections()">
+                    </div>
                 </div>
             </div>
             
-            <!-- Status Tabs -->
+            <!-- Status Tabs (Segmented Control) -->
             <div class="conn-status-tabs">
-                <button class="conn-status-tab active" onclick="setConnStatus(this, 'all')">All<span class="conn-status-count" id="connAllCount">12</span></button>
-                <button class="conn-status-tab" onclick="setConnStatus(this, 'pending')">Pending<span class="conn-status-count" id="connPendingCount">3</span></button>
-                <button class="conn-status-tab" onclick="setConnStatus(this, 'connected')">Connected<span class="conn-status-count" id="connConnectedCount">9</span></button>
+                <button class="conn-status-tab active" onclick="setConnStatus(this, 'all')">All<span class="conn-status-count" id="connAllCount">0</span></button>
+                <button class="conn-status-tab" onclick="setConnStatus(this, 'pending')">Pending<span class="conn-status-count" id="connPendingCount">0</span></button>
+                <button class="conn-status-tab" onclick="setConnStatus(this, 'connected')">Connected<span class="conn-status-count" id="connConnectedCount">0</span></button>
             </div>
             
-            <!-- Filter Pills -->
-            <div class="conn-filter-pills" id="connFilterPills">
-                <button class="conn-pill active" onclick="setConnFilter(this, 'all')">All</button>
-                <button class="conn-pill" onclick="setConnFilter(this, 'investors')">Investors</button>
-                <button class="conn-pill" onclick="setConnFilter(this, 'cofounders')">Co-founders</button>
-                <button class="conn-pill" onclick="setConnFilter(this, 'designers')">Designers</button>
-                <button class="conn-pill" onclick="setConnFilter(this, 'creatives')">Creatives</button>
-                <button class="conn-pill" onclick="setConnFilter(this, 'mentors')">Mentors</button>
+            <!-- Connection List -->
+            <div class="conn-list" id="connList">
+                <!-- Pending Section -->
+                <div class="conn-section" id="pendingSection" style="display: none;"></div>
+                
+                <!-- Connected Section -->
+                <div class="conn-section" id="connectedSection"></div>
             </div>
             
-            <!-- Pending Section -->
-            <div class="conn-section" id="pendingSection">
-                <div class="conn-section-header">
-                    <span class="conn-section-title">
-                        Pending
-                        <span class="conn-section-badge" id="pendingBadge">3</span>
-                    </span>
-                </div>
+            <!-- Empty State -->
+            <div class="conn-empty" id="emptyConnections">
+                <h2 class="conn-empty-title">No introductions yet</h2>
+                <p class="conn-empty-text">When Taj connects you with someone, they'll appear here.</p>
+                <p class="conn-empty-meta">Introductions usually happen within 24–48 hours.</p>
+                <a href="https://t.me/TapinXBot" target="_blank" class="conn-empty-btn">Message Taj</a>
+                <p class="conn-empty-notify">You'll be notified when there's an update.</p>
                 
-                <div class="attention-card intro" data-conn-status="pending" data-conn-id="p1" data-name="Rachel Thompson">
-                    <div class="attention-avatar" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">R</div>
-                    <div class="attention-info">
-                        <div class="attention-name">Rachel Thompson</div>
-                        <div class="attention-text">Pending intro • Waiting for your response</div>
+                <!-- Skeleton Row - Future State Affordance -->
+                <div class="conn-skeleton-row">
+                    <div class="skeleton-avatar"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line medium"></div>
                     </div>
-                    <button class="attention-action decline" onclick="declineConnection(this)">Decline</button>
-                    <button class="attention-action" onclick="acceptConnection(this)">Accept</button>
-                </div>
-                
-                <div class="attention-card" data-conn-status="pending" data-conn-id="p2" data-name="Sarah Chen">
-                    <div class="attention-avatar">S</div>
-                    <div class="attention-info">
-                        <div class="attention-name">Sarah Chen</div>
-                        <div class="attention-text">New message • 2 hours ago</div>
-                    </div>
-                    <button class="attention-action secondary" onclick="replyToConnection(this, 'Sarah Chen')">Reply</button>
-                </div>
-                
-                <div class="attention-card" data-conn-status="pending" data-conn-id="p3" data-name="Marcus Johnson">
-                    <div class="attention-avatar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">M</div>
-                    <div class="attention-info">
-                        <div class="attention-name">Marcus Johnson</div>
-                        <div class="attention-text">Wants to schedule a call</div>
-                    </div>
-                    <button class="attention-action secondary" onclick="replyToConnection(this, 'Marcus Johnson')">Reply</button>
+                    <div class="skeleton-btn"></div>
                 </div>
             </div>
             
-            <!-- Empty state for pending -->
+            <!-- Empty state for pending filter -->
             <div class="conn-empty" id="emptyPending" style="display: none;">
-                <div class="conn-empty-title">All caught up!</div>
-                <p class="conn-empty-text">No pending requests right now.</p>
+                <h2 class="conn-empty-title">No pending introductions</h2>
+                <p class="conn-empty-text">All caught up! Check back soon.</p>
             </div>
             
-            <!-- Connected Section -->
-            <div class="conn-section" id="connectedSection">
-                <div class="conn-section-header">
-                    <span class="conn-section-title">Connected</span>
-                </div>
-                
-                <div class="conn-time-header">This Week</div>
-                
-                <div class="connection-row" data-category="investors" data-conn-status="connected" data-name="Rachel Thompson">
-                    <div class="row-avatar" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">R</div>
-                    <div class="row-info">
-                        <div class="row-name">Rachel Thompson</div>
-                        <div class="row-title">VC at Sequoia</div>
-                    </div>
-                    <div class="row-meta">
-                        <div class="row-time">3 days ago</div>
-                        <span class="row-tag">Investor</span>
-                    </div>
-                    <button class="row-action" onclick="messageConnection(this, 'Rachel Thompson')">Message</button>
-                </div>
-                
-                <div class="connection-row" data-category="cofounders" data-conn-status="connected" data-name="Alex Rivera">
-                    <div class="row-avatar" style="background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);">A</div>
-                    <div class="row-info">
-                        <div class="row-name">Alex Rivera</div>
-                        <div class="row-title">GTM Expert</div>
-                    </div>
-                    <div class="row-meta">
-                        <div class="row-time">5 days ago</div>
-                        <span class="row-tag">Partner</span>
-                    </div>
-                    <button class="row-action" onclick="messageConnection(this, 'Alex Rivera')">Message</button>
-                </div>
-                
-                <div class="conn-time-header">Last Week</div>
-                
-                <div class="connection-row" data-category="cofounders" data-conn-status="connected" data-name="Marcus Johnson">
-                    <div class="row-avatar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">M</div>
-                    <div class="row-info">
-                        <div class="row-name">Marcus Johnson</div>
-                        <div class="row-title">Technical Co-founder</div>
-                    </div>
-                    <div class="row-meta">
-                        <div class="row-time">1 week ago</div>
-                        <span class="row-tag">Co-founder</span>
-                    </div>
-                    <button class="row-action" onclick="messageConnection(this, 'Marcus Johnson')">Message</button>
-                </div>
-                
-                <div class="connection-row" data-category="designers" data-conn-status="connected" data-name="Lisa Park">
-                    <div class="row-avatar" style="background: linear-gradient(135deg, #c471f5 0%, #fa71cd 100%);">L</div>
-                    <div class="row-info">
-                        <div class="row-name">Lisa Park</div>
-                        <div class="row-title">Brand Designer</div>
-                    </div>
-                    <div class="row-meta">
-                        <div class="row-time">1 week ago</div>
-                        <span class="row-tag">Designer</span>
-                    </div>
-                    <button class="row-action" onclick="messageConnection(this, 'Lisa Park')">Message</button>
-                </div>
-                
-                <div class="connection-row" data-category="creatives" data-conn-status="connected" data-name="Kunaal Sharma">
-                    <div class="row-avatar" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333;">K</div>
-                    <div class="row-info">
-                        <div class="row-name">Kunaal Sharma</div>
-                        <div class="row-title">Singer & Songwriter</div>
-                    </div>
-                    <div class="row-meta">
-                        <div class="row-time">1 week ago</div>
-                        <span class="row-tag">Creative</span>
-                    </div>
-                    <button class="row-action" onclick="messageConnection(this, 'Kunaal Sharma')">Message</button>
-                </div>
-                
-                <div class="conn-time-header">Earlier</div>
-                
-                <div class="connection-row" data-category="investors" data-conn-status="connected" data-name="Sarah Chen">
-                    <div class="row-avatar">S</div>
-                    <div class="row-info">
-                        <div class="row-name">Sarah Chen</div>
-                        <div class="row-title">Partner at a16z</div>
-                    </div>
-                    <div class="row-meta">
-                        <div class="row-time">2 weeks ago</div>
-                        <span class="row-tag">Investor</span>
-                    </div>
-                    <button class="row-action" onclick="messageConnection(this, 'Sarah Chen')">Message</button>
-                </div>
-                
-                <div class="connection-row" data-category="designers" data-conn-status="connected" data-name="Emily Rodriguez">
-                    <div class="row-avatar" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">E</div>
-                    <div class="row-info">
-                        <div class="row-name">Emily Rodriguez</div>
-                        <div class="row-title">UX Designer</div>
-                    </div>
-                    <div class="row-meta">
-                        <div class="row-time">2 weeks ago</div>
-                        <span class="row-tag">Designer</span>
-                    </div>
-                    <button class="row-action" onclick="messageConnection(this, 'Emily Rodriguez')">Message</button>
-                </div>
-                
-                <div class="connection-row" data-category="creatives" data-conn-status="connected" data-name="Julia Martinez">
-                    <div class="row-avatar" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333;">J</div>
-                    <div class="row-info">
-                        <div class="row-name">Julia Martinez</div>
-                        <div class="row-title">Music Producer</div>
-                    </div>
-                    <div class="row-meta">
-                        <div class="row-time">3 weeks ago</div>
-                        <span class="row-tag">Creative</span>
-                    </div>
-                    <button class="row-action" onclick="messageConnection(this, 'Julia Martinez')">Message</button>
-                </div>
-                
-                <div class="connection-row" data-category="investors" data-conn-status="connected" data-name="David Kim">
-                    <div class="row-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">D</div>
-                    <div class="row-info">
-                        <div class="row-name">David Kim</div>
-                        <div class="row-title">Angel Investor</div>
-                    </div>
-                    <div class="row-meta">
-                        <div class="row-time">1 month ago</div>
-                        <span class="row-tag">Investor</span>
-                    </div>
-                    <button class="row-action" onclick="messageConnection(this, 'David Kim')">Message</button>
-                </div>
-                
-                <div class="connection-row" data-category="mentors" data-conn-status="connected" data-name="Kevin Park">
-                    <div class="row-avatar" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">K</div>
-                    <div class="row-info">
-                        <div class="row-name">Kevin Park</div>
-                        <div class="row-title">Former CTO, Stripe</div>
-                    </div>
-                    <div class="row-meta">
-                        <div class="row-time">2 months ago</div>
-                        <span class="row-tag">Mentor</span>
-                    </div>
-                    <button class="row-action" onclick="messageConnection(this, 'Kevin Park')">Message</button>
-                </div>
-            </div>
-            
-            <!-- Empty state for connected -->
+            <!-- Empty state for connected filter -->
             <div class="conn-empty" id="emptyConnected" style="display: none;">
-                <div class="conn-empty-title">No connections yet</div>
-                <p class="conn-empty-text">Start by telling Taj who you want to meet!</p>
+                <h2 class="conn-empty-title">No connections yet</h2>
+                <p class="conn-empty-text">When Taj connects you with someone, they'll appear here.</p>
+                <p class="conn-empty-meta">Introductions usually happen within 24–48 hours.</p>
+                <a href="https://t.me/TapinXBot" target="_blank" class="conn-empty-btn">Message Taj</a>
             </div>
             
             <!-- Toast notification -->
@@ -4685,54 +4989,81 @@
                 document.getElementById('connAvatarInitial').style.display = 'none';
             }
             
-            // Clear demo data
+            // Clear sections
             const pendingSection = document.getElementById('pendingSection');
             const connectedSection = document.getElementById('connectedSection');
-            pendingSection.innerHTML = '<div class="conn-section-header"><span class="conn-section-title">Pending <span class="conn-section-badge" id="pendingBadge">0</span></span></div>';
-            connectedSection.innerHTML = '<div class="conn-section-header"><span class="conn-section-title">Connected</span></div><div style="text-align:center;padding:20px;color:#666;">Loading...</div>';
+            const emptyConnections = document.getElementById('emptyConnections');
+            const searchBar = document.querySelector('.conn-search-bar');
+            
+            pendingSection.innerHTML = '';
+            connectedSection.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">Loading...</div>';
             
             // Fetch real connections from API
             const { connections, count } = await fetchConnections();
             
             // Update counts
+            const pendingCount = 0; // Will come from API later
             document.getElementById('connAllCount').textContent = count;
-            document.getElementById('connPendingCount').textContent = '0';
+            document.getElementById('connPendingCount').textContent = pendingCount;
             document.getElementById('connConnectedCount').textContent = count;
+            
+            // Handle tabs - conditional red and softening
+            document.querySelectorAll('.conn-status-tab').forEach(tab => {
+                const countEl = tab.querySelector('.conn-status-count');
+                const tabCount = countEl ? parseInt(countEl.textContent) : 0;
+                
+                // Remove all state classes first
+                tab.classList.remove('softened', 'has-action');
+                
+                // Soften if count is 0
+                if (tabCount === 0) {
+                    tab.classList.add('softened');
+                }
+            });
+            
+            // Red only when pending > 0 (action required)
+            const pendingTab = document.querySelector('.conn-status-tab[onclick*="pending"]');
+            if (pendingTab && pendingCount > 0) {
+                pendingTab.classList.add('has-action');
+                pendingTab.classList.remove('softened');
+            }
+            
+            // De-emphasize search when empty
+            if (count === 0) {
+                searchBar.classList.add('subdued');
+            } else {
+                searchBar.classList.remove('subdued');
+            }
             
             if (count === 0) {
                 pendingSection.style.display = 'none';
-                connectedSection.innerHTML = '';
                 connectedSection.style.display = 'none';
-                document.getElementById('emptyConnected').style.display = 'block';
-                document.getElementById('connFilterPills').style.display = 'none';
+                emptyConnections.style.display = 'block';
             } else {
-                document.getElementById('emptyConnected').style.display = 'none';
-                connectedSection.innerHTML = '<div class="conn-section-header"><span class="conn-section-title">Connected</span></div>' + connections.map(c => renderConnectionRow(c)).join('');
+                emptyConnections.style.display = 'none';
+                pendingSection.style.display = 'none';
+                connectedSection.style.display = 'block';
+                connectedSection.innerHTML = connections.map(c => renderConnectionRow(c)).join('');
             }
         }
         
         function renderConnectionRow(conn) {
             const initial = conn.name ? conn.name.charAt(0).toUpperCase() : '?';
             const timeAgo = formatTimeAgo(conn.connected_at);
-            const gradients = [
-                'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
-                'linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%)',
-                'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-                'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
-            ];
-            const gradient = gradients[Math.floor(Math.random() * gradients.length)];
+            const context = conn.role || conn.title || '';
+            
             return `
-                <div class="connection-row" data-category="other" data-conn-status="connected" data-name="${conn.name || 'Unknown'}">
-                    <div class="row-avatar" style="background: ${gradient};">${initial}</div>
-                    <div class="row-info">
+                <div class="connection-row" data-conn-status="connected" data-name="${conn.name || 'Unknown'}">
+                    <div class="row-avatar">${initial}</div>
+                    <div class="row-content">
                         <div class="row-name">${conn.name || 'Unknown'}</div>
-                        <div class="row-title">${conn.linkedin_url ? 'View LinkedIn' : ''}</div>
+                        <div class="row-context">${context}</div>
+                        <div class="row-intro-meta">Introduced by Taj · ${timeAgo}</div>
                     </div>
-                    <div class="row-meta">
-                        <div class="row-time">${timeAgo}</div>
+                    <div class="row-actions">
+                        <button class="row-btn row-btn-primary" onclick="messageConnection(this, '${conn.name}')">Message</button>
+                        ${conn.linkedin_url ? `<button class="row-btn row-btn-secondary" onclick="window.open('${conn.linkedin_url}', '_blank')">View</button>` : ''}
                     </div>
-                    <button class="row-action" onclick="messageConnection(this, '${conn.name}')">Message</button>
                 </div>
             `;
         }
@@ -4749,82 +5080,67 @@
             const connectedSection = document.getElementById('connectedSection');
             const emptyPending = document.getElementById('emptyPending');
             const emptyConnected = document.getElementById('emptyConnected');
+            const emptyConnections = document.getElementById('emptyConnections');
             
             // Count items
             const pendingCount = document.querySelectorAll('.attention-card[data-conn-status="pending"]').length;
             const connectedCount = document.querySelectorAll('.connection-row[data-conn-status="connected"]').length;
+            const totalCount = pendingCount + connectedCount;
+            
+            // Hide main empty state if there are any connections
+            if (totalCount > 0) {
+                emptyConnections.style.display = 'none';
+            }
             
             if (status === 'all') {
                 pendingSection.style.display = pendingCount > 0 ? 'block' : 'none';
                 connectedSection.style.display = connectedCount > 0 ? 'block' : 'none';
                 emptyPending.style.display = 'none';
                 emptyConnected.style.display = 'none';
-                document.getElementById('connFilterPills').style.display = 'flex';
+                if (totalCount === 0) {
+                    emptyConnections.style.display = 'block';
+                }
             } else if (status === 'pending') {
                 pendingSection.style.display = pendingCount > 0 ? 'block' : 'none';
                 connectedSection.style.display = 'none';
                 emptyPending.style.display = pendingCount === 0 ? 'block' : 'none';
                 emptyConnected.style.display = 'none';
-                document.getElementById('connFilterPills').style.display = 'none';
+                emptyConnections.style.display = 'none';
             } else if (status === 'connected') {
                 pendingSection.style.display = 'none';
                 connectedSection.style.display = connectedCount > 0 ? 'block' : 'none';
                 emptyPending.style.display = 'none';
                 emptyConnected.style.display = connectedCount === 0 ? 'block' : 'none';
-                document.getElementById('connFilterPills').style.display = 'flex';
+                emptyConnections.style.display = 'none';
             }
         }
         
         function setConnFilter(btn, category) {
-            document.querySelectorAll('.conn-pill').forEach(p => p.classList.remove('active'));
-            btn.classList.add('active');
-            
-            const rows = document.querySelectorAll('.connection-row');
-            const timeHeaders = document.querySelectorAll('.conn-time-header');
-            
-            if (category === 'all') {
-                rows.forEach(row => row.style.display = 'flex');
-                timeHeaders.forEach(h => h.style.display = 'block');
-                if (currentConnStatus === 'all') {
-                    document.getElementById('pendingSection').style.display = 'block';
-                }
-            } else {
-                if (currentConnStatus === 'all') {
-                    document.getElementById('pendingSection').style.display = 'none';
-                }
-                timeHeaders.forEach(h => h.style.display = 'none');
-                
-                rows.forEach(row => {
-                    if (row.dataset.category === category) {
-                        row.style.display = 'flex';
-                } else {
-                        row.style.display = 'none';
-                    }
-                });
-            }
+            // Filter pills removed - this function kept for compatibility
         }
         
         function filterConnections() {
             const query = document.getElementById('connSearchInput').value.toLowerCase();
             
-            if (query) {
-                document.getElementById('pendingSection').style.display = 'none';
-                document.querySelectorAll('.conn-time-header').forEach(h => h.style.display = 'none');
-            } else {
-                if (currentConnStatus === 'all' || currentConnStatus === 'pending') {
-                    document.getElementById('pendingSection').style.display = 'block';
-                }
-                document.querySelectorAll('.conn-time-header').forEach(h => h.style.display = 'block');
-            }
-            
             document.querySelectorAll('.connection-row').forEach(row => {
-                const name = row.querySelector('.row-name').textContent.toLowerCase();
-                const title = row.querySelector('.row-title').textContent.toLowerCase();
+                const name = row.dataset.name ? row.dataset.name.toLowerCase() : '';
+                const context = row.querySelector('.row-context');
+                const contextText = context ? context.textContent.toLowerCase() : '';
                 
-                if (name.includes(query) || title.includes(query)) {
+                if (name.includes(query) || contextText.includes(query)) {
                     row.style.display = 'flex';
                 } else {
                     row.style.display = 'none';
+                }
+            });
+            
+            document.querySelectorAll('.attention-card').forEach(card => {
+                const name = card.dataset.name ? card.dataset.name.toLowerCase() : '';
+                
+                if (name.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
                 }
             });
         }
