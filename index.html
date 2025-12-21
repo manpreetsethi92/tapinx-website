@@ -9175,7 +9175,6 @@
             }
         }
         
-        // ========== MY REQUESTS FUNCTIONS ==========
         async function loadNewRequests() {
             const list = document.getElementById('newRequestsList');
             const empty = document.getElementById('newRequestsEmpty');
@@ -9183,16 +9182,21 @@
             // Try to fetch from API
             let requests = [];
             try {
-                const userId = localStorage.getItem('tapinx_user_id');
-                if (userId) {
-                    const response = await fetch(`https://api.anthropic.com/tapinx/requests?user_id=${userId}`);
+                const userPhone = localStorage.getItem('tapinx_user_phone');
+                if (userPhone) {
+                    // Clean phone format for API
+                    const cleanPhone = userPhone.replace(/\s/g, '').replace(/[()-]/g, '');
+                    const API_URL = 'https://tapinx-backend-production.up.railway.app';
+                    const response = await fetch(`${API_URL}/api/requests/${encodeURIComponent(cleanPhone)}`);
                     if (response.ok) {
                         const data = await response.json();
-                        requests = data.requests || [];
+                        if (data.success) {
+                            requests = data.requests || [];
+                        }
                     }
                 }
             } catch (e) {
-                console.log('Could not fetch requests from API, using local storage');
+                console.log('[TapinX] Could not fetch requests:', e.message);
             }
             
             // Fallback to localStorage for demo
