@@ -6818,11 +6818,13 @@
         
         // Fetch connections from API
         async function fetchConnections() {
+            const userId = localStorage.getItem('tapinx_user_id');
             const phone = localStorage.getItem('tapinx_user_phone');
-            if (!phone) return { connections: [], count: 0 };
+            const identifier = userId || phone;
+            if (!identifier) return { connections: [], count: 0 };
             
             try {
-                const response = await fetch(`${API_URL}/users/${encodeURIComponent(phone)}/connections`);
+                const response = await fetch(`${API_URL}/connections/${encodeURIComponent(identifier)}`);
                 const data = await response.json();
                 if (data.success) {
                     return { connections: data.connections, count: data.count };
