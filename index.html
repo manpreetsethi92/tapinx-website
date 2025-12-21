@@ -5930,7 +5930,7 @@
     <!-- ========== LANDING PAGE ========== -->
     <div class="page active" id="landingPage">
         <header class="header">
-            <span class="logo" onclick="showPage('landing')">T</span>
+            <span class="logo" onclick="handleLogoClick()">T</span>
             <a class="header-signin" onclick="openSignIn()">Sign in</a>
         </header>
         
@@ -6072,7 +6072,7 @@
             <!-- Left Sidebar -->
             <aside class="new-sidebar" id="mobileSidebar">
                 <div class="new-sidebar-logo">
-                    <span class="new-sidebar-logo-text" onclick="showPage('landing')">T</span>
+                    <span class="new-sidebar-logo-text" onclick="handleLogoClick()">T</span>
                 </div>
                 
                 <nav class="new-sidebar-nav">
@@ -6534,7 +6534,7 @@
     <!-- ========== CONNECTIONS PAGE ========== -->
     <div class="page workspace-page" id="connectionsPage">
         <header class="header workspace-header">
-            <span class="logo" onclick="showPage('dashboard')">T</span>
+            <span class="logo" onclick="handleLogoClick()">T</span>
             <div class="profile-btn" onclick="toggleConnectionsDropdown(event)">
                 <div class="avatar">
                     <span id="connAvatarInitial">T</span>
@@ -6639,7 +6639,7 @@
     <!-- ========== ATTENTION REQUIRED PAGE ========== -->
     <div class="page" id="attentionPage">
         <header class="header attention-header">
-            <span class="logo" onclick="showPage('dashboard')">T</span>
+            <span class="logo" onclick="handleLogoClick()">T</span>
             <div class="profile-btn" onclick="toggleAttentionDropdown(event)">
                 <div class="avatar">
                     <span id="attnAvatarInitial">T</span>
@@ -9831,6 +9831,21 @@
         
         function showNewAppPage(page) {
             Router.navigate(page);
+        }
+        
+        // Handle T logo click - different behavior for logged in vs logged out
+        function handleLogoClick() {
+            const userId = localStorage.getItem('tapinx_user_id');
+            const userPhone = localStorage.getItem('tapinx_user_phone');
+            const isLoggedIn = userId || userPhone;
+            
+            if (isLoggedIn) {
+                // Logged in - go to opportunities
+                Router.navigate('opportunities');
+            } else {
+                // Not logged in - refresh landing page
+                window.location.href = '/';
+            }
         }
         
         async function loadNewConnections() {
