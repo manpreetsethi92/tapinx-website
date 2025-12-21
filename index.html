@@ -9714,8 +9714,8 @@
         }
 
         function followUpRequestFromModal() {
-            const requestTitle = currentRequestData ? (currentRequestData.title || currentRequestData.description || '') : '';
-            window.open('https://t.me/TapinXBot?text=' + encodeURIComponent('Follow up on my request: ' + requestTitle), '_blank');
+            const requestTitle = currentRequestData ? (currentRequestData.title || currentRequestData.description || 'my request') : 'my request';
+            window.open('https://t.me/TapinXBot?text=' + encodeURIComponent("What's the update on my request: " + requestTitle), '_blank');
             closeRequestModal();
         }
         
@@ -9933,25 +9933,24 @@
                     
                     // Determine actions based on status
                     let actions = '';
-                    const requestDataStr = JSON.stringify(r).replace(/'/g, '&#39;');
                     if (status === 'active' || status === 'waiting') {
                         actions = `
-                            <button class="new-request-action" onclick="openRequestModal(${requestDataStr})">View details</button>
-                            <button class="new-request-action" onclick="followUpRequest('${r.id}')">Follow up</button>
+                            <button class="new-request-action" onclick="event.stopPropagation(); openRequestModal(${JSON.stringify(r).replace(/"/g, "&quot;")})">View details</button>
+                            <button class="new-request-action" onclick="event.stopPropagation(); followUpRequest('${r.id}')">Follow up</button>
                         `;
                     } else if (status === 'matched') {
                         actions = `
-                            <button class="new-request-action" onclick="openRequestModal(${requestDataStr})">View details</button>
+                            <button class="new-request-action" onclick="event.stopPropagation(); openRequestModal(${JSON.stringify(r).replace(/"/g, "&quot;")})">View details</button>
                         `;
                     } else if (status === 'completed') {
                         actions = `
-                            <button class="new-request-action" onclick="openRequestModal(${requestDataStr})">View details</button>
-                            <button class="new-request-action" onclick="archiveRequest('${r.id}')">Archive</button>
+                            <button class="new-request-action" onclick="event.stopPropagation(); openRequestModal(${JSON.stringify(r).replace(/"/g, "&quot;")})">View details</button>
+                            <button class="new-request-action" onclick="event.stopPropagation(); archiveRequest('${r.id}')">Archive</button>
                         `;
                     }
                     
                     return `
-                    <div class="new-feed-item new-request-row" data-id="${r.id}" data-status="${status}">
+                    <div class="new-feed-item new-request-row" data-id="${r.id}" data-status="${status}" onclick='openRequestModal(${JSON.stringify(r).replace(/"/g, "&quot;")})' style="cursor: pointer;">
                         <div class="new-request-content">
                             <div class="new-request-header">
                                 <span class="new-request-title">${r.title || r.description || 'Introduction request'}</span>
