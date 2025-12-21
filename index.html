@@ -8383,7 +8383,7 @@
                 }
             } catch (error) {
                 console.error('[TapinX] Error fetching connections:', error);
-                return { connections: [], count: 0 };
+            return { connections: [], count: 0 };
             }
         }
         
@@ -8466,7 +8466,7 @@
             
             // Initialize Firebase first
             if (typeof initFirebase === 'function') {
-                initFirebase();
+            initFirebase();
             }
             
             // Initialize router
@@ -8476,7 +8476,7 @@
         // Also try immediately in case DOM is already ready
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
             if (typeof initFirebase === 'function') {
-                initFirebase();
+            initFirebase();
             }
             Router.init();
         }
@@ -9820,7 +9820,8 @@
             const photo = localStorage.getItem('tapinx_user_photo');
             const initial = name.charAt(0).toUpperCase();
             
-            document.getElementById('dashHeaderName').textContent = name;
+            const dashHeaderName = document.getElementById('dashHeaderName');
+            if (dashHeaderName) dashHeaderName.textContent = name;
             document.getElementById('welcomeName').textContent = name.split(' ')[0];
             document.getElementById('dashProfileName').textContent = name;
             document.getElementById('dashProfileBio').textContent = bio;
@@ -9896,7 +9897,8 @@
         }
         function toggleDropdown(e) {
             e.stopPropagation();
-            document.getElementById('dashDropdown').classList.toggle('active');
+            const dashDropdown = document.getElementById('dashDropdown');
+            if (dashDropdown) dashDropdown.classList.toggle('active');
         }
         
         function toggleConnectionsDropdown(e) {
@@ -9905,7 +9907,8 @@
         }
         
         document.addEventListener('click', () => {
-            document.getElementById('dashDropdown').classList.remove('active');
+            const dashDropdown = document.getElementById('dashDropdown');
+            if (dashDropdown) dashDropdown.classList.remove('active');
             const connDropdown = document.getElementById('connDropdown');
             if (connDropdown) connDropdown.classList.remove('active');
             const attnDropdown = document.getElementById('attnDropdown');
@@ -10613,10 +10616,10 @@
         async function loadNewConnections() {
             try {
                 console.log('[TapinX] Loading connections...');
-                const { connections: conns, count } = await fetchConnections();
-                const list = document.getElementById('newConnectionsList');
-                const empty = document.getElementById('newConnectionsEmpty');
-                
+            const { connections: conns, count } = await fetchConnections();
+            const list = document.getElementById('newConnectionsList');
+            const empty = document.getElementById('newConnectionsEmpty');
+            
                 if (!list || !empty) {
                     console.error('[TapinX] Connections page DOM elements not found');
                     return;
@@ -10625,24 +10628,24 @@
                 console.log('[TapinX] Connections loaded:', count, 'connections');
                 
                 if (count === 0 || !conns || conns.length === 0) {
-                    list.innerHTML = '';
-                    empty.style.display = 'block';
+                list.innerHTML = '';
+                empty.style.display = 'block';
                     console.log('[TapinX] No connections found, showing empty state');
-                } else {
-                    empty.style.display = 'none';
-                    list.innerHTML = conns.map(c => `
-                        <div class="new-feed-item" data-status="${c.status || 'connected'}" onclick='openConnectionModal(${JSON.stringify(c).replace(/'/g, "&#39;")})' style="cursor: pointer;">
-                            <div class="new-feed-avatar">${(c.name || 'U').charAt(0).toUpperCase()}</div>
-                            <div class="new-feed-content">
-                                <div class="new-feed-header">
-                                    <span class="new-feed-name">${c.name || 'Unknown'}</span>
-                                    <span class="new-feed-status ${c.status || 'connected'}">${(c.status || 'Connected').charAt(0).toUpperCase() + (c.status || 'connected').slice(1)}</span>
-                                </div>
-                                <div class="new-feed-context">${c.ask_title || c.role || c.title || 'Introduction from Taj'}</div>
-                                <div class="new-feed-time">${formatNewDate(c.connected_at)}</div>
+            } else {
+                empty.style.display = 'none';
+                list.innerHTML = conns.map(c => `
+                    <div class="new-feed-item" data-status="${c.status || 'connected'}" onclick='openConnectionModal(${JSON.stringify(c).replace(/'/g, "&#39;")})' style="cursor: pointer;">
+                        <div class="new-feed-avatar">${(c.name || 'U').charAt(0).toUpperCase()}</div>
+                        <div class="new-feed-content">
+                            <div class="new-feed-header">
+                                <span class="new-feed-name">${c.name || 'Unknown'}</span>
+                                <span class="new-feed-status ${c.status || 'connected'}">${(c.status || 'Connected').charAt(0).toUpperCase() + (c.status || 'connected').slice(1)}</span>
                             </div>
+                            <div class="new-feed-context">${c.ask_title || c.role || c.title || 'Introduction from Taj'}</div>
+                            <div class="new-feed-time">${formatNewDate(c.connected_at)}</div>
                         </div>
-                    `).join('');
+                    </div>
+                `).join('');
                     console.log('[TapinX] Connections rendered successfully');
                 }
             } catch (error) {
@@ -10843,8 +10846,19 @@
             }
             
             if (filteredMatches.length === 0) {
-                list.innerHTML = '';
-                empty.style.display = 'block';
+                if (list) list.innerHTML = '';
+                if (empty) {
+                    empty.style.display = 'flex';
+                    empty.innerHTML = `
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                        <h3 class="new-empty-title">You're all caught up</h3>
+                        <p class="new-empty-text">Taj will surface opportunities aligned with your intent. Check back soon or update your preferences in Settings.</p>
+                    `;
+                }
             } else {
                 empty.style.display = 'none';
                 const matchTypes = ['professional', 'community'];
@@ -10880,7 +10894,7 @@
             // Update active tab UI
             document.querySelectorAll('#newOpportunitiesPage .new-tab').forEach(t => t.classList.remove('active'));
             if (btn) {
-                btn.classList.add('active');
+            btn.classList.add('active');
             } else {
                 // If no button provided, find and activate the correct tab
                 const activeTab = document.querySelector(`#newOpportunitiesPage .new-tab[onclick*="${type}"]`);
