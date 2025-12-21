@@ -3824,6 +3824,18 @@
             min-height: 100vh;
         }
         
+        /* Page loading states */
+        .page-loading {
+            opacity: 0.6;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        
+        .page-loaded {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
         /* New Sidebar - Instagram-style with centered nav */
         .new-sidebar {
             width: 275px;
@@ -7194,140 +7206,339 @@
     
     <script>
         // ============================================
-        // URL ROUTER - Clean URL routing with History API
-        // Works on both desktop and mobile browsers
+        // PROFESSIONAL URL ROUTER
+        // Complete routing system with all edge cases
         // ============================================
         
         const Router = {
-            // Map URL paths to page names
+            // Valid routes
             routes: {
-                '/': 'landing',
-                '/opportunities': 'opportunities',
-                '/requests': 'requests',
-                '/connections': 'connections',
-                '/speak': 'speak',
-                '/settings': 'settings',
-                '/referrals': 'referrals'
+                '/': { page: 'landing', title: 'TapinX - Text to Get Connected', requiresAuth: false },
+                '/opportunities': { page: 'opportunities', title: 'Opportunities - TapinX', requiresAuth: true },
+                '/requests': { page: 'requests', title: 'My Requests - TapinX', requiresAuth: true },
+                '/connections': { page: 'connections', title: 'My Connections - TapinX', requiresAuth: true },
+                '/speak': { page: 'speak', title: 'Speak to Taj - TapinX', requiresAuth: true },
+                '/settings': { page: 'settings', title: 'Settings - TapinX', requiresAuth: true },
+                '/referrals': { page: 'referrals', title: 'Referrals - TapinX', requiresAuth: true }
             },
             
-            // Map page names back to URL paths
-            paths: {
-                'landing': '/',
-                'opportunities': '/opportunities',
-                'requests': '/requests',
-                'connections': '/connections',
-                'speak': '/speak',
-                'settings': '/settings',
-                'referrals': '/referrals'
+            // Track if this is first load
+            isFirstLoad: true,
+            
+            // Track current page to prevent duplicate navigation
+            currentPage: null,
+            
+            // Check if user is authenticated
+            isAuthenticated: function() {
+                return !!(localStorage.getItem('tapinx_user_id') || localStorage.getItem('tapinx_user_phone'));
             },
             
-            // Navigate to a new page and update URL
-            navigate: function(page) {
-                console.log('[Router] Navigating to:', page);
-                const path = this.paths[page] || '/';
+            // Get route info from path
+            getRoute: function(path) {
+                return this.routes[path] || null;
+            },
+            
+            // Get current path
+            getCurrentPath: function() {
+                return window.location.pathname;
+            },
+            
+            // Navigate to a page (user action - adds to history)
+            navigate: function(page, options = {}) {
+                const path = page === 'landing' ? '/' : '/' + page;
+                const route = this.getRoute(path);
                 
-                // Only push state if URL is different
-                if (window.location.pathname !== path) {
-                    history.pushState({ page: page }, '', path);
+                console.log('[Router] Navigate to:', page, 'Path:', path);
+                
+                // Check if route exists
+                if (!route && page !== 'landing') {
+                    console.log('[Router] Invalid route, redirecting to opportunities');
+                    this.navigate('opportunities');
+                    return;
                 }
+                
+                // Check authentication
+                if (route && route.requiresAuth && !this.isAuthenticated()) {
+                    console.log('[Router] Auth required, redirecting to landing');
+                    this.navigate('landing');
+                    return;
+                }
+                
+                // Don't navigate if already on this page (prevents duplicate history)
+                if (this.currentPage === page && !options.force) {
+                    console.log('[Router] Already on page:', page);
+                    return;
+                }
+                
+                // Update history
+                if (this.isFirstLoad || options.replace) {
+                    history.replaceState({ page: page, path: path }, '', path);
+                } else {
+                    history.pushState({ page: page, path: path }, '', path);
+                }
+                
+                // Update page title
+                document.title = route ? route.title : 'TapinX';
                 
                 // Show the page
                 this.showPage(page);
+                
+                // Update state
+                this.currentPage = page;
+                this.isFirstLoad = false;
             },
             
-            // Show page without changing URL (used for popstate/back button)
+            // Show page (internal - doesn't modify history)
             showPage: function(page) {
                 console.log('[Router] Showing page:', page);
-                const userId = localStorage.getItem('tapinx_user_id');
-                const userPhone = localStorage.getItem('tapinx_user_phone');
-                const isLoggedIn = userId || userPhone;
                 
-                if (page === 'landing' || !isLoggedIn) {
-                    // Show landing page
-                    if (typeof showPage === 'function') {
-                        showPage('landing');
-                    }
+                if (page === 'landing') {
+                    if (typeof showPage === 'function') showPage('landing');
                 } else {
-                    // Show dashboard with specific page
-                    if (typeof showPage === 'function') {
-                        showPage('dashboard');
-                    }
-                    if (typeof showNewAppPage === 'function') {
-                        showNewAppPage(page);
-                    }
+                    if (typeof showPage === 'function') showPage('dashboard');
+                    this.showAppPage(page);
                 }
             },
             
-            // Get current page from URL path
-            getCurrentPage: function() {
-                const path = window.location.pathname;
-                console.log('[Router] Current path:', path);
-                return this.routes[path] || 'landing';
+            // Show app page without history modification
+            showAppPage: function(page) {
+                console.log('[Router] Showing app page:', page);
+                
+                // Add loading state
+                const mainColumn = document.querySelector('.new-main-column');
+                if (mainColumn) mainColumn.classList.add('page-loading');
+                
+                // Close mobile menu
+                try {
+                    if (typeof closeMobileMenu === 'function') closeMobileMenu();
+                } catch(e) {}
+                
+                // Page ID mapping
+                const pageIds = {
+                    'opportunities': 'newOpportunitiesPage',
+                    'requests': 'newRequestsPage',
+                    'connections': 'newConnectionsPage',
+                    'speak': 'newSpeakPage',
+                    'settings': 'newSettingsPage',
+                    'referrals': 'newReferralsPage'
+                };
+                
+                // Hide all pages
+                Object.values(pageIds).forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = 'none';
+                });
+                
+                // Show target page
+                const targetId = pageIds[page];
+                if (targetId) {
+                    const el = document.getElementById(targetId);
+                    if (el) {
+                        // Use 'block' for most pages, 'flex' only if needed
+                        el.style.display = 'block';
+                    }
+                }
+                
+                // Update mobile header title
+                const titles = {
+                    'speak': 'Speak to Taj',
+                    'requests': 'My Requests',
+                    'connections': 'My Connections',
+                    'opportunities': 'Opportunities',
+                    'referrals': 'Referrals',
+                    'settings': 'Settings'
+                };
+                if (typeof updateMobileHeader === 'function') {
+                    updateMobileHeader(titles[page] || 'TapinX');
+                }
+                
+                // Update sidebar active states
+                document.querySelectorAll('.new-sidebar-link').forEach(link => {
+                    link.classList.remove('active');
+                    const onclick = link.getAttribute('onclick');
+                    if (onclick && onclick.includes("'" + page + "'")) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                // Update sidebar nav by ID
+                const navLink = document.getElementById('nav' + page.charAt(0).toUpperCase() + page.slice(1));
+                if (navLink) navLink.classList.add('active');
+                
+                // Update sublinks
+                document.querySelectorAll('.new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+                
+                // Handle expand sections
+                document.querySelectorAll('.new-sidebar-expand').forEach(e => {
+                    e.style.display = 'none';
+                });
+                if (page === 'requests') {
+                    const expand = document.getElementById('requestsExpand');
+                    if (expand) expand.style.display = 'block';
+                    // Reset tabs to "All" when showing page
+                    const tabs = document.querySelectorAll('#newRequestsPage .new-tab');
+                    tabs.forEach(t => t.classList.remove('active'));
+                    if (tabs[0]) tabs[0].classList.add('active');
+                    // Reset sidebar sublinks for requests
+                    document.querySelectorAll('#requestsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+                    const requestSublinks = document.querySelectorAll('#requestsExpand .new-sidebar-sublink');
+                    if (requestSublinks[0]) requestSublinks[0].classList.add('active');
+                }
+                if (page === 'connections') {
+                    const expand = document.getElementById('connectionsExpand');
+                    if (expand) expand.style.display = 'block';
+                    // Reset tabs to "All" when showing page
+                    const tabs = document.querySelectorAll('#newConnectionsPage .new-tab');
+                    tabs.forEach(t => t.classList.remove('active'));
+                    if (tabs[0]) tabs[0].classList.add('active');
+                    // Reset sidebar sublinks for connections
+                    document.querySelectorAll('#connectionsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+                    const connectionSublinks = document.querySelectorAll('#connectionsExpand .new-sidebar-sublink');
+                    if (connectionSublinks[0]) connectionSublinks[0].classList.add('active');
+                }
+                if (page === 'opportunities') {
+                    const expand = document.getElementById('opportunitiesExpand');
+                    if (expand) expand.style.display = 'block';
+                    // Reset tabs to "All" when showing page
+                    const tabs = document.querySelectorAll('#newOpportunitiesPage .new-tab');
+                    tabs.forEach(t => t.classList.remove('active'));
+                    if (tabs[0]) tabs[0].classList.add('active');
+                    // Reset sidebar sublinks for opportunities
+                    document.querySelectorAll('#opportunitiesExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+                    const opportunitySublinks = document.querySelectorAll('#opportunitiesExpand .new-sidebar-sublink');
+                    if (opportunitySublinks[0]) opportunitySublinks[0].classList.add('active');
+                }
+                
+                // Load page data
+                this.loadPageData(page);
+                
+                // Update current page tracker
+                if (typeof currentNewAppPage !== 'undefined') {
+                    currentNewAppPage = page;
+                }
+                
+                // Remove loading state after data loads
+                setTimeout(() => {
+                    if (mainColumn) mainColumn.classList.remove('page-loading');
+                }, 300);
             },
             
-            // Check if user is logged in
-            isLoggedIn: function() {
-                const userId = localStorage.getItem('tapinx_user_id');
-                const userPhone = localStorage.getItem('tapinx_user_phone');
-                return !!(userId || userPhone);
+            // Load data for the page
+            loadPageData: function(page) {
+                console.log('[Router] Loading data for:', page);
+                
+                try {
+                    if (page === 'requests' && typeof loadNewRequests === 'function') {
+                        loadNewRequests();
+                    }
+                    if (page === 'connections' && typeof loadNewConnections === 'function') {
+                        loadNewConnections();
+                    }
+                    if (page === 'opportunities' && typeof loadNewOpportunities === 'function') {
+                        loadNewOpportunities();
+                    }
+                } catch(e) {
+                    console.error('[Router] Error loading page data:', e);
+                }
             },
             
-            // Initialize router on page load - THIS IS CRITICAL
+            // Handle browser back/forward
+            handlePopState: function(event) {
+                console.log('[Router] PopState event:', event.state);
+                
+                let page = 'landing';
+                
+                if (event.state && event.state.page) {
+                    page = event.state.page;
+                } else {
+                    // Derive from URL
+                    const path = window.location.pathname;
+                    const route = this.getRoute(path);
+                    page = route ? route.page : 'landing';
+                }
+                
+                // Check auth for protected pages
+                if (page !== 'landing' && !this.isAuthenticated()) {
+                    window.location.replace('/');
+                    return;
+                }
+                
+                // Update title
+                const route = this.getRoute(page === 'landing' ? '/' : '/' + page);
+                document.title = route ? route.title : 'TapinX';
+                
+                // Show page without modifying history
+                this.currentPage = page;
+                this.showPage(page);
+            },
+            
+            // Initialize router
             init: function() {
                 console.log('[Router] Initializing...');
-                const isLoggedIn = this.isLoggedIn();
-                const currentPage = this.getCurrentPage();
                 
-                console.log('[Router] Is logged in:', isLoggedIn);
-                console.log('[Router] Current page from URL:', currentPage);
-                
-                if (isLoggedIn) {
-                    // User is logged in
-                    if (currentPage === 'landing' || currentPage === '') {
-                        // On landing page but logged in - redirect to opportunities
-                        console.log('[Router] Logged in user on landing, redirecting to opportunities');
-                        this.navigate('opportunities');
-                    } else {
-                        // Show the current page from URL
-                        console.log('[Router] Showing page from URL:', currentPage);
-                        if (typeof showPage === 'function') {
-                            showPage('dashboard');
-                        }
-                        if (typeof showNewAppPage === 'function') {
-                            showNewAppPage(currentPage);
-                        }
-                        // Update URL state
-                        history.replaceState({ page: currentPage }, '', this.paths[currentPage]);
-                    }
-                } else {
-                    // Not logged in
-                    if (currentPage !== 'landing') {
-                        // Trying to access protected page without login - redirect to landing
-                        console.log('[Router] Not logged in, redirecting to landing');
-                        this.navigate('landing');
-                    } else {
-                        // Already on landing, just show it
-                        console.log('[Router] Showing landing page');
-                        if (typeof showPage === 'function') {
-                            showPage('landing');
-                        }
+                // Handle legacy hash URLs (redirect #page to /page)
+                if (window.location.hash) {
+                    const hashPage = window.location.hash.replace('#', '');
+                    if (this.routes['/' + hashPage]) {
+                        window.location.replace('/' + hashPage);
+                        return;
                     }
                 }
+                
+                const path = this.getCurrentPath();
+                const route = this.getRoute(path);
+                const isAuthenticated = this.isAuthenticated();
+                
+                console.log('[Router] Path:', path, 'Authenticated:', isAuthenticated);
+                
+                // Handle routing logic
+                if (!route) {
+                    // Invalid URL - redirect
+                    if (isAuthenticated) {
+                        window.location.replace('/opportunities');
+                    } else {
+                        window.location.replace('/');
+                    }
+                    return;
+                }
+                
+                if (route.requiresAuth && !isAuthenticated) {
+                    // Needs auth but not logged in
+                    window.location.replace('/');
+                    return;
+                }
+                
+                if (path === '/' && isAuthenticated) {
+                    // On landing but logged in - go to opportunities
+                    this.navigate('opportunities', { replace: true });
+                    return;
+                }
+                
+                // Show the current page
+                this.navigate(route.page, { replace: true });
+                
+                console.log('[Router] Initialization complete');
             }
         };
         
-        // Handle browser back/forward buttons - CRITICAL for both desktop and mobile
+        // Set up popstate listener for back/forward buttons
         window.addEventListener('popstate', function(event) {
-            console.log('[Router] Popstate event, state:', event.state);
-            const page = event.state?.page || Router.getCurrentPage();
-            Router.showPage(page);
+            Router.handlePopState(event);
         });
         
-        // Mobile browser compatibility - ensure history state is set on initial load
-        if (!history.state) {
-            const currentPage = Router.getCurrentPage();
-            history.replaceState({ page: currentPage }, '', window.location.pathname);
-        }
+        // Network status handlers
+        window.addEventListener('online', function() {
+            console.log('[Network] Back online');
+            // Optionally reload current page data
+            if (Router.currentPage) {
+                Router.loadPageData(Router.currentPage);
+            }
+        });
+        
+        window.addEventListener('offline', function() {
+            console.log('[Network] Went offline');
+            // Optionally show offline indicator
+        });
         
         // ========== API CONFIGURATION ==========
         const API_URL = 'https://tapinx-backend-production.up.railway.app/api';
@@ -7535,15 +7746,20 @@
         
         // Try to initialize Firebase on page load
         document.addEventListener('DOMContentLoaded', function() {
-            initFirebase();
-            // Initialize router - this handles page routing based on URL
+            // Initialize Firebase first
+            if (typeof initFirebase === 'function') {
+                initFirebase();
+            }
+            
+            // Initialize router
             Router.init();
         });
         
         // Also try immediately in case DOM is already ready
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
-            initFirebase();
-            // Initialize router - this handles page routing based on URL
+            if (typeof initFirebase === 'function') {
+                initFirebase();
+            }
             Router.init();
         }
         
@@ -8227,7 +8443,7 @@
             if (event && event.target !== event.currentTarget) return;
             document.getElementById('telegramModal').classList.remove('active');
             document.body.style.overflow = '';
-            showNewAppPage('opportunities');
+            Router.navigate('opportunities');
         }
         
         function goToTelegram() {
@@ -8937,11 +9153,11 @@
         function logout() {
             console.log('[Logout] Logging out user');
             
-            // Clear all user data from localStorage
+            // Clear all user data
             localStorage.clear();
             
-            // Navigate to landing page with proper URL
-            window.location.href = '/';
+            // Use replace to prevent back-button into logged-in state
+            window.location.replace('/');
         }
         
         // ========== CONNECTIONS PAGE ==========
@@ -9614,89 +9830,7 @@
         }
         
         function showNewAppPage(page) {
-            // === URL ROUTING - Update URL without adding to history stack ===
-            console.log('[showNewAppPage] Called with:', page);
-            
-            // Update URL without adding to history stack
-            const path = '/' + page;
-            if (window.location.pathname !== path) {
-                history.replaceState({ page: page }, '', path);
-                console.log('[showNewAppPage] URL updated to:', path);
-            }
-            // === END OF URL ROUTING CODE ===
-            
-            currentNewAppPage = page;
-            
-            // Update mobile header title
-            const titles = {
-                'speak': 'Speak to Taj',
-                'requests': 'My Requests',
-                'connections': 'My Connections',
-                'opportunities': 'Opportunities',
-                'referrals': 'Referrals',
-                'settings': 'Settings'
-            };
-            updateMobileHeader(titles[page] || 'TapinX');
-            
-            // Update sidebar nav
-            document.querySelectorAll('.new-sidebar-link').forEach(l => l.classList.remove('active'));
-            const navLink = document.getElementById('nav' + page.charAt(0).toUpperCase() + page.slice(1));
-            if (navLink) navLink.classList.add('active');
-            
-            // Hide all pages
-            document.getElementById('newSpeakPage').style.display = 'none';
-            document.getElementById('newRequestsPage').style.display = 'none';
-            document.getElementById('newConnectionsPage').style.display = 'none';
-            document.getElementById('newOpportunitiesPage').style.display = 'none';
-            document.getElementById('newReferralsPage').style.display = 'none';
-            document.getElementById('newSettingsPage').style.display = 'none';
-            
-            // Show/hide expand sections
-            document.getElementById('requestsExpand').style.display = page === 'requests' ? 'block' : 'none';
-            document.getElementById('connectionsExpand').style.display = page === 'connections' ? 'block' : 'none';
-            document.getElementById('opportunitiesExpand').style.display = page === 'opportunities' ? 'block' : 'none';
-            
-            // Show selected page
-            if (page === 'speak') {
-                document.getElementById('newSpeakPage').style.display = 'block';
-            } else if (page === 'requests') {
-                document.getElementById('newRequestsPage').style.display = 'block';
-                // Reset tabs to "All" when showing page
-                const tabs = document.querySelectorAll('#newRequestsPage .new-tab');
-                tabs.forEach(t => t.classList.remove('active'));
-                if (tabs[0]) tabs[0].classList.add('active');
-                // Reset sidebar sublinks for requests
-                document.querySelectorAll('#requestsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
-                const sublinks = document.querySelectorAll('#requestsExpand .new-sidebar-sublink');
-                if (sublinks[0]) sublinks[0].classList.add('active');
-                loadNewRequests();
-            } else if (page === 'connections') {
-                document.getElementById('newConnectionsPage').style.display = 'block';
-                // Reset tabs to "All" when showing page
-                const tabs = document.querySelectorAll('#newConnectionsPage .new-tab');
-                tabs.forEach(t => t.classList.remove('active'));
-                if (tabs[0]) tabs[0].classList.add('active');
-                // Reset sidebar sublinks for connections
-                document.querySelectorAll('#connectionsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
-                const sublinks = document.querySelectorAll('#connectionsExpand .new-sidebar-sublink');
-                if (sublinks[0]) sublinks[0].classList.add('active');
-                loadNewConnections();
-            } else if (page === 'opportunities') {
-                document.getElementById('newOpportunitiesPage').style.display = 'block';
-                // Reset tabs to "All" when showing page
-                const tabs = document.querySelectorAll('#newOpportunitiesPage .new-tab');
-                tabs.forEach(t => t.classList.remove('active'));
-                if (tabs[0]) tabs[0].classList.add('active');
-                // Reset sidebar sublinks for opportunities
-                document.querySelectorAll('#opportunitiesExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
-                const sublinks = document.querySelectorAll('#opportunitiesExpand .new-sidebar-sublink');
-                if (sublinks[0]) sublinks[0].classList.add('active');
-                loadNewOpportunities();
-            } else if (page === 'referrals') {
-                document.getElementById('newReferralsPage').style.display = 'block';
-            } else if (page === 'settings') {
-                document.getElementById('newSettingsPage').style.display = 'block';
-            }
+            Router.navigate(page);
         }
         
         async function loadNewConnections() {
