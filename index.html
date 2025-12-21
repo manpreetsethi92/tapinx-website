@@ -6164,7 +6164,7 @@
             <!-- Main Column -->
             <main class="new-main-column">
                 <!-- Speak to Taj Page - CENTERED CANVAS -->
-                <div id="newSpeakPage">
+                <div id="newSpeakPage" style="display: none;">
                     <header class="new-main-header">
                         <h1 class="new-main-title">Speak to Taj</h1>
                     </header>
@@ -7400,11 +7400,29 @@
         // Try to initialize Firebase on page load
         document.addEventListener('DOMContentLoaded', function() {
             initFirebase();
+            // Check if user is logged in and show opportunities page
+            if (localStorage.getItem('tapinx_logged_in') === 'true') {
+                // Delay to ensure showNewAppPage is defined and DOM is ready
+                setTimeout(() => {
+                    if (typeof showNewAppPage === 'function') {
+                        showNewAppPage('opportunities');
+                    }
+                }, 200);
+            }
         });
         
         // Also try immediately in case DOM is already ready
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
             initFirebase();
+            // Check if user is logged in and show opportunities page
+            if (localStorage.getItem('tapinx_logged_in') === 'true') {
+                // Delay to ensure showNewAppPage is defined and DOM is ready
+                setTimeout(() => {
+                    if (typeof showNewAppPage === 'function') {
+                        showNewAppPage('opportunities');
+                    }
+                }, 200);
+            }
         }
         
         function initRecaptcha() {
