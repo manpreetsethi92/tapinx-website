@@ -5908,28 +5908,6 @@
             /* Connection list mobile spacing */
             #newConnectionsList {
                 padding-bottom: 20px;
-                display: block !important;
-                visibility: visible !important;
-                height: auto !important;
-                min-height: 0 !important;
-            }
-            
-            /* Ensure connections page is visible on mobile */
-            #newConnectionsPage {
-                display: flex !important;
-                visibility: visible !important;
-            }
-            
-            /* Ensure connection items are visible */
-            #newConnectionsList .new-feed-item {
-                display: flex !important;
-                visibility: visible !important;
-            }
-            
-            /* Ensure empty state is visible when needed */
-            #newConnectionsEmpty {
-                display: block !important;
-                visibility: visible !important;
             }
             
             /* Tabs mobile adjustments */
@@ -7281,33 +7259,20 @@
         
         // Fetch connections from API
         async function fetchConnections() {
-            console.log('[DEBUG fetchConnections] Function called');
             const userId = localStorage.getItem('tapinx_user_id');
             const phone = localStorage.getItem('tapinx_user_phone');
-            console.log('[DEBUG fetchConnections] userId:', userId, 'phone:', phone);
             const identifier = userId || phone;
-            if (!identifier) {
-                console.log('[DEBUG fetchConnections] No identifier found, returning empty');
-                return { connections: [], count: 0 };
-            }
+            if (!identifier) return { connections: [], count: 0 };
             
             try {
-                const url = `${API_URL}/connections/${encodeURIComponent(identifier)}`;
-                console.log('[DEBUG fetchConnections] Fetching from:', url);
-                const response = await fetch(url);
-                console.log('[DEBUG fetchConnections] Response status:', response.status);
+                const response = await fetch(`${API_URL}/connections/${encodeURIComponent(identifier)}`);
                 const data = await response.json();
-                console.log('[DEBUG fetchConnections] Response data:', data);
                 if (data.success) {
-                    console.log('[DEBUG fetchConnections] Success! Returning', data.count, 'connections');
                     return { connections: data.connections, count: data.count };
-                } else {
-                    console.log('[DEBUG fetchConnections] Response not successful:', data);
                 }
             } catch (error) {
-                console.error('[DEBUG fetchConnections] Error fetching connections:', error);
+                console.error('Error fetching connections:', error);
             }
-            console.log('[DEBUG fetchConnections] Returning empty result');
             return { connections: [], count: 0 };
         }
         
@@ -9460,10 +9425,7 @@
             // Hide all pages
             document.getElementById('newSpeakPage').style.display = 'none';
             document.getElementById('newRequestsPage').style.display = 'none';
-            const connectionsPage = document.getElementById('newConnectionsPage');
-            if (connectionsPage) {
-                connectionsPage.style.display = 'none';
-            }
+            document.getElementById('newConnectionsPage').style.display = 'none';
             document.getElementById('newOpportunitiesPage').style.display = 'none';
             document.getElementById('newReferralsPage').style.display = 'none';
             document.getElementById('newSettingsPage').style.display = 'none';
@@ -9488,11 +9450,7 @@
                 if (sublinks[0]) sublinks[0].classList.add('active');
                 loadNewRequests();
             } else if (page === 'connections') {
-                const connectionsPage = document.getElementById('newConnectionsPage');
-                if (connectionsPage) {
-                    connectionsPage.style.display = 'flex'; // Use flex since top-canvas uses display: flex
-                    console.log('[DEBUG showNewAppPage] Connections page displayed, style:', connectionsPage.style.display);
-                }
+                document.getElementById('newConnectionsPage').style.display = 'block';
                 // Reset tabs to "All" when showing page
                 const tabs = document.querySelectorAll('#newConnectionsPage .new-tab');
                 tabs.forEach(t => t.classList.remove('active'));
@@ -9501,11 +9459,7 @@
                 document.querySelectorAll('#connectionsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
                 const sublinks = document.querySelectorAll('#connectionsExpand .new-sidebar-sublink');
                 if (sublinks[0]) sublinks[0].classList.add('active');
-                // Small delay to ensure DOM is ready, especially on mobile
-                setTimeout(() => {
-                    console.log('[DEBUG showNewAppPage] Calling loadNewConnections after delay');
-                    loadNewConnections();
-                }, 100);
+                loadNewConnections();
             } else if (page === 'opportunities') {
                 document.getElementById('newOpportunitiesPage').style.display = 'block';
                 // Reset tabs to "All" when showing page
@@ -9525,41 +9479,24 @@
         }
         
         async function loadNewConnections() {
-            console.log('[DEBUG loadNewConnections] Function called');
-            const userId = localStorage.getItem('tapinx_user_id');
-            const phone = localStorage.getItem('tapinx_user_phone');
-            console.log('[DEBUG loadNewConnections] userId:', userId, 'phone:', phone);
-            
             try {
                 const list = document.getElementById('newConnectionsList');
                 const empty = document.getElementById('newConnectionsEmpty');
-                const page = document.getElementById('newConnectionsPage');
-                
-                console.log('[DEBUG loadNewConnections] List element:', list);
-                console.log('[DEBUG loadNewConnections] Empty element:', empty);
-                console.log('[DEBUG loadNewConnections] Page element:', page);
-                console.log('[DEBUG loadNewConnections] Page display style:', page ? page.style.display : 'page not found');
-                console.log('[DEBUG loadNewConnections] Page computed display:', page ? window.getComputedStyle(page).display : 'N/A');
                 
                 if (!list || !empty) {
-                    console.error('[DEBUG loadNewConnections] Connection page elements not found');
+                    console.error('Connection page elements not found');
                     return;
                 }
                 
-                console.log('[DEBUG loadNewConnections] Calling fetchConnections...');
                 const { connections: conns, count } = await fetchConnections();
-                console.log('[DEBUG loadNewConnections] Connections fetched - count:', count, 'connections:', conns);
                 
                 if (count === 0 || !conns || conns.length === 0) {
-                    console.log('[DEBUG loadNewConnections] No connections, showing empty state');
                     list.innerHTML = '';
                     empty.style.display = 'block';
-                    console.log('[DEBUG loadNewConnections] Empty state display:', window.getComputedStyle(empty).display);
                 } else {
-                    console.log('[DEBUG loadNewConnections] Rendering', conns.length, 'connections');
                     empty.style.display = 'none';
                     // Escape HTML and handle special characters for mobile
-                    const html = conns.map(c => {
+                    list.innerHTML = conns.map(c => {
                         const safeData = JSON.stringify(c).replace(/'/g, "&#39;").replace(/"/g, '&quot;');
                         return `
                             <div class="new-feed-item" data-status="${c.status || 'connected'}" onclick='openConnectionModal(${safeData})' style="cursor: pointer;">
@@ -9575,14 +9512,9 @@
                             </div>
                         `;
                     }).join('');
-                    list.innerHTML = html;
-                    console.log('[DEBUG loadNewConnections] HTML rendered, list children:', list.children.length);
-                    console.log('[DEBUG loadNewConnections] List display:', window.getComputedStyle(list).display);
-                    console.log('[DEBUG loadNewConnections] List visibility:', window.getComputedStyle(list).visibility);
-                    console.log('[DEBUG loadNewConnections] List height:', window.getComputedStyle(list).height);
                 }
             } catch (error) {
-                console.error('[DEBUG loadNewConnections] Error loading connections:', error);
+                console.error('Error loading connections:', error);
                 const list = document.getElementById('newConnectionsList');
                 const empty = document.getElementById('newConnectionsEmpty');
                 if (list) list.innerHTML = '';
