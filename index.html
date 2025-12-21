@@ -6791,17 +6791,27 @@
         
         // Fetch matches (Attention Required) from API
         async function fetchMatches() {
+            const userId = localStorage.getItem('tapinx_user_id');
             const phone = localStorage.getItem('tapinx_user_phone');
-            if (!phone) return { matches: [], count: 0 };
+            const identifier = userId || phone;
+            if (!identifier) return { matches: [], count: 0 };
             
             try {
-                const response = await fetch(`${API_URL}/users/${encodeURIComponent(phone)}/matches`);
+                const response = await fetch(`${API_URL}/opportunities/${encodeURIComponent(identifier)}`);
                 const data = await response.json();
                 if (data.success) {
-                    return { matches: data.matches, count: data.count };
+                    // Map opportunities to match format expected by UI
+                    const matches = data.opportunities.map(opp => ({
+                        id: opp.id,
+                        other_name: opp.requester_name,
+                        match_type: opp.match_type || 'professional',
+                        intro_reason: opp.ask_title,
+                        created_at: opp.created_at
+                    }));
+                    return { matches, count: data.count };
                 }
             } catch (error) {
-                console.error('Error fetching matches:', error);
+                console.error('Error fetching opportunities:', error);
             }
             return { matches: [], count: 0 };
         }
