@@ -7193,6 +7193,142 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     
     <script>
+        // ============================================
+        // URL ROUTER - Clean URL routing with History API
+        // Works on both desktop and mobile browsers
+        // ============================================
+        
+        const Router = {
+            // Map URL paths to page names
+            routes: {
+                '/': 'landing',
+                '/opportunities': 'opportunities',
+                '/requests': 'requests',
+                '/connections': 'connections',
+                '/speak': 'speak',
+                '/settings': 'settings',
+                '/referrals': 'referrals'
+            },
+            
+            // Map page names back to URL paths
+            paths: {
+                'landing': '/',
+                'opportunities': '/opportunities',
+                'requests': '/requests',
+                'connections': '/connections',
+                'speak': '/speak',
+                'settings': '/settings',
+                'referrals': '/referrals'
+            },
+            
+            // Navigate to a new page and update URL
+            navigate: function(page) {
+                console.log('[Router] Navigating to:', page);
+                const path = this.paths[page] || '/';
+                
+                // Only push state if URL is different
+                if (window.location.pathname !== path) {
+                    history.pushState({ page: page }, '', path);
+                }
+                
+                // Show the page
+                this.showPage(page);
+            },
+            
+            // Show page without changing URL (used for popstate/back button)
+            showPage: function(page) {
+                console.log('[Router] Showing page:', page);
+                const userId = localStorage.getItem('tapinx_user_id');
+                const userPhone = localStorage.getItem('tapinx_user_phone');
+                const isLoggedIn = userId || userPhone;
+                
+                if (page === 'landing' || !isLoggedIn) {
+                    // Show landing page
+                    if (typeof showPage === 'function') {
+                        showPage('landing');
+                    }
+                } else {
+                    // Show dashboard with specific page
+                    if (typeof showPage === 'function') {
+                        showPage('dashboard');
+                    }
+                    if (typeof showNewAppPage === 'function') {
+                        showNewAppPage(page);
+                    }
+                }
+            },
+            
+            // Get current page from URL path
+            getCurrentPage: function() {
+                const path = window.location.pathname;
+                console.log('[Router] Current path:', path);
+                return this.routes[path] || 'landing';
+            },
+            
+            // Check if user is logged in
+            isLoggedIn: function() {
+                const userId = localStorage.getItem('tapinx_user_id');
+                const userPhone = localStorage.getItem('tapinx_user_phone');
+                return !!(userId || userPhone);
+            },
+            
+            // Initialize router on page load - THIS IS CRITICAL
+            init: function() {
+                console.log('[Router] Initializing...');
+                const isLoggedIn = this.isLoggedIn();
+                const currentPage = this.getCurrentPage();
+                
+                console.log('[Router] Is logged in:', isLoggedIn);
+                console.log('[Router] Current page from URL:', currentPage);
+                
+                if (isLoggedIn) {
+                    // User is logged in
+                    if (currentPage === 'landing' || currentPage === '') {
+                        // On landing page but logged in - redirect to opportunities
+                        console.log('[Router] Logged in user on landing, redirecting to opportunities');
+                        this.navigate('opportunities');
+                    } else {
+                        // Show the current page from URL
+                        console.log('[Router] Showing page from URL:', currentPage);
+                        if (typeof showPage === 'function') {
+                            showPage('dashboard');
+                        }
+                        if (typeof showNewAppPage === 'function') {
+                            showNewAppPage(currentPage);
+                        }
+                        // Update URL state
+                        history.replaceState({ page: currentPage }, '', this.paths[currentPage]);
+                    }
+                } else {
+                    // Not logged in
+                    if (currentPage !== 'landing') {
+                        // Trying to access protected page without login - redirect to landing
+                        console.log('[Router] Not logged in, redirecting to landing');
+                        this.navigate('landing');
+                    } else {
+                        // Already on landing, just show it
+                        console.log('[Router] Showing landing page');
+                        if (typeof showPage === 'function') {
+                            showPage('landing');
+                        }
+                    }
+                }
+            }
+        };
+        
+        // Handle browser back/forward buttons - CRITICAL for both desktop and mobile
+        window.addEventListener('popstate', function(event) {
+            console.log('[Router] Popstate event, state:', event.state);
+            const page = event.state?.page || Router.getCurrentPage();
+            Router.showPage(page);
+        });
+        
+        // Mobile browser compatibility - ensure history state is set on initial load
+        if (!history.state) {
+            const currentPage = Router.getCurrentPage();
+            history.replaceState({ page: currentPage }, '', window.location.pathname);
+        }
+        
         // ========== API CONFIGURATION ==========
         const API_URL = 'https://tapinx-backend-production.up.railway.app/api';
         
@@ -7400,29 +7536,15 @@
         // Try to initialize Firebase on page load
         document.addEventListener('DOMContentLoaded', function() {
             initFirebase();
-            // Check if user is logged in and show opportunities page
-            if (localStorage.getItem('tapinx_logged_in') === 'true') {
-                // Delay to ensure showNewAppPage is defined and DOM is ready
-                setTimeout(() => {
-                    if (typeof showNewAppPage === 'function') {
-                        showNewAppPage('opportunities');
-                    }
-                }, 200);
-            }
+            // Initialize router - this handles page routing based on URL
+            Router.init();
         });
         
         // Also try immediately in case DOM is already ready
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
             initFirebase();
-            // Check if user is logged in and show opportunities page
-            if (localStorage.getItem('tapinx_logged_in') === 'true') {
-                // Delay to ensure showNewAppPage is defined and DOM is ready
-                setTimeout(() => {
-                    if (typeof showNewAppPage === 'function') {
-                        showNewAppPage('opportunities');
-                    }
-                }, 200);
-            }
+            // Initialize router - this handles page routing based on URL
+            Router.init();
         }
         
         function initRecaptcha() {
@@ -8023,7 +8145,7 @@
                                     console.error('[TapinX] Backend sync error:', e);
                                 }
                                 
-                                showNewAppPage('opportunities');
+                                Router.navigate('opportunities');
                         } else {
                                 // New user - transfer signup data to profile
                                 const name = localStorage.getItem('tapinx_signup_name') || '';
@@ -8044,7 +8166,7 @@
                                     updateNewSidebar();
                                 });
                                 
-                                showNewAppPage('opportunities');
+                                Router.navigate('opportunities');
                                 setTimeout(() => openEditProfileModal(), 300);
                             }
                         })
@@ -8701,7 +8823,7 @@
                 setTimeout(() => showTelegramModal(), 1500);
             } else {
                 // Go to opportunities for returning users
-                setTimeout(() => showNewAppPage('opportunities'), 1500);
+                setTimeout(() => Router.navigate('opportunities'), 1500);
             }
         }
         
@@ -8813,8 +8935,13 @@
         });
         
         function logout() {
+            console.log('[Logout] Logging out user');
+            
+            // Clear all user data from localStorage
             localStorage.clear();
-            showPage('landing');
+            
+            // Navigate to landing page with proper URL
+            window.location.href = '/';
         }
         
         // ========== CONNECTIONS PAGE ==========
@@ -9487,6 +9614,17 @@
         }
         
         function showNewAppPage(page) {
+            // === URL ROUTING - Update URL without adding to history stack ===
+            console.log('[showNewAppPage] Called with:', page);
+            
+            // Update URL without adding to history stack
+            const path = '/' + page;
+            if (window.location.pathname !== path) {
+                history.replaceState({ page: page }, '', path);
+                console.log('[showNewAppPage] URL updated to:', path);
+            }
+            // === END OF URL ROUTING CODE ===
+            
             currentNewAppPage = page;
             
             // Update mobile header title

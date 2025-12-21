@@ -1,13 +1,12 @@
 {
   "rewrites": [
-    { "source": "/admin", "destination": "/admin.html" }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" }
-      ]
-    }
+    { "source": "/opportunities", "destination": "/index.html" },
+    { "source": "/requests", "destination": "/index.html" },
+    { "source": "/connections", "destination": "/index.html" },
+    { "source": "/speak", "destination": "/index.html" },
+    { "source": "/settings", "destination": "/index.html" },
+    { "source": "/referrals", "destination": "/index.html" },
+    { "source": "/admin", "destination": "/index.html" },
+    { "source": "/admin/(.*)", "destination": "/index.html" }
   ]
 }
