@@ -6835,14 +6835,17 @@
         
         // Respond to a match (accept/decline)
         async function respondToMatch(matchId, action) {
-            const phone = localStorage.getItem('tapinx_user_phone');
-            if (!phone) return false;
+            const userId = localStorage.getItem('tapinx_user_id');
+            if (!userId) return false;
             
             try {
                 const response = await fetch(`${API_URL}/matches/${matchId}/respond`, {
-                    method: 'PUT',
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action, phone })
+                    body: JSON.stringify({ 
+                        response: action === 'accept' ? 'yes' : 'no',
+                        user_id: userId
+                    })
                 });
                 const data = await response.json();
                 return data.success;
