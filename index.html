@@ -10664,9 +10664,9 @@
                 
                 list.innerHTML = matches.map(m => {
                     const matchType = m.match_type || matchTypes[Math.floor(Math.random() * matchTypes.length)];
-                    const oppData = JSON.stringify(m).replace(/"/g, '&quot;');
+                    const oppDataStr = JSON.stringify(m).replace(/"/g, '&quot;');
                     return `
-                    <div class="new-feed-item" data-id="${m.id}" data-type="${matchType}" data-opportunity='${oppData}' onclick="const opp = this.getAttribute('data-opportunity'); if (opp) openOppDetailModal(JSON.parse(opp.replace(/&quot;/g, '\"')))" style="cursor: pointer;">
+                    <div class="new-feed-item" data-id="${m.id}" data-type="${matchType}" data-opportunity='${oppDataStr}' onclick="handleOppCardClick(this)" style="cursor: pointer;">
                         <div class="new-feed-avatar">${(m.other_name || 'T').charAt(0).toUpperCase()}</div>
                         <div class="new-feed-content">
                             <div class="new-feed-header">
@@ -10678,7 +10678,7 @@
                             <div class="new-feed-actions" onclick="event.stopPropagation()">
                                 <button class="new-feed-btn primary" onclick="acceptNewOpportunity('${m.id}')">Approve</button>
                                 <button class="new-feed-btn secondary" onclick="declineNewOpportunity('${m.id}')">Decline</button>
-                                <button class="opportunity-refer-btn" data-opportunity='${oppData}' onclick="openReferFromCard(JSON.parse(this.getAttribute('data-opportunity').replace(/&quot;/g, '\"')))">Refer a Friend</button>
+                                <button class="opportunity-refer-btn" onclick="event.stopPropagation(); handleOppReferClick(this)">Refer a Friend</button>
                             </div>
                         </div>
                     </div>
@@ -10842,36 +10842,86 @@
         
         // ========== DETAIL MODAL FUNCTIONS ==========
         
+        function handleOppCardClick(element) {
+            const oppData = element.getAttribute('data-opportunity');
+            if (oppData) {
+                try {
+                    const opportunity = JSON.parse(oppData.replace(/&quot;/g, '"'));
+                    openOppDetailModal(opportunity);
+                } catch (e) {
+                    console.error('[Modal] Error parsing opportunity data:', e);
+                }
+            }
+        }
+        
+        function handleOppReferClick(element) {
+            const card = element.closest('.new-feed-item');
+            const oppData = card ? card.getAttribute('data-opportunity') : null;
+            if (oppData) {
+                try {
+                    const opportunity = JSON.parse(oppData.replace(/&quot;/g, '"'));
+                    openReferFromCard(opportunity);
+                } catch (e) {
+                    console.error('[Modal] Error parsing opportunity data:', e);
+                }
+            }
+        }
+        
         function openOppDetailModal(opportunity) {
+            console.log('[Modal] Opening detail modal for:', opportunity);
+            
+            if (!opportunity) {
+                console.error('[Modal] No opportunity data provided');
+                return;
+            }
+            
             currentOppData = opportunity;
             
             // Set avatar and name
             const name = opportunity.requester_name || opportunity.other_name || 'Someone';
-            document.getElementById('oppDetailAvatar').textContent = name.charAt(0).toUpperCase();
-            document.getElementById('oppDetailName').textContent = name;
-            document.getElementById('oppDetailBio').textContent = opportunity.requester_bio || 'TapinX member';
+            const avatarEl = document.getElementById('oppDetailAvatar');
+            const nameEl = document.getElementById('oppDetailName');
+            const bioEl = document.getElementById('oppDetailBio');
+            
+            if (avatarEl) avatarEl.textContent = name.charAt(0).toUpperCase();
+            if (nameEl) nameEl.textContent = name;
+            if (bioEl) bioEl.textContent = opportunity.requester_bio || 'TapinX member';
             
             // Set opportunity details
-            document.getElementById('oppDetailTitle').textContent = opportunity.ask_title || opportunity.title || 'Connection Request';
-            document.getElementById('oppDetailDesc').textContent = opportunity.ask_text || opportunity.intro_reason || 'No description provided.';
+            const titleEl = document.getElementById('oppDetailTitle');
+            const descEl = document.getElementById('oppDetailDesc');
+            
+            if (titleEl) titleEl.textContent = opportunity.ask_title || opportunity.title || 'Connection Request';
+            if (descEl) descEl.textContent = opportunity.ask_text || opportunity.intro_reason || 'No description provided.';
             
             // Set skills
             const skillsContainer = document.getElementById('oppDetailSkills');
             const skillsSection = document.getElementById('oppDetailSkillsSection');
-            if (opportunity.skills_needed && opportunity.skills_needed.length > 0) {
-                skillsSection.style.display = 'block';
-                skillsContainer.innerHTML = opportunity.skills_needed.map(s => 
-                    '<span class="opp-detail-skill">' + escapeHtml(s) + '</span>'
-                ).join('');
-            } else {
-                skillsSection.style.display = 'none';
+            if (skillsContainer && skillsSection) {
+                if (opportunity.skills_needed && opportunity.skills_needed.length > 0) {
+                    skillsSection.style.display = 'block';
+                    skillsContainer.innerHTML = opportunity.skills_needed.map(s => 
+                        '<span class="opp-detail-skill">' + escapeHtml(s) + '</span>'
+                    ).join('');
+                } else {
+                    skillsSection.style.display = 'none';
+                }
             }
             
             // Set match score
-            const score = opportunity.match_score || 0;
-            document.getElementById('oppDetailScore').textContent = Math.round(score) + '% match';
+            const scoreEl = document.getElementById('oppDetailScore');
+            if (scoreEl) {
+                const score = opportunity.match_score || 0;
+                scoreEl.textContent = Math.round(score) + '% match';
+            }
             
-            document.getElementById('oppDetailModal').classList.add('show');
+            const modal = document.getElementById('oppDetailModal');
+            if (modal) {
+                modal.classList.add('show');
+                console.log('[Modal] Modal shown successfully');
+            } else {
+                console.error('[Modal] Modal element not found - check HTML');
+            }
         }
         
         function closeOppDetailModal(event) {
