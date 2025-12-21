@@ -545,9 +545,12 @@
         
         .phone-input-container {
             display: flex;
-            border: 1px solid #ddd;
+            align-items: center;
+            background: #f7f7f7;
+            border: 1px solid #e0e0e0;
             border-radius: 8px;
-            overflow: visible;
+            overflow: hidden;
+            transition: border-color 0.2s;
         }
         
         .phone-input-container:focus-within {
@@ -559,9 +562,9 @@
             align-items: center;
             gap: 6px;
             padding: 14px 12px;
-            background: #f9f9f9;
+            background: transparent;
             border: none;
-            border-right: 1px solid #ddd;
+            border-right: 1px solid #e0e0e0;
             cursor: pointer;
             font-size: 14px;
         }
@@ -574,6 +577,7 @@
             flex: 1;
             padding: 14px 16px;
             border: none;
+            background: transparent;
             font-size: 16px;
             outline: none;
             font-family: inherit;
@@ -721,9 +725,11 @@
         
         .phone-row {
             display: flex;
-            border: 1px solid #ddd;
+            align-items: center;
+            background: #f7f7f7;
+            border: 1px solid #e0e0e0;
             border-radius: 8px;
-            overflow: visible;
+            overflow: hidden;
             transition: border-color 0.2s;
         }
         
@@ -740,17 +746,18 @@
             align-items: center;
             gap: 6px;
             padding: 14px 12px;
-            background: #f9f9f9;
+            background: transparent;
             border: none;
-            border-right: 1px solid #ddd;
+            border-right: 1px solid #e0e0e0;
             cursor: pointer;
             font-size: 14px;
             font-family: inherit;
             min-width: 90px;
+            transition: background 0.2s;
         }
         
         .country-btn:hover {
-            background: #f0f0f0;
+            background: rgba(0, 0, 0, 0.03);
         }
         
         .country-list {
@@ -825,6 +832,7 @@
             flex: 1;
             padding: 14px 16px;
             border: none;
+            background: transparent;
             font-size: 16px;
             outline: none;
             font-family: inherit;
@@ -832,6 +840,37 @@
         
         .phone-number-input::placeholder {
             color: #999;
+        }
+        
+        /* Additional phone input fixes for consistent appearance */
+        input[type="tel"] {
+            background: transparent;
+        }
+        
+        /* Ensure phone input containers have consistent styling */
+        .phone-input-container,
+        .phone-row {
+            background: #f7f7f7;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        /* Fix country selector to match container background */
+        .country-select,
+        .country-btn {
+            background: transparent;
+            border-radius: 8px 0 0 8px;
+        }
+        
+        /* Ensure country button border matches container */
+        .phone-input-container .country-select,
+        .phone-row .country-btn {
+            border-right-color: #e0e0e0;
+        }
+        
+        .phone-input-container:focus-within .country-select,
+        .phone-row:focus-within .country-btn {
+            border-right-color: #e0e0e0;
         }
         
         .modal-error {
