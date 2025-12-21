@@ -6996,6 +6996,7 @@
                             <input type="url" class="edit-input" id="editInstagramInput" placeholder="instagram.com/yourprofile" oninput="validateEditLinks()">
                             <span class="edit-validation-icon" id="editInstagramStatus"></span>
                         </div>
+                        <a href="#" id="editInstagramPreview" target="_blank" style="display: none; font-size: 12px; color: #0f1419; text-decoration: underline; margin-top: 4px; opacity: 0.7; line-height: 1.4;">View profile →</a>
                     </div>
                     
                     <div class="edit-link-item">
@@ -8158,7 +8159,11 @@
             document.getElementById('editAgeInput').value = age;
             document.getElementById('editBioInput').value = bio;
             document.getElementById('editLinkedinInput').value = linkedin;
-            document.getElementById('editInstagramInput').value = instagram;
+            // Display Instagram as "instagram.com/username" if stored as just username
+            const instagramDisplay = instagram && !instagram.includes('instagram.com') 
+                ? 'instagram.com/' + instagram 
+                : instagram;
+            document.getElementById('editInstagramInput').value = instagramDisplay;
             document.getElementById('editTwitterInput').value = twitter;
             document.getElementById('editSoundcloudInput').value = soundcloud;
             document.getElementById('editImdbInput').value = imdb;
@@ -8207,11 +8212,32 @@
             }
         }
         
+        function validateInstagramUsername(input) {
+            // Remove instagram.com/ prefix if present
+            let username = input.trim();
+            username = username.replace(/^(https?:\/\/)?(www\.)?instagram\.com\//i, '');
+            username = username.replace(/\/$/, ''); // Remove trailing slash
+            
+            // Instagram username rules: 1-30 chars, letters, numbers, periods, underscores
+            const isValid = /^[a-zA-Z0-9._]{1,30}$/.test(username);
+            
+            return {
+                isValid: isValid && username.length > 0,
+                username: username
+            };
+        }
+        
         function validateEditUrl(url, type) {
             if (!url) return 'empty';
+            
+            // Special handling for Instagram
+            if (type === 'instagram') {
+                const result = validateInstagramUsername(url);
+                return result.isValid ? 'valid' : 'invalid';
+            }
+            
             const patterns = {
                 linkedin: /linkedin\.com\/(in|company)\//i,
-                instagram: /instagram\.com\//i,
                 twitter: /(twitter\.com|x\.com)\//i,
                 soundcloud: /soundcloud\.com\//i,
                 imdb: /imdb\.com\/(name|title)\//i
@@ -8230,6 +8256,22 @@
                 
                 status.className = 'edit-validation-icon';
                 status.textContent = '';
+                
+                // Special handling for Instagram preview link
+                if (field === 'instagram') {
+                    const preview = document.getElementById('editInstagramPreview');
+                    if (result === 'valid') {
+                        const instagramResult = validateInstagramUsername(val);
+                        if (instagramResult.isValid && instagramResult.username) {
+                            preview.href = 'https://instagram.com/' + instagramResult.username;
+                            preview.style.display = 'inline';
+                        } else {
+                            preview.style.display = 'none';
+                        }
+                    } else {
+                        preview.style.display = 'none';
+                    }
+                }
                 
                 if (result === 'valid') {
                     status.classList.add('valid');
@@ -8257,9 +8299,13 @@
         
         function saveEditProfile() {
             const name = document.getElementById('editNameInput').value.trim();
-            const instagram = document.getElementById('editInstagramInput').value;
+            const instagramInput = document.getElementById('editInstagramInput').value;
             
-            if (!name || validateEditUrl(instagram, 'instagram') !== 'valid') return;
+            if (!name || validateEditUrl(instagramInput, 'instagram') !== 'valid') return;
+            
+            // Extract Instagram username (store just username, not full URL)
+            const instagramResult = validateInstagramUsername(instagramInput);
+            const instagram = instagramResult.isValid ? instagramResult.username : '';
             
             // Gather all profile data
             const profileData = {
@@ -8612,9 +8658,15 @@
         
         function validateUrl(url, type) {
             if (!url) return 'empty';
+            
+            // Special handling for Instagram
+            if (type === 'instagram') {
+                const result = validateInstagramUsername(url);
+                return result.isValid ? 'valid' : 'invalid';
+            }
+            
             const patterns = {
                 linkedin: /linkedin\.com\/(in|company)\//i,
-                instagram: /instagram\.com\//i,
                 twitter: /(twitter\.com|x\.com)\//i,
                 soundcloud: /soundcloud\.com\//i,
                 imdb: /imdb\.com\/(name|title)\//i
@@ -8651,7 +8703,12 @@
             document.getElementById('nameInput').value = name;
             document.getElementById('bioInput').value = bio;
             document.getElementById('linkedinInput').value = localStorage.getItem('tapinx_user_linkedin') || '';
-            document.getElementById('instagramInput').value = localStorage.getItem('tapinx_user_instagram') || '';
+            // Display Instagram as "instagram.com/username" if stored as just username
+            const storedInstagram = localStorage.getItem('tapinx_user_instagram') || '';
+            const instagramDisplay = storedInstagram && !storedInstagram.includes('instagram.com') 
+                ? 'instagram.com/' + storedInstagram 
+                : storedInstagram;
+            document.getElementById('instagramInput').value = instagramDisplay;
             document.getElementById('twitterInput').value = localStorage.getItem('tapinx_user_twitter') || '';
             document.getElementById('soundcloudInput').value = localStorage.getItem('tapinx_user_soundcloud') || '';
             document.getElementById('imdbInput').value = localStorage.getItem('tapinx_user_imdb') || '';
@@ -8674,6 +8731,11 @@
             const name = document.getElementById('nameInput').value.trim();
             const bio = document.getElementById('bioInput').value.trim();
             const linkedin = document.getElementById('linkedinInput').value;
+            const instagramInput = document.getElementById('instagramInput').value;
+            
+            // Extract Instagram username (store just username, not full URL)
+            const instagramResult = validateInstagramUsername(instagramInput);
+            const instagram = instagramResult.isValid ? instagramResult.username : '';
             
             if (!name || validateUrl(linkedin, 'linkedin') !== 'valid') return;
             
@@ -8684,7 +8746,7 @@
             localStorage.setItem('tapinx_user_name', name);
             localStorage.setItem('tapinx_user_bio', bio);
             localStorage.setItem('tapinx_user_linkedin', linkedin);
-            localStorage.setItem('tapinx_user_instagram', document.getElementById('instagramInput').value);
+            localStorage.setItem('tapinx_user_instagram', instagram);
             localStorage.setItem('tapinx_user_twitter', document.getElementById('twitterInput').value);
             localStorage.setItem('tapinx_user_soundcloud', document.getElementById('soundcloudInput').value);
             localStorage.setItem('tapinx_user_imdb', document.getElementById('imdbInput').value);
@@ -9464,921 +9526,3 @@
         })();
         
         // ========== NEW X.COM-STYLE APP FUNCTIONS ==========
-        let currentNewAppPage = 'opportunities';
-        
-        // Mobile menu functions
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('mobileSidebar');
-            const overlay = document.getElementById('mobileOverlay');
-            sidebar.classList.toggle('mobile-open');
-            overlay.classList.toggle('active');
-        }
-        
-        function closeMobileMenu() {
-            const sidebar = document.getElementById('mobileSidebar');
-            const overlay = document.getElementById('mobileOverlay');
-            if (sidebar) sidebar.classList.remove('mobile-open');
-            if (overlay) overlay.classList.remove('active');
-        }
-        
-        function updateMobileHeader(title) {
-            const headerTitle = document.getElementById('mobileHeaderTitle');
-            if (headerTitle) headerTitle.textContent = title;
-        }
-        
-        function showNewAppPage(page) {
-            currentNewAppPage = page;
-            
-            // Update mobile header title
-            const titles = {
-                'speak': 'Speak to Taj',
-                'requests': 'My Requests',
-                'connections': 'My Connections',
-                'opportunities': 'Opportunities',
-                'referrals': 'Referrals',
-                'settings': 'Settings'
-            };
-            updateMobileHeader(titles[page] || 'TapinX');
-            
-            // Update sidebar nav
-            document.querySelectorAll('.new-sidebar-link').forEach(l => l.classList.remove('active'));
-            const navLink = document.getElementById('nav' + page.charAt(0).toUpperCase() + page.slice(1));
-            if (navLink) navLink.classList.add('active');
-            
-            // Hide all pages
-            document.getElementById('newSpeakPage').style.display = 'none';
-            document.getElementById('newRequestsPage').style.display = 'none';
-            document.getElementById('newConnectionsPage').style.display = 'none';
-            document.getElementById('newOpportunitiesPage').style.display = 'none';
-            document.getElementById('newReferralsPage').style.display = 'none';
-            document.getElementById('newSettingsPage').style.display = 'none';
-            
-            // Show/hide expand sections
-            document.getElementById('requestsExpand').style.display = page === 'requests' ? 'block' : 'none';
-            document.getElementById('connectionsExpand').style.display = page === 'connections' ? 'block' : 'none';
-            document.getElementById('opportunitiesExpand').style.display = page === 'opportunities' ? 'block' : 'none';
-            
-            // Show selected page
-            if (page === 'speak') {
-                document.getElementById('newSpeakPage').style.display = 'block';
-            } else if (page === 'requests') {
-                document.getElementById('newRequestsPage').style.display = 'block';
-                // Reset tabs to "All" when showing page
-                const tabs = document.querySelectorAll('#newRequestsPage .new-tab');
-                tabs.forEach(t => t.classList.remove('active'));
-                if (tabs[0]) tabs[0].classList.add('active');
-                // Reset sidebar sublinks for requests
-                document.querySelectorAll('#requestsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
-                const sublinks = document.querySelectorAll('#requestsExpand .new-sidebar-sublink');
-                if (sublinks[0]) sublinks[0].classList.add('active');
-                loadNewRequests();
-            } else if (page === 'connections') {
-                document.getElementById('newConnectionsPage').style.display = 'block';
-                // Reset tabs to "All" when showing page
-                const tabs = document.querySelectorAll('#newConnectionsPage .new-tab');
-                tabs.forEach(t => t.classList.remove('active'));
-                if (tabs[0]) tabs[0].classList.add('active');
-                // Reset sidebar sublinks for connections
-                document.querySelectorAll('#connectionsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
-                const sublinks = document.querySelectorAll('#connectionsExpand .new-sidebar-sublink');
-                if (sublinks[0]) sublinks[0].classList.add('active');
-                loadNewConnections();
-            } else if (page === 'opportunities') {
-                document.getElementById('newOpportunitiesPage').style.display = 'block';
-                // Reset tabs to "All" when showing page
-                const tabs = document.querySelectorAll('#newOpportunitiesPage .new-tab');
-                tabs.forEach(t => t.classList.remove('active'));
-                if (tabs[0]) tabs[0].classList.add('active');
-                // Reset sidebar sublinks for opportunities
-                document.querySelectorAll('#opportunitiesExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
-                const sublinks = document.querySelectorAll('#opportunitiesExpand .new-sidebar-sublink');
-                if (sublinks[0]) sublinks[0].classList.add('active');
-                loadNewOpportunities();
-            } else if (page === 'referrals') {
-                document.getElementById('newReferralsPage').style.display = 'block';
-            } else if (page === 'settings') {
-                document.getElementById('newSettingsPage').style.display = 'block';
-            }
-        }
-        
-        async function loadNewConnections() {
-            try {
-                console.log('[TapinX] Loading connections...');
-                const { connections: conns, count } = await fetchConnections();
-                const list = document.getElementById('newConnectionsList');
-                const empty = document.getElementById('newConnectionsEmpty');
-                
-                if (!list || !empty) {
-                    console.error('[TapinX] Connections page DOM elements not found');
-                    return;
-                }
-                
-                console.log('[TapinX] Connections loaded:', count, 'connections');
-                
-                if (count === 0 || !conns || conns.length === 0) {
-                    list.innerHTML = '';
-                    empty.style.display = 'block';
-                    console.log('[TapinX] No connections found, showing empty state');
-                } else {
-                    empty.style.display = 'none';
-                    list.innerHTML = conns.map(c => `
-                        <div class="new-feed-item" data-status="${c.status || 'connected'}" onclick='openConnectionModal(${JSON.stringify(c).replace(/'/g, "&#39;")})' style="cursor: pointer;">
-                            <div class="new-feed-avatar">${(c.name || 'U').charAt(0).toUpperCase()}</div>
-                            <div class="new-feed-content">
-                                <div class="new-feed-header">
-                                    <span class="new-feed-name">${c.name || 'Unknown'}</span>
-                                    <span class="new-feed-status ${c.status || 'connected'}">${(c.status || 'Connected').charAt(0).toUpperCase() + (c.status || 'connected').slice(1)}</span>
-                                </div>
-                                <div class="new-feed-context">${c.ask_title || c.role || c.title || 'Introduction from Taj'}</div>
-                                <div class="new-feed-time">${formatNewDate(c.connected_at)}</div>
-                            </div>
-                        </div>
-                    `).join('');
-                    console.log('[TapinX] Connections rendered successfully');
-                }
-            } catch (error) {
-                console.error('[TapinX] Error in loadNewConnections:', error);
-                const list = document.getElementById('newConnectionsList');
-                const empty = document.getElementById('newConnectionsEmpty');
-                if (list) list.innerHTML = '';
-                if (empty) empty.style.display = 'block';
-            }
-        }
-        
-        let currentConnectionData = null;
-
-        function openConnectionModal(connectionData) {
-            currentConnectionData = connectionData;
-            document.getElementById('connModalAvatar').textContent = (connectionData.name || 'U').charAt(0).toUpperCase();
-            document.getElementById('connModalName').textContent = connectionData.name || 'Unknown';
-            
-            const isConnected = connectionData.status === 'connected';
-            const status = document.getElementById('connModalStatus');
-            status.textContent = isConnected ? 'Connected' : 'Pending';
-            status.className = 'connection-modal-status ' + (isConnected ? 'connected' : 'pending');
-            
-            document.getElementById('connModalContextText').textContent = connectionData.ask_title || 'Introduction from Taj';
-            
-            const bioSection = document.getElementById('connModalBio');
-            if (connectionData.bio) { bioSection.style.display = 'block'; document.getElementById('connModalBioText').textContent = connectionData.bio; } 
-            else { bioSection.style.display = 'none'; }
-            
-            const skillsSection = document.getElementById('connModalSkills');
-            if (connectionData.skills && connectionData.skills.length > 0) {
-                skillsSection.style.display = 'block';
-                document.getElementById('connModalSkillsList').innerHTML = connectionData.skills.map(s => '<span class="connection-modal-skill">' + s + '</span>').join('');
-            } else { skillsSection.style.display = 'none'; }
-            
-            const message = document.getElementById('connModalMessage');
-            const footer = document.getElementById('connModalFooter');
-            
-            if (isConnected) {
-                message.className = 'connection-modal-message success';
-                message.innerHTML = '<div class="connection-modal-message-icon">🎉</div><div class="connection-modal-message-title">You\'re connected!</div><div class="connection-modal-message-text">Taj has introduced you both via Telegram. Check your messages to start the conversation!</div>';
-                footer.innerHTML = '<button class="connection-modal-btn primary" onclick="window.open(\'https://t.me/TapinXBot\', \'_blank\'); closeConnectionModal();">Open Telegram</button><button class="connection-modal-btn secondary" onclick="closeConnectionModal()">Close</button>';
-            } else {
-                message.className = 'connection-modal-message waiting';
-                message.innerHTML = '<div class="connection-modal-message-icon">⏳</div><div class="connection-modal-message-title">Waiting for response</div><div class="connection-modal-message-text">' + (connectionData.name || 'They') + ' hasn\'t responded yet. We\'ll notify you via Telegram as soon as they accept!</div>';
-                footer.innerHTML = '<button class="connection-modal-btn secondary" onclick="closeConnectionModal()">Got it</button>';
-            }
-            
-            document.getElementById('connectionModal').classList.add('show');
-        }
-
-        function closeConnectionModal(event) {
-            if (event && event.target !== event.currentTarget) return;
-            document.getElementById('connectionModal').classList.remove('show');
-        }
-        
-        // Request Modal Functions
-        let currentRequestData = null;
-
-        function openRequestModal(requestData) {
-            currentRequestData = requestData;
-            
-            // Status labels mapping
-            const statusLabels = {
-                'active': 'In progress',
-                'waiting': 'Waiting',
-                'matched': 'Matched',
-                'completed': 'Completed'
-            };
-            
-            // Intent to category mapping
-            const intentLabels = {
-                'professional': 'Professional',
-                'community': 'Community',
-                'personal': 'Personal'
-            };
-            
-            document.getElementById('requestModalTitle').textContent = requestData.title || requestData.description || 'Request';
-            
-            const status = requestData.status || 'active';
-            document.getElementById('requestModalStatus').textContent = statusLabels[status] || 'Active';
-            
-            const intent = requestData.intent || requestData.category || 'professional';
-            document.getElementById('requestModalCategory').textContent = intentLabels[intent] || 'Professional';
-            
-            // Format date - try formatNewDate first, fallback to formatRequestTime or raw date
-            let dateText = 'Just now';
-            if (requestData.created_at) {
-                try {
-                    dateText = formatNewDate(requestData.created_at);
-                } catch (e) {
-                    try {
-                        dateText = formatRequestTime ? formatRequestTime(requestData.created_at) : new Date(requestData.created_at).toLocaleDateString();
-                    } catch (e2) {
-                        dateText = requestData.created_at;
-                    }
-                }
-            }
-            document.getElementById('requestModalDate').textContent = dateText;
-            
-            const skillsContainer = document.getElementById('requestModalSkills');
-            if (requestData.skills_needed && requestData.skills_needed.length > 0) {
-                skillsContainer.innerHTML = requestData.skills_needed.map(s => 
-                    '<span class="request-modal-skill">' + s + '</span>'
-                ).join('');
-            } else {
-                skillsContainer.innerHTML = '<span class="request-modal-value">Not specified</span>';
-            }
-            
-            const matchSection = document.getElementById('requestModalMatchSection');
-            if (requestData.match_name) {
-                matchSection.style.display = 'block';
-                document.getElementById('requestModalMatch').textContent = requestData.match_name;
-            } else {
-                matchSection.style.display = 'none';
-            }
-            
-            document.getElementById('requestModal').classList.add('show');
-        }
-
-        function closeRequestModal(event) {
-            if (event && event.target !== event.currentTarget) return;
-            document.getElementById('requestModal').classList.remove('show');
-            currentRequestData = null;
-        }
-
-        function followUpRequestFromModal() {
-            const requestTitle = currentRequestData ? (currentRequestData.title || currentRequestData.description || 'request') : 'request';
-            window.open('https://t.me/TapinXBot?text=' + encodeURIComponent("What's the update on my " + requestTitle + " request I had asked you about?"), '_blank');
-            closeRequestModal();
-        }
-        
-        function setNewConnectionsTab(btn, tab) {
-            document.querySelectorAll('#newConnectionsPage .new-tab').forEach(t => t.classList.remove('active'));
-            btn.classList.add('active');
-            filterNewConnections(tab, true);
-        }
-        
-        function filterNewConnections(status, fromHorizontalTab = false) {
-            document.querySelectorAll('#newConnectionsList .new-feed-item').forEach(item => {
-                const itemStatus = item.dataset.status;
-                if (status === 'all') {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = itemStatus === status ? 'flex' : 'none';
-                }
-            });
-            
-            // Update sidebar sublinks for connections only
-            document.querySelectorAll('#connectionsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
-            const sublinks = document.querySelectorAll('#connectionsExpand .new-sidebar-sublink');
-            if (status === 'all' && sublinks[0]) sublinks[0].classList.add('active');
-            if (status === 'connected' && sublinks[1]) sublinks[1].classList.add('active');
-            if (status === 'pending' && sublinks[2]) sublinks[2].classList.add('active');
-            
-            // Also update horizontal tabs when clicking from sidebar
-            if (!fromHorizontalTab) {
-                const tabs = document.querySelectorAll('#newConnectionsPage .new-tab');
-                tabs.forEach(t => t.classList.remove('active'));
-                if (status === 'all' && tabs[0]) tabs[0].classList.add('active');
-                if (status === 'connected' && tabs[1]) tabs[1].classList.add('active');
-                if (status === 'pending' && tabs[2]) tabs[2].classList.add('active');
-            }
-        }
-        
-        async function loadNewOpportunities() {
-            const { matches, count } = await fetchMatches();
-            const list = document.getElementById('newOpportunitiesList');
-            const empty = document.getElementById('newOpportunitiesEmpty');
-            
-            // Update badge
-            const badge = document.getElementById('opportunitiesBadge');
-            if (count > 0) {
-                badge.textContent = count;
-                badge.style.display = 'inline';
-            } else {
-                badge.style.display = 'none';
-            }
-            
-            if (count === 0) {
-                list.innerHTML = '';
-                empty.style.display = 'block';
-            } else {
-                empty.style.display = 'none';
-                const matchTypes = ['professional', 'community'];
-                const matchLabels = { professional: 'Professional match', community: 'Community-relevant' };
-                
-                list.innerHTML = matches.map(m => {
-                    const matchType = m.match_type || matchTypes[Math.floor(Math.random() * matchTypes.length)];
-                    return `
-                    <div class="new-feed-item" data-id="${m.id}" data-type="${matchType}">
-                        <div class="new-feed-avatar">${(m.other_name || 'T').charAt(0).toUpperCase()}</div>
-                        <div class="new-feed-content">
-                            <div class="new-feed-header">
-                                <span class="new-feed-name">${m.other_name || 'New opportunity'}</span>
-                                <span class="new-match-type ${matchType}">${matchLabels[matchType]}</span>
-                            </div>
-                            <div class="new-feed-text">Taj wants to introduce you to ${m.other_name || 'someone'}${m.intro_reason ? ' for ' + m.intro_reason : ''}</div>
-                            <div class="new-feed-time">${formatNewTimeAgo(m.created_at)}</div>
-                            <div class="new-feed-actions">
-                                <button class="new-feed-btn primary" onclick="acceptNewOpportunity('${m.id}')">Approve</button>
-                                <button class="new-feed-btn secondary" onclick="declineNewOpportunity('${m.id}')">Decline</button>
-                            </div>
-                        </div>
-                    </div>
-                `}).join('');
-            }
-        }
-        
-        function filterNewOpportunities(type, btn) {
-            document.querySelectorAll('#newOpportunitiesPage .new-tab').forEach(t => t.classList.remove('active'));
-            btn.classList.add('active');
-            
-            filterOpportunitiesItems(type);
-            
-            // Also update sidebar sublinks
-            updateOpportunitiesSidebarSublinks(type);
-        }
-        
-        function filterOpportunitiesFromSidebar(type) {
-            filterOpportunitiesItems(type);
-            
-            // Update sidebar sublinks
-            updateOpportunitiesSidebarSublinks(type);
-            
-            // Update horizontal tabs
-            const tabs = document.querySelectorAll('#newOpportunitiesPage .new-tab');
-            tabs.forEach(t => t.classList.remove('active'));
-            if (type === 'all' && tabs[0]) tabs[0].classList.add('active');
-            if (type === 'professional' && tabs[1]) tabs[1].classList.add('active');
-            if (type === 'community' && tabs[2]) tabs[2].classList.add('active');
-            if (type === 'saved' && tabs[3]) tabs[3].classList.add('active');
-        }
-        
-        function filterOpportunitiesItems(type) {
-            document.querySelectorAll('#newOpportunitiesList .new-feed-item').forEach(item => {
-                const itemType = item.dataset.type;
-                if (type === 'all') {
-                    item.style.display = 'flex';
-                } else if (type === 'saved') {
-                    item.style.display = item.dataset.saved === 'true' ? 'flex' : 'none';
-                } else {
-                    item.style.display = itemType === type ? 'flex' : 'none';
-                }
-            });
-        }
-        
-        function updateOpportunitiesSidebarSublinks(type) {
-            document.querySelectorAll('#opportunitiesExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
-            const sublinks = document.querySelectorAll('#opportunitiesExpand .new-sidebar-sublink');
-            if (type === 'all' && sublinks[0]) sublinks[0].classList.add('active');
-            if (type === 'professional' && sublinks[1]) sublinks[1].classList.add('active');
-            if (type === 'community' && sublinks[2]) sublinks[2].classList.add('active');
-            if (type === 'saved' && sublinks[3]) sublinks[3].classList.add('active');
-        }
-        
-        async function acceptNewOpportunity(id) {
-            await respondToMatch(id, 'accept');
-            showNewToast('Introduction accepted!');
-            loadNewOpportunities();
-        }
-        
-        async function declineNewOpportunity(id) {
-            await respondToMatch(id, 'decline');
-            showNewToast('Passed');
-            loadNewOpportunities();
-        }
-        
-        function submitNewReferral() {
-            const name = document.getElementById('newReferralName').value;
-            const contact = document.getElementById('newReferralContact').value;
-            if (name && contact) {
-                showNewToast('Referral sent!');
-                document.getElementById('newReferralName').value = '';
-                document.getElementById('newReferralContact').value = '';
-                document.getElementById('newReferralContext').value = '';
-            }
-        }
-        
-        async function loadNewRequests() {
-            const list = document.getElementById('newRequestsList');
-            const empty = document.getElementById('newRequestsEmpty');
-            
-            // Try to fetch from API
-            let requests = [];
-            try {
-                const userPhone = localStorage.getItem('tapinx_user_phone');
-                if (userPhone) {
-                    // Clean phone format for API
-                    const cleanPhone = userPhone.replace(/\s/g, '').replace(/[()-]/g, '');
-                    const API_URL = 'https://tapinx-backend-production.up.railway.app';
-                    const response = await fetch(`${API_URL}/api/requests/${encodeURIComponent(cleanPhone)}`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.success) {
-                            requests = data.requests || [];
-                        }
-                    }
-                }
-            } catch (e) {
-                console.log('[TapinX] Could not fetch requests:', e.message);
-            }
-            
-            // Fallback to localStorage for demo
-            if (requests.length === 0) {
-                requests = JSON.parse(localStorage.getItem('tapinx_requests') || '[]');
-            }
-            
-            // Update badge
-            const activeCount = requests.filter(r => r.status === 'active' || r.status === 'matched').length;
-            const badge = document.getElementById('requestsBadge');
-            if (activeCount > 0) {
-                badge.textContent = activeCount;
-                badge.style.display = 'inline';
-            } else {
-                badge.style.display = 'none';
-            }
-            
-            if (requests.length === 0) {
-                list.innerHTML = '';
-                empty.style.display = 'block';
-            } else {
-                empty.style.display = 'none';
-                
-                // Status styling
-                const statusLabels = {
-                    'active': 'In progress',
-                    'waiting': 'Waiting',
-                    'matched': 'Matched',
-                    'completed': 'Completed'
-                };
-                
-                // Intent badge styling
-                const intentLabels = {
-                    'professional': 'Professional',
-                    'community': 'Community',
-                    'personal': 'Personal'
-                };
-                
-                list.innerHTML = requests.map(r => {
-                    const status = r.status || 'active';
-                    const intent = r.intent || 'professional';
-                    const timestamp = r.created_at ? formatRequestTime(r.created_at) : 'Just now';
-                    
-                    // Determine actions based on status
-                    let actions = '';
-                    if (status === 'active' || status === 'waiting') {
-                        actions = `
-                            <button class="new-request-action" onclick="event.stopPropagation(); openRequestModal(${JSON.stringify(r).replace(/"/g, "&quot;")})">View details</button>
-                            <button class="new-request-action" onclick="event.stopPropagation(); followUpRequest('${r.id}')">Follow up</button>
-                        `;
-                    } else if (status === 'matched') {
-                        actions = `
-                            <button class="new-request-action" onclick="event.stopPropagation(); openRequestModal(${JSON.stringify(r).replace(/"/g, "&quot;")})">View details</button>
-                        `;
-                    } else if (status === 'completed') {
-                        actions = `
-                            <button class="new-request-action" onclick="event.stopPropagation(); openRequestModal(${JSON.stringify(r).replace(/"/g, "&quot;")})">View details</button>
-                            <button class="new-request-action" onclick="event.stopPropagation(); archiveRequest('${r.id}')">Archive</button>
-                        `;
-                    }
-                    
-                    return `
-                    <div class="new-feed-item new-request-row" data-id="${r.id}" data-status="${status}" onclick='openRequestModal(${JSON.stringify(r).replace(/"/g, "&quot;")})' style="cursor: pointer;">
-                        <div class="new-request-content">
-                            <div class="new-request-header">
-                                <span class="new-request-title">${r.title || r.description || 'Introduction request'}</span>
-                                <div class="new-request-badges">
-                                    <span class="new-request-intent">${intentLabels[intent] || 'Professional'}</span>
-                                    <span class="new-request-status ${status}">${statusLabels[status] || 'In progress'}</span>
-                                </div>
-                            </div>
-                            <div class="new-request-meta">
-                                <span class="new-request-time">Requested ${timestamp}</span>
-                            </div>
-                        </div>
-                        <div class="new-request-actions">
-                            ${actions}
-                        </div>
-                    </div>
-                `}).join('');
-            }
-        }
-        
-        function formatRequestTime(dateStr) {
-            if (!dateStr) return 'Just now';
-            const now = new Date();
-            const d = new Date(dateStr);
-            const diffMs = now - d;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            const diffDays = Math.floor(diffMs / 86400000);
-            
-            if (diffMins < 60) return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
-            if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
-            if (diffDays === 1) return 'yesterday';
-            if (diffDays < 7) return `${diffDays} days ago`;
-            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        }
-        
-        function filterRequests(status, btn) {
-            if (btn) {
-                document.querySelectorAll('#newRequestsPage .new-tab').forEach(t => t.classList.remove('active'));
-                btn.classList.add('active');
-            }
-            
-            filterRequestsItems(status);
-            
-            // Update sidebar sublinks
-            updateRequestsSidebarSublinks(status);
-        }
-        
-        function filterRequestsFromSidebar(status) {
-            filterRequestsItems(status);
-            
-            // Update sidebar sublinks
-            updateRequestsSidebarSublinks(status);
-            
-            // Update horizontal tabs
-            const tabs = document.querySelectorAll('#newRequestsPage .new-tab');
-            tabs.forEach(t => t.classList.remove('active'));
-            if (status === 'all' && tabs[0]) tabs[0].classList.add('active');
-            if (status === 'active' && tabs[1]) tabs[1].classList.add('active');
-            if (status === 'matched' && tabs[2]) tabs[2].classList.add('active');
-            if (status === 'completed' && tabs[3]) tabs[3].classList.add('active');
-        }
-        
-        function filterRequestsItems(status) {
-            document.querySelectorAll('#newRequestsList .new-feed-item').forEach(item => {
-                const itemStatus = item.dataset.status;
-                if (status === 'all') {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = itemStatus === status ? 'flex' : 'none';
-                }
-            });
-        }
-        
-        function updateRequestsSidebarSublinks(status) {
-            document.querySelectorAll('#requestsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
-            const sublinks = document.querySelectorAll('#requestsExpand .new-sidebar-sublink');
-            if (status === 'all' && sublinks[0]) sublinks[0].classList.add('active');
-            if (status === 'active' && sublinks[1]) sublinks[1].classList.add('active');
-            if (status === 'matched' && sublinks[2]) sublinks[2].classList.add('active');
-            if (status === 'completed' && sublinks[3]) sublinks[3].classList.add('active');
-        }
-        
-        function viewRequestDetails(requestId) {
-            // Show request details - could open a modal or navigate
-            showNewToast('Opening request details...');
-        }
-        
-        function followUpRequest(requestId) {
-            // Open Telegram to follow up with Taj
-            window.open('https://t.me/TapinXBot', '_blank');
-            showNewToast('Following up with Taj...');
-        }
-        
-        function archiveRequest(requestId) {
-            // Archive the request
-            let requests = JSON.parse(localStorage.getItem('tapinx_requests') || '[]');
-            requests = requests.filter(r => r.id !== requestId);
-            localStorage.setItem('tapinx_requests', JSON.stringify(requests));
-            loadNewRequests();
-            showNewToast('Request archived');
-        }
-        
-        function cancelRequest(requestId) {
-            // Update in localStorage
-            let requests = JSON.parse(localStorage.getItem('tapinx_requests') || '[]');
-            requests = requests.map(r => {
-                if (r.id === requestId) {
-                    r.status = 'cancelled';
-                }
-                return r;
-            });
-            localStorage.setItem('tapinx_requests', JSON.stringify(requests));
-            loadNewRequests();
-            showNewToast('Request cancelled');
-        }
-        // ========== END MY REQUESTS FUNCTIONS ==========
-        
-        function showBlockedContacts() {
-            // For now, show a toast - can be expanded to a modal later
-            showNewToast('No blocked contacts');
-        }
-        
-        function confirmDeleteAccount() {
-            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-                // Clear all user data
-                localStorage.clear();
-                showNewToast('Account deleted');
-                setTimeout(() => {
-                    showPage('landing');
-                }, 1500);
-            }
-        }
-        
-        // ========== TASKS SYSTEM ==========
-        let tasks = [];
-        
-        function initTasks() {
-            // Load saved tasks from localStorage
-            const saved = localStorage.getItem('tapinx_tasks');
-            if (saved) {
-                tasks = JSON.parse(saved);
-            }
-            
-            // Add system tasks based on state
-            generateSystemTasks();
-            renderTasks();
-        }
-        
-        function generateSystemTasks() {
-            // Remove old system tasks
-            tasks = tasks.filter(t => t.type !== 'system');
-            
-            // Check profile completion (Instagram is required)
-            const hasProfile = localStorage.getItem('tapinx_user_instagram');
-            if (!hasProfile) {
-                tasks.unshift({
-                    id: 'sys_profile',
-                    title: 'Complete your profile',
-                    meta: 'Help Taj make better matches',
-                    type: 'system',
-                    action: 'openNewEditProfile()',
-                    done: false
-                });
-            }
-            
-            // Check if user has messaged Taj
-            const hasMessaged = localStorage.getItem('tapinx_has_messaged');
-            if (!hasMessaged) {
-                tasks.unshift({
-                    id: 'sys_message',
-                    title: 'Message Taj',
-                    meta: 'Tell Taj who you want to meet',
-                    type: 'system',
-                    action: "window.open('https://t.me/TapinXBot', '_blank')",
-                    done: false
-                });
-            }
-            
-            // Check for pending opportunities (mock - would be real data)
-            const pendingCount = parseInt(localStorage.getItem('tapinx_pending_opps') || '0');
-            if (pendingCount > 0) {
-                tasks.unshift({
-                    id: 'sys_opportunities',
-                    title: `Review ${pendingCount} new ${pendingCount === 1 ? 'opportunity' : 'opportunities'}`,
-                    meta: 'Pending introductions',
-                    type: 'system',
-                    action: "showNewAppPage('opportunities')",
-                    done: false
-                });
-            }
-        }
-        
-        function renderTasks() {
-            const list = document.getElementById('tasksList');
-            const empty = document.getElementById('tasksEmpty');
-            
-            if (!list) return;
-            
-            // Filter out done tasks that are older than 5 seconds (auto-dismiss)
-            const activeTasks = tasks.filter(t => !t.done || (t.doneAt && Date.now() - t.doneAt < 5000));
-            
-            if (activeTasks.length === 0) {
-                list.innerHTML = '';
-                if (empty) empty.style.display = 'block';
-                return;
-            }
-            
-            if (empty) empty.style.display = 'none';
-            
-            // Separate system and custom tasks
-            const systemTasks = activeTasks.filter(t => t.type === 'system');
-            const customTasks = activeTasks.filter(t => t.type === 'custom');
-            
-            let html = '';
-            
-            // System tasks
-            if (systemTasks.length > 0) {
-                html += '<div class="new-tasks-divider">To do</div>';
-                systemTasks.forEach(task => {
-                    html += renderTaskItem(task);
-                });
-            }
-            
-            // Custom tasks
-            if (customTasks.length > 0) {
-                if (systemTasks.length > 0) {
-                    html += '<div class="new-tasks-divider">My tasks</div>';
-                }
-                customTasks.forEach(task => {
-                    html += renderTaskItem(task);
-                });
-            }
-            
-            list.innerHTML = html;
-        }
-        
-        function renderTaskItem(task) {
-            const doneClass = task.done ? 'done' : '';
-            const checkmark = task.done ? '✓' : '';
-            const typeClass = task.type === 'system' ? 'system' : '';
-            
-            return `
-                <div class="new-task-item ${doneClass}" onclick="handleTaskClick('${task.id}')" data-id="${task.id}">
-                    <div class="new-task-checkbox">${checkmark}</div>
-                    <div class="new-task-content">
-                        <div class="new-task-title">${task.title}</div>
-                        ${task.meta ? `<div class="new-task-meta">${task.meta}</div>` : ''}
-                    </div>
-                    <button class="new-task-dismiss" onclick="event.stopPropagation(); dismissTask('${task.id}')" title="Dismiss">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"/>
-                            <line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                    </button>
-                </div>
-            `;
-        }
-        
-        function handleTaskClick(taskId) {
-            const task = tasks.find(t => t.id === taskId);
-            if (!task) return;
-            
-            if (task.done) return; // Already done
-            
-            // If it has an action, execute it
-            if (task.action) {
-                eval(task.action);
-            }
-            
-            // Mark as done
-            task.done = true;
-            task.doneAt = Date.now();
-            saveTasks();
-            renderTasks();
-            
-            // Auto-remove after 3 seconds
-            setTimeout(() => {
-                renderTasks();
-            }, 3000);
-        }
-        
-        function dismissTask(taskId) {
-            tasks = tasks.filter(t => t.id !== taskId);
-            saveTasks();
-            renderTasks();
-        }
-        
-        function openAddTaskModal() {
-            const modal = document.getElementById('addTaskModal');
-            modal.classList.add('show');
-            document.getElementById('taskModalInput').focus();
-        }
-        
-        function closeAddTaskModal(event) {
-            if (event && event.target !== event.currentTarget) return;
-            const modal = document.getElementById('addTaskModal');
-            modal.classList.remove('show');
-            document.getElementById('taskModalInput').value = '';
-            document.getElementById('taskModalNote').value = '';
-        }
-        
-        function handleTaskModalKeypress(e) {
-            if (e.key === 'Enter') {
-                addCustomTaskFromModal();
-            }
-        }
-        
-        function addCustomTaskFromModal() {
-            const titleInput = document.getElementById('taskModalInput');
-            const noteInput = document.getElementById('taskModalNote');
-            const title = titleInput.value.trim();
-            const note = noteInput.value.trim();
-            
-            if (!title) return;
-            
-            tasks.push({
-                id: 'custom_' + Date.now(),
-                title: title,
-                meta: note || null,
-                type: 'custom',
-                done: false,
-                createdAt: Date.now()
-            });
-            
-            saveTasks();
-            renderTasks();
-            closeAddTaskModal();
-            showNewToast('Task added');
-        }
-        
-        function saveTasks() {
-            // Only save custom tasks
-            const customTasks = tasks.filter(t => t.type === 'custom');
-            localStorage.setItem('tapinx_tasks', JSON.stringify(customTasks));
-        }
-        
-        function openNewEditProfile() {
-            openEditProfileModal();
-        }
-        
-        function formatNewDate(dateStr) {
-            if (!dateStr) return '';
-            const d = new Date(dateStr);
-            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        }
-        
-        function formatNewTimeAgo(dateStr) {
-            if (!dateStr) return '';
-            const now = new Date();
-            const d = new Date(dateStr);
-            const diffMs = now - d;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            const diffDays = Math.floor(diffMs / 86400000);
-            
-            if (diffMins < 60) return `${diffMins}m ago`;
-            if (diffHours < 24) return `${diffHours}h ago`;
-            return `${diffDays}d ago`;
-        }
-        
-        // Intent selector
-        function setIntent(intent, btn) {
-            // Update UI
-            document.querySelectorAll('.intent-seg-btn').forEach(opt => opt.classList.remove('active'));
-            btn.classList.add('active');
-            
-            // Save to localStorage
-            localStorage.setItem('tapinx_user_intent', intent);
-            
-            // Show confirmation
-            showNewToast(`Intent set to ${intent.charAt(0).toUpperCase() + intent.slice(1)}`);
-        }
-        
-        // Load saved intent on page load
-        function loadSavedIntent() {
-            const savedIntent = localStorage.getItem('tapinx_user_intent') || 'professional';
-            const intentBtn = document.querySelector(`.intent-seg-btn[data-intent="${savedIntent}"]`);
-            if (intentBtn) {
-                document.querySelectorAll('.intent-seg-btn').forEach(opt => opt.classList.remove('active'));
-                intentBtn.classList.add('active');
-            }
-        }
-        
-        function showNewToast(msg) {
-            const toast = document.createElement('div');
-            toast.className = 'conn-toast show';
-            toast.textContent = msg;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-        
-        // Update sidebar with user data
-        function updateNewSidebar() {
-            const name = localStorage.getItem('tapinx_user_name') || 'User';
-            const photo = localStorage.getItem('tapinx_user_photo');
-            
-            document.getElementById('newSidebarName').textContent = name;
-            document.getElementById('newSidebarAvatarInitial').textContent = name.charAt(0).toUpperCase();
-            
-            if (photo) {
-                document.getElementById('newSidebarAvatarImg').src = photo;
-                document.getElementById('newSidebarAvatarImg').style.display = 'block';
-                document.getElementById('newSidebarAvatarInitial').style.display = 'none';
-            } else {
-                document.getElementById('newSidebarAvatarImg').style.display = 'none';
-                document.getElementById('newSidebarAvatarInitial').style.display = 'flex';
-            }
-            
-            // Refresh tasks when sidebar updates
-            if (typeof initTasks === 'function') {
-                initTasks();
-            }
-        }
-        
-        // Call when page loads
-        if (document.getElementById('dashboardPage')) {
-            updateNewSidebar();
-            loadSavedIntent();
-            initTasks();
-        }
-    </script>
-</body>
-</html>
