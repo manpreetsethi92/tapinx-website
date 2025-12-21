@@ -9714,8 +9714,8 @@
         }
 
         function followUpRequestFromModal() {
-            const requestTitle = currentRequestData ? (currentRequestData.title || currentRequestData.description || 'my request') : 'my request';
-            window.open('https://t.me/TapinXBot?text=' + encodeURIComponent("What's the update on my request: " + requestTitle), '_blank');
+            const requestTitle = currentRequestData ? (currentRequestData.title || currentRequestData.description || 'request') : 'request';
+            window.open('https://t.me/TapinXBot?text=' + encodeURIComponent("What's the update on my " + requestTitle + " request I had asked you about?"), '_blank');
             closeRequestModal();
         }
         
