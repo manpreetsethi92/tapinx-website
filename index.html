@@ -10811,9 +10811,13 @@
         async function loadNewOpportunities(filter = 'all') {
             console.log('[Opportunities] Loading with filter:', filter);
             
-            const { matches, count } = await fetchMatches();
+            // Clear previous content BEFORE fetching
             const list = document.getElementById('newOpportunitiesList');
             const empty = document.getElementById('newOpportunitiesEmpty');
+            if (empty) empty.style.display = 'none';
+            if (list) list.innerHTML = '<div style="text-align:center;padding:20px;color:#666;">Loading...</div>';
+            
+            const { matches, count } = await fetchMatches();
             
             // Update badge
             const badge = document.getElementById('opportunitiesBadge');
@@ -10954,6 +10958,12 @@
         }
         
         async function loadArchivedOpportunities() {
+            // Clear previous content BEFORE fetching
+            const list = document.getElementById('newOpportunitiesList');
+            const empty = document.getElementById('newOpportunitiesEmpty');
+            if (empty) empty.style.display = 'none';
+            if (list) list.innerHTML = '<div style="text-align:center;padding:20px;color:#666;">Loading...</div>';
+            
             const userId = localStorage.getItem('tapinx_user_id');
             if (!userId) return;
             
