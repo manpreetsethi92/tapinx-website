@@ -7449,7 +7449,7 @@
                 // Verify with Firebase
                 if (confirmationResult) {
                     confirmationResult.confirm(otp)
-                        .then((result) => {
+                    .then(async (result) => {
                             // User signed in successfully
                             const user = result.user;
                             console.log('User verified:', user.phoneNumber);
@@ -7462,8 +7462,28 @@
                             closeSignIn();
                             
                             if (isSigningIn) {
-                                // Returning user - go to dashboard
+                                // Returning user - save phone and sync with backend
                                 localStorage.setItem('tapinx_logged_in', 'true');
+                                localStorage.setItem('tapinx_user_phone', user.phoneNumber);
+                                
+                                // Sync with backend to get user ID
+                                try {
+                                    const API_URL = 'https://tapinx-backend-production.up.railway.app';
+                                    const response = await fetch(`${API_URL}/api/signup`, {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ phone: user.phoneNumber, name: 'User' })
+                                    });
+                                    const data = await response.json();
+                                    if (data.success && data.user) {
+                                        localStorage.setItem('tapinx_user_id', data.user.id);
+                                        if (data.user.name) localStorage.setItem('tapinx_user_name', data.user.name);
+                                        console.log('[TapinX] User synced:', data.user.id);
+                                    }
+                                } catch (e) {
+                                    console.error('[TapinX] Backend sync error:', e);
+                                }
+                                
                                 showPage('dashboard');
                         } else {
                                 // New user - transfer signup data to profile
