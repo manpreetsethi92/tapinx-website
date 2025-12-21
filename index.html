@@ -5180,6 +5180,337 @@
             color: #666;
         }
         
+        .archive-badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+        }
+        
+        .archive-badge.declined {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .archive-badge.referred {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .archive-btn {
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            background: white;
+            color: #0f1419;
+            border: 1px solid #ddd;
+            transition: all 0.2s;
+        }
+        
+        .archive-btn:hover {
+            background: #f7f7f7;
+            border-color: #ccc;
+        }
+        
+        /* ========== OPPORTUNITY MODALS ========== */
+        
+        /* Shared overlay styles */
+        .opp-detail-overlay,
+        .refer-confirm-overlay,
+        .refer-success-overlay,
+        .decline-confirm-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .opp-detail-overlay.show,
+        .refer-confirm-overlay.show,
+        .refer-success-overlay.show,
+        .decline-confirm-overlay.show {
+            display: flex;
+        }
+        
+        /* Shared modal styles */
+        .opp-detail-modal,
+        .refer-confirm-modal,
+        .refer-success-modal,
+        .decline-confirm-modal {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: modalSlideIn 0.2s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .opp-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #f5f5f5;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            transition: background 0.2s;
+            z-index: 1;
+        }
+        
+        .opp-modal-close:hover {
+            background: #e0e0e0;
+        }
+        
+        /* Detail Modal Styles */
+        .opp-detail-body {
+            padding: 24px;
+        }
+        
+        .opp-detail-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .opp-detail-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .opp-detail-info {
+            flex: 1;
+        }
+        
+        .opp-detail-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0f1419;
+            margin: 0 0 4px 0;
+        }
+        
+        .opp-detail-bio {
+            font-size: 14px;
+            color: #536471;
+            margin: 0;
+        }
+        
+        .opp-detail-section {
+            margin-bottom: 20px;
+        }
+        
+        .opp-detail-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #536471;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        
+        .opp-detail-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f1419;
+            margin: 0;
+        }
+        
+        .opp-detail-desc {
+            font-size: 15px;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .opp-detail-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .opp-detail-skill {
+            background: #f0f0f0;
+            color: #536471;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 13px;
+        }
+        
+        .opp-detail-score {
+            font-size: 18px;
+            font-weight: 700;
+            color: #E50914;
+        }
+        
+        .opp-detail-footer {
+            padding: 16px 24px 24px;
+            display: flex;
+            gap: 12px;
+            border-top: 1px solid #eee;
+        }
+        
+        .opp-detail-btn {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 9999px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .opp-detail-btn.primary {
+            background: #0f1419;
+            color: white;
+        }
+        
+        .opp-detail-btn.primary:hover {
+            background: #2a2a2a;
+        }
+        
+        .opp-detail-btn.secondary {
+            background: #f0f0f0;
+            color: #0f1419;
+        }
+        
+        .opp-detail-btn.secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .opp-detail-btn.tertiary {
+            background: white;
+            color: #536471;
+            border: 1px solid #ddd;
+        }
+        
+        .opp-detail-btn.tertiary:hover {
+            background: #f7f7f7;
+            border-color: #ccc;
+        }
+        
+        /* Confirmation Modal Styles */
+        .refer-confirm-body,
+        .refer-success-body,
+        .decline-confirm-body {
+            padding: 32px 24px;
+            text-align: center;
+        }
+        
+        .refer-confirm-icon,
+        .refer-success-icon,
+        .decline-confirm-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .refer-confirm-title,
+        .refer-success-title,
+        .decline-confirm-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0f1419;
+            margin: 0 0 8px 0;
+        }
+        
+        .refer-confirm-subtitle,
+        .refer-success-subtitle,
+        .decline-confirm-subtitle {
+            font-size: 15px;
+            color: #536471;
+            margin: 0;
+            line-height: 1.5;
+        }
+        
+        .refer-confirm-input-group {
+            margin-top: 24px;
+            text-align: left;
+        }
+        
+        .refer-confirm-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #536471;
+            margin-bottom: 8px;
+        }
+        
+        .refer-confirm-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        
+        .refer-confirm-input:focus {
+            outline: none;
+            border-color: #0f1419;
+        }
+        
+        .refer-confirm-footer,
+        .refer-success-footer,
+        .decline-confirm-footer {
+            padding: 16px 24px 24px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .opp-detail-footer,
+            .refer-confirm-footer,
+            .refer-success-footer,
+            .decline-confirm-footer {
+                flex-direction: column;
+            }
+            
+            .opp-detail-btn {
+                width: 100%;
+            }
+        }
+        
         /* Empty States - Centered within content area */
         .new-empty-state {
             flex: 1;
@@ -6615,6 +6946,121 @@
                     <button class="request-modal-btn primary" onclick="followUpRequestFromModal()">Follow up with Taj</button>
                     <button class="request-modal-btn secondary" onclick="closeRequestModal()">Close</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ========== OPPORTUNITY DETAIL MODAL ========== -->
+    <div class="opp-detail-overlay" id="oppDetailModal" onclick="closeOppDetailModal(event)">
+        <div class="opp-detail-modal" onclick="event.stopPropagation()">
+            <button class="opp-modal-close" onclick="closeOppDetailModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            
+            <div class="opp-detail-body">
+                <div class="opp-detail-header">
+                    <div class="opp-detail-avatar" id="oppDetailAvatar">S</div>
+                    <div class="opp-detail-info">
+                        <h2 class="opp-detail-name" id="oppDetailName">Sarah Johnson</h2>
+                        <p class="opp-detail-bio" id="oppDetailBio">Marketing agency owner</p>
+                    </div>
+                </div>
+                
+                <div class="opp-detail-section">
+                    <div class="opp-detail-label">LOOKING FOR</div>
+                    <h3 class="opp-detail-title" id="oppDetailTitle">Video Editor for Social Media</h3>
+                </div>
+                
+                <div class="opp-detail-section">
+                    <div class="opp-detail-label">DESCRIPTION</div>
+                    <p class="opp-detail-desc" id="oppDetailDesc">Looking for a video editor who can create engaging short-form content for TikTok and Instagram Reels.</p>
+                </div>
+                
+                <div class="opp-detail-section" id="oppDetailSkillsSection">
+                    <div class="opp-detail-label">SKILLS NEEDED</div>
+                    <div class="opp-detail-skills" id="oppDetailSkills"></div>
+                </div>
+                
+                <div class="opp-detail-section">
+                    <div class="opp-detail-label">MATCH SCORE</div>
+                    <div class="opp-detail-score" id="oppDetailScore">88% match</div>
+                </div>
+            </div>
+            
+            <div class="opp-detail-footer">
+                <button class="opp-detail-btn primary" onclick="handleOppInterested()">I'm Interested</button>
+                <button class="opp-detail-btn secondary" onclick="handleOppDecline()">Not for me</button>
+                <button class="opp-detail-btn tertiary" onclick="handleOppRefer()">Refer a Friend</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ========== REFERRAL CONFIRMATION MODAL ========== -->
+    <div class="refer-confirm-overlay" id="referConfirmModal" onclick="closeReferConfirmModal(event)">
+        <div class="refer-confirm-modal" onclick="event.stopPropagation()">
+            <button class="opp-modal-close" onclick="closeReferConfirmModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            
+            <div class="refer-confirm-body">
+                <div class="refer-confirm-icon">🎯</div>
+                <h2 class="refer-confirm-title">Refer this opportunity</h2>
+                <p class="refer-confirm-subtitle">You're about to refer "<span id="referConfirmOppTitle">Video Editor</span>" to a friend.</p>
+                
+                <div class="refer-confirm-input-group">
+                    <label class="refer-confirm-label">Friend's name (optional)</label>
+                    <input type="text" class="refer-confirm-input" id="referFriendName" placeholder="Enter their name">
+                </div>
+            </div>
+            
+            <div class="refer-confirm-footer">
+                <button class="opp-detail-btn primary" onclick="sendReferral()">Send Referral</button>
+                <button class="opp-detail-btn secondary" onclick="closeReferConfirmModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ========== SUCCESS CELEBRATION MODAL ========== -->
+    <div class="refer-success-overlay" id="referSuccessModal" onclick="closeReferSuccessModal(event)">
+        <div class="refer-success-modal" onclick="event.stopPropagation()">
+            <div class="refer-success-body">
+                <div class="refer-success-icon">🎉</div>
+                <h2 class="refer-success-title">Referral Sent!</h2>
+                <p class="refer-success-subtitle">This opportunity has been moved to your Archive. Your friend will receive a link to check it out.</p>
+            </div>
+            
+            <div class="refer-success-footer">
+                <button class="opp-detail-btn primary" onclick="goToArchive()">View Archive</button>
+                <button class="opp-detail-btn secondary" onclick="closeReferSuccessModal()">Done</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ========== DECLINE CONFIRMATION MODAL ========== -->
+    <div class="decline-confirm-overlay" id="declineConfirmModal" onclick="closeDeclineConfirmModal(event)">
+        <div class="decline-confirm-modal" onclick="event.stopPropagation()">
+            <button class="opp-modal-close" onclick="closeDeclineConfirmModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            
+            <div class="decline-confirm-body">
+                <div class="decline-confirm-icon">🤔</div>
+                <h2 class="decline-confirm-title">Pass on this opportunity?</h2>
+                <p class="decline-confirm-subtitle">This will move "<span id="declineConfirmOppTitle">Video Editor</span>" to your Archive.</p>
+            </div>
+            
+            <div class="decline-confirm-footer">
+                <button class="opp-detail-btn secondary" onclick="confirmDecline()">Yes, pass</button>
+                <button class="opp-detail-btn primary" onclick="closeDeclineConfirmModal()">Keep it</button>
             </div>
         </div>
     </div>
@@ -10218,8 +10664,9 @@
                 
                 list.innerHTML = matches.map(m => {
                     const matchType = m.match_type || matchTypes[Math.floor(Math.random() * matchTypes.length)];
+                    const oppData = JSON.stringify(m).replace(/"/g, '&quot;');
                     return `
-                    <div class="new-feed-item" data-id="${m.id}" data-type="${matchType}">
+                    <div class="new-feed-item" data-id="${m.id}" data-type="${matchType}" data-opportunity='${oppData}' onclick="const opp = this.getAttribute('data-opportunity'); if (opp) openOppDetailModal(JSON.parse(opp.replace(/&quot;/g, '\"')))" style="cursor: pointer;">
                         <div class="new-feed-avatar">${(m.other_name || 'T').charAt(0).toUpperCase()}</div>
                         <div class="new-feed-content">
                             <div class="new-feed-header">
@@ -10228,10 +10675,10 @@
                             </div>
                             <div class="new-feed-text">Taj wants to introduce you to ${m.other_name || 'someone'}${m.intro_reason ? ' for ' + m.intro_reason : ''}</div>
                             <div class="new-feed-time">${formatNewTimeAgo(m.created_at)}</div>
-                            <div class="new-feed-actions">
+                            <div class="new-feed-actions" onclick="event.stopPropagation()">
                                 <button class="new-feed-btn primary" onclick="acceptNewOpportunity('${m.id}')">Approve</button>
                                 <button class="new-feed-btn secondary" onclick="declineNewOpportunity('${m.id}')">Decline</button>
-                                <button class="opportunity-refer-btn" data-opportunity='${JSON.stringify(m)}' onclick="referOpportunity(JSON.parse(this.getAttribute('data-opportunity')))">Refer a Friend</button>
+                                <button class="opportunity-refer-btn" data-opportunity='${oppData}' onclick="openReferFromCard(JSON.parse(this.getAttribute('data-opportunity').replace(/&quot;/g, '\"')))">Refer a Friend</button>
                             </div>
                         </div>
                     </div>
@@ -10240,8 +10687,9 @@
         }
         
         function filterNewOpportunities(type, btn) {
+            // Update active tab
             document.querySelectorAll('#newOpportunitiesPage .new-tab').forEach(t => t.classList.remove('active'));
-            btn.classList.add('active');
+            if (btn) btn.classList.add('active');
             
             if (type === 'archive') {
                 loadArchivedOpportunities();
@@ -10335,33 +10783,278 @@
             const list = document.getElementById('newOpportunitiesList');
             const empty = document.getElementById('newOpportunitiesEmpty');
             
-            if (opportunities.length === 0) {
-                list.innerHTML = '';
-                empty.style.display = 'block';
+            if (!opportunities || opportunities.length === 0) {
+                if (list) list.innerHTML = '';
+                if (empty) {
+                    empty.style.display = 'flex';
+                    empty.innerHTML = `
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1">
+                            <path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/>
+                        </svg>
+                        <h3 class="new-empty-title">Archive is empty</h3>
+                        <p class="new-empty-text">Opportunities you decline or refer will appear here.</p>
+                    `;
+                }
                 return;
             }
             
-            empty.style.display = 'none';
+            if (empty) empty.style.display = 'none';
+            
             list.innerHTML = opportunities.map(o => {
                 const statusLabel = o.status === 'declined' ? 'Declined' : 'Referred';
+                const statusClass = o.status === 'declined' ? 'declined' : 'referred';
                 const statusMessage = o.status === 'declined' 
                     ? 'You passed on this opportunity'
                     : 'You referred this to a friend';
+                const initial = (o.requester_name || o.other_name || 'S').charAt(0).toUpperCase();
+                const title = escapeHtml(o.ask_title || o.title || 'Opportunity');
                 
                 return `
-                    <div class="new-feed-item archived" data-status="${o.status}">
-                        <div class="new-feed-avatar">${(o.requester_name || o.other_name || 'S').charAt(0).toUpperCase()}</div>
-                        <div class="new-feed-content">
-                            <div class="new-feed-header">
-                                <span class="new-feed-name">${o.requester_name || o.other_name || 'Someone'}</span>
-                                <span class="archive-status ${o.status}">${statusLabel}</span>
+                    <div class="new-feed-item archived">
+                        <div class="new-feed-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">${initial}</div>
+                        <div class="new-feed-content" style="flex: 1;">
+                            <div class="new-feed-header" style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <span class="new-feed-name" style="font-weight: 600;">${escapeHtml(o.requester_name || o.other_name || 'Someone')}</span>
+                                <span class="archive-badge ${statusClass}">${statusLabel}</span>
                             </div>
-                            <div class="new-feed-text" style="font-weight: 600; margin-bottom: 8px;">${o.ask_title || o.title || 'Opportunity'}</div>
-                            <div class="new-feed-time">${statusMessage}</div>
+                            <div class="new-feed-text" style="font-size: 15px; color: #333; margin-bottom: 4px;">${title}</div>
+                            <div class="new-feed-meta" style="font-size: 13px; color: #666;">${statusMessage}</div>
+                            <div class="archive-actions" style="margin-top: 12px; display: flex; gap: 8px;">
+                                ${o.status === 'referred' ? `<button class="archive-btn" onclick="referAgain(${o.id}, ${o.ask_id}, '${title.replace(/'/g, "\\'")}')">Refer Again</button>` : ''}
+                                <button class="archive-btn" onclick="restoreOpportunity(${o.id})">Restore</button>
+                            </div>
                         </div>
                     </div>
                 `;
             }).join('');
+        }
+        
+        // ========== OPPORTUNITY MODAL STATE ==========
+        let currentOppData = null;
+        
+        // ========== HELPER FUNCTION ==========
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // ========== DETAIL MODAL FUNCTIONS ==========
+        
+        function openOppDetailModal(opportunity) {
+            currentOppData = opportunity;
+            
+            // Set avatar and name
+            const name = opportunity.requester_name || opportunity.other_name || 'Someone';
+            document.getElementById('oppDetailAvatar').textContent = name.charAt(0).toUpperCase();
+            document.getElementById('oppDetailName').textContent = name;
+            document.getElementById('oppDetailBio').textContent = opportunity.requester_bio || 'TapinX member';
+            
+            // Set opportunity details
+            document.getElementById('oppDetailTitle').textContent = opportunity.ask_title || opportunity.title || 'Connection Request';
+            document.getElementById('oppDetailDesc').textContent = opportunity.ask_text || opportunity.intro_reason || 'No description provided.';
+            
+            // Set skills
+            const skillsContainer = document.getElementById('oppDetailSkills');
+            const skillsSection = document.getElementById('oppDetailSkillsSection');
+            if (opportunity.skills_needed && opportunity.skills_needed.length > 0) {
+                skillsSection.style.display = 'block';
+                skillsContainer.innerHTML = opportunity.skills_needed.map(s => 
+                    '<span class="opp-detail-skill">' + escapeHtml(s) + '</span>'
+                ).join('');
+            } else {
+                skillsSection.style.display = 'none';
+            }
+            
+            // Set match score
+            const score = opportunity.match_score || 0;
+            document.getElementById('oppDetailScore').textContent = Math.round(score) + '% match';
+            
+            document.getElementById('oppDetailModal').classList.add('show');
+        }
+        
+        function closeOppDetailModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('oppDetailModal').classList.remove('show');
+        }
+        
+        function handleOppInterested() {
+            if (!currentOppData) return;
+            closeOppDetailModal();
+            acceptNewOpportunity(currentOppData.id);
+        }
+        
+        function handleOppDecline() {
+            if (!currentOppData) return;
+            // Show decline confirmation
+            document.getElementById('declineConfirmOppTitle').textContent = currentOppData.ask_title || currentOppData.title || 'this opportunity';
+            document.getElementById('declineConfirmModal').classList.add('show');
+        }
+        
+        function handleOppRefer() {
+            if (!currentOppData) return;
+            closeOppDetailModal();
+            // Show referral confirmation
+            document.getElementById('referConfirmOppTitle').textContent = currentOppData.ask_title || currentOppData.title || 'this opportunity';
+            document.getElementById('referFriendName').value = '';
+            document.getElementById('referConfirmModal').classList.add('show');
+        }
+        
+        function openReferFromCard(opportunity) {
+            currentOppData = opportunity;
+            document.getElementById('referConfirmOppTitle').textContent = opportunity.ask_title || opportunity.title || 'this opportunity';
+            document.getElementById('referFriendName').value = '';
+            document.getElementById('referConfirmModal').classList.add('show');
+        }
+        
+        // ========== DECLINE MODAL FUNCTIONS ==========
+        
+        function closeDeclineConfirmModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('declineConfirmModal').classList.remove('show');
+        }
+        
+        function confirmDecline() {
+            if (!currentOppData) return;
+            closeDeclineConfirmModal();
+            closeOppDetailModal();
+            declineNewOpportunity(currentOppData.id);
+        }
+        
+        // ========== REFERRAL MODAL FUNCTIONS ==========
+        
+        function closeReferConfirmModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('referConfirmModal').classList.remove('show');
+        }
+        
+        async function sendReferral() {
+            if (!currentOppData) return;
+            
+            const friendName = document.getElementById('referFriendName').value.trim();
+            const matchId = currentOppData.id;
+            const title = currentOppData.ask_title || currentOppData.title || 'an opportunity';
+            const oppId = currentOppData.ask_id;
+            const userId = localStorage.getItem('tapinx_user_id');
+            
+            // Close confirmation modal
+            closeReferConfirmModal();
+            
+            // Update match status to 'referred' in backend
+            try {
+                await fetch(API_URL + '/matches/' + matchId + '/respond', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        response: 'referred',
+                        user_id: userId
+                    })
+                });
+            } catch (e) {
+                console.error('Error updating match status:', e);
+            }
+            
+            // Create referral link
+            const referralLink = 'https://tapinx.com?ref=' + userId + '&opp=' + oppId;
+            
+            // Create share message
+            let shareMessage = "Hey";
+            if (friendName) {
+                shareMessage += " " + friendName;
+            }
+            shareMessage += "! I found an opportunity on TapinX that might be perfect for you: \"" + title + "\". Check it out: " + referralLink;
+            
+            // Open share/SMS
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                window.location.href = 'sms:?body=' + encodeURIComponent(shareMessage);
+            } else {
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'TapinX Opportunity',
+                        text: shareMessage
+                    }).catch(console.error);
+                } else {
+                    navigator.clipboard.writeText(shareMessage).then(() => {
+                        // Show success after copy
+                    }).catch(() => {
+                        window.open(referralLink, '_blank');
+                    });
+                }
+            }
+            
+            // Show success modal
+            document.getElementById('referSuccessModal').classList.add('show');
+            
+            // Reload opportunities
+            loadNewOpportunities();
+        }
+        
+        // ========== SUCCESS MODAL FUNCTIONS ==========
+        
+        function closeReferSuccessModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('referSuccessModal').classList.remove('show');
+            currentOppData = null;
+        }
+        
+        function goToArchive() {
+            closeReferSuccessModal();
+            // Click the archive tab
+            const archiveTab = document.querySelector('.new-tab[onclick*="archive"]');
+            if (archiveTab) {
+                filterNewOpportunities('archive', archiveTab);
+            }
+        }
+        
+        // ========== ARCHIVE ACTIONS ==========
+        
+        async function referAgain(matchId, askId, title) {
+            const userId = localStorage.getItem('tapinx_user_id');
+            const referralLink = 'https://tapinx.com?ref=' + userId + '&opp=' + askId;
+            const shareMessage = "Hey! I found an opportunity on TapinX that might be perfect for you: \"" + title + "\". Check it out: " + referralLink;
+            
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                window.location.href = 'sms:?body=' + encodeURIComponent(shareMessage);
+            } else {
+                if (navigator.share) {
+                    navigator.share({ title: 'TapinX Opportunity', text: shareMessage }).catch(console.error);
+                } else {
+                    navigator.clipboard.writeText(shareMessage).then(() => {
+                        alert('Message copied! Share it with your friend.');
+                    });
+                }
+            }
+        }
+        
+        async function restoreOpportunity(matchId) {
+            const userId = localStorage.getItem('tapinx_user_id');
+            
+            try {
+                const response = await fetch(API_URL + '/matches/' + matchId + '/restore', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Reload archive
+                    loadArchivedOpportunities();
+                    // Show confirmation
+                    alert('Opportunity restored! Check your Opportunities.');
+                } else {
+                    alert('Could not restore opportunity. Please try again.');
+                }
+            } catch (e) {
+                console.error('Error restoring opportunity:', e);
+                alert('Error restoring opportunity.');
+            }
         }
         
         async function referOpportunity(opportunity) {
