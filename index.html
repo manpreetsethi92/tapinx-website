@@ -5117,6 +5117,24 @@
             border: none;
         }
         
+        .opportunity-refer-btn {
+            background: transparent;
+            color: #536471;
+            border: 1px solid #e0e0e0;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .opportunity-refer-btn:hover {
+            background: #f7f7f7;
+            border-color: #ccc;
+        }
+        
         .new-feed-btn.primary:hover {
             opacity: 0.9;
         }
@@ -6171,15 +6189,6 @@
                     </div>
                     
                     <div class="new-sidebar-section">
-                        <div class="new-sidebar-link" id="navSpeak" onclick="showNewAppPage('speak'); closeMobileMenu();">
-                            <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                            </svg>
-                            <span class="new-sidebar-label">Speak to Taj</span>
-                        </div>
-                    </div>
-                    
-                    <div class="new-sidebar-section">
                         <div class="new-sidebar-link" id="navSettings" onclick="showNewAppPage('settings'); closeMobileMenu();">
                             <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="3"/>
@@ -6284,6 +6293,10 @@
                         <button class="new-tab" onclick="filterNewOpportunities('community', this)">Community</button>
                         <button class="new-tab" onclick="filterNewOpportunities('saved', this)">Saved</button>
                     </div>
+                    <div class="invite-banner" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #f8f9fa; border-radius: 10px; margin-bottom: 16px;">
+                        <span style="color: #536471; font-size: 14px;">Know someone who'd benefit from TapinX?</span>
+                        <button onclick="inviteFriend()" style="background: #0f1419; color: white; border: none; padding: 8px 16px; border-radius: 9999px; font-size: 13px; font-weight: 600; cursor: pointer;">Invite a Friend</button>
+                    </div>
                     <div id="newOpportunitiesList"></div>
                     <div class="new-empty-state" id="newOpportunitiesEmpty">
                         <svg class="new-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -6293,6 +6306,11 @@
                         </svg>
                         <h3 class="new-empty-title">You're all caught up</h3>
                         <p class="new-empty-text">Taj will surface opportunities aligned with your intent. Check back soon or update your preferences in Settings.</p>
+                        
+                        <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #eee;">
+                            <p style="color: #536471; font-size: 14px; margin-bottom: 12px;">Know someone who'd benefit from TapinX?</p>
+                            <button onclick="inviteFriend()" style="background: #0f1419; color: white; border: none; padding: 12px 24px; border-radius: 9999px; font-size: 15px; font-weight: 600; cursor: pointer;">Invite a Friend</button>
+                        </div>
                     </div>
                 </div>
                 
@@ -7256,7 +7274,6 @@
                 '/opportunities': { page: 'opportunities', title: 'Opportunities - TapinX', requiresAuth: true },
                 '/requests': { page: 'requests', title: 'My Requests - TapinX', requiresAuth: true },
                 '/connections': { page: 'connections', title: 'My Connections - TapinX', requiresAuth: true },
-                '/speak': { page: 'speak', title: 'Speak to Taj - TapinX', requiresAuth: true },
                 '/settings': { page: 'settings', title: 'Settings - TapinX', requiresAuth: true },
                 '/referrals': { page: 'referrals', title: 'Referrals - TapinX', requiresAuth: true }
             },
@@ -7357,7 +7374,6 @@
                     'opportunities': 'newOpportunitiesPage',
                     'requests': 'newRequestsPage',
                     'connections': 'newConnectionsPage',
-                    'speak': 'newSpeakPage',
                     'settings': 'newSettingsPage',
                     'referrals': 'newReferralsPage'
                 };
@@ -7380,7 +7396,6 @@
                 
                 // Update mobile header title
                 const titles = {
-                    'speak': 'Speak to Taj',
                     'requests': 'My Requests',
                     'connections': 'My Connections',
                     'opportunities': 'Opportunities',
@@ -10122,6 +10137,7 @@
                             <div class="new-feed-actions">
                                 <button class="new-feed-btn primary" onclick="acceptNewOpportunity('${m.id}')">Approve</button>
                                 <button class="new-feed-btn secondary" onclick="declineNewOpportunity('${m.id}')">Decline</button>
+                                <button class="opportunity-refer-btn" onclick="referOpportunity('${m.id}', '${String(m.other_name || 'New opportunity').replace(/'/g, "\\'").replace(/"/g, "&quot;")}', '${String(m.intro_reason || '').replace(/'/g, "\\'").replace(/"/g, "&quot;")}')">Refer a Friend</button>
                             </div>
                         </div>
                     </div>
@@ -10186,6 +10202,35 @@
             await respondToMatch(id, 'decline');
             showNewToast('Passed');
             loadNewOpportunities();
+        }
+        
+        function referOpportunity(id, name, reason) {
+            const title = name || 'this opportunity';
+            const message = `Hey! I saw an opportunity on TapinX that might be perfect for you: "${title}"${reason ? ' - ' + reason : ''}. Check it out: https://t.me/TapinXBot`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'TapinX Opportunity',
+                    text: message,
+                    url: 'https://t.me/TapinXBot'
+                }).catch(console.error);
+            } else {
+                window.open('https://t.me/share/url?url=' + encodeURIComponent('https://t.me/TapinXBot') + '&text=' + encodeURIComponent(message), '_blank');
+            }
+        }
+        
+        function inviteFriend() {
+            const inviteMessage = "Hey! I've been using TapinX to make professional connections. You should check it out - just text the bot and tell Taj who you want to meet: https://t.me/TapinXBot";
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Join TapinX',
+                    text: inviteMessage,
+                    url: 'https://t.me/TapinXBot'
+                }).catch(console.error);
+            } else {
+                window.open('https://t.me/share/url?url=' + encodeURIComponent('https://t.me/TapinXBot') + '&text=' + encodeURIComponent('Check out TapinX - text Taj who you want to meet and get introduced!'), '_blank');
+            }
         }
         
         function submitNewReferral() {
