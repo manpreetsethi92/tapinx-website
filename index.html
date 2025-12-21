@@ -4461,8 +4461,169 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        
+
+        /* Connection Modal */
+        .connection-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .connection-modal-overlay.show {
+            display: flex;
+        }
+
+        .connection-modal {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 420px;
+            max-height: 80vh;
+            overflow: hidden;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .connection-modal-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .connection-modal-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #E50914 0%, #ff4757 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .connection-modal-info { flex: 1; }
+
+        .connection-modal-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0 0 4px 0;
+        }
+
+        .connection-modal-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .connection-modal-status.connected {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .connection-modal-status.pending {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .connection-modal-close {
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            color: #666;
+            border-radius: 8px;
+        }
+
+        .connection-modal-close:hover {
+            background: #f5f5f5;
+        }
+
+        .connection-modal-body { padding: 24px; }
+
+        .connection-modal-section { margin-bottom: 20px; }
+
+        .connection-modal-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .connection-modal-value {
+            font-size: 15px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .connection-modal-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .connection-modal-skill {
+            background: #f0f0f0;
+            color: #555;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 13px;
+        }
+
+        .connection-modal-message {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .connection-modal-message.success { background: #e8f5e9; }
+        .connection-modal-message.waiting { background: #fff3e0; }
+
+        .connection-modal-message-icon { font-size: 24px; margin-bottom: 8px; }
+        .connection-modal-message-title { font-weight: 600; color: #333; margin-bottom: 4px; }
+        .connection-modal-message-text { font-size: 14px; color: #666; line-height: 1.5; }
+
+        .connection-modal-footer {
+            padding: 16px 24px 24px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .connection-modal-btn {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+
+        .connection-modal-btn.primary { background: #E50914; color: white; }
+        .connection-modal-btn.secondary { background: #f0f0f0; color: #333; }
+        .connection-modal-btn.telegram { background: #0088cc; color: white; }
+
         /* Referral Note */
+        .new-referral-note {
         .new-referral-note {
             font-size: 13px;
             color: #536471;
@@ -6078,6 +6239,41 @@
                     <button class="task-modal-submit" onclick="addCustomTaskFromModal()">Add Task</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Connection Modal -->
+    <div class="connection-modal-overlay" id="connectionModal" onclick="closeConnectionModal(event)">
+        <div class="connection-modal" onclick="event.stopPropagation()">
+            <div class="connection-modal-header">
+                <div class="connection-modal-avatar" id="connModalAvatar">M</div>
+                <div class="connection-modal-info">
+                    <h3 class="connection-modal-name" id="connModalName">Name</h3>
+                    <span class="connection-modal-status" id="connModalStatus">Connected</span>
+                </div>
+                <button class="connection-modal-close" onclick="closeConnectionModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="connection-modal-body">
+                <div class="connection-modal-section" id="connModalContext">
+                    <div class="connection-modal-label">Connection Context</div>
+                    <div class="connection-modal-value" id="connModalContextText">Podcast Producer for Health Show</div>
+                </div>
+                <div class="connection-modal-section" id="connModalBio" style="display: none;">
+                    <div class="connection-modal-label">About</div>
+                    <div class="connection-modal-value" id="connModalBioText"></div>
+                </div>
+                <div class="connection-modal-section" id="connModalSkills" style="display: none;">
+                    <div class="connection-modal-label">Skills</div>
+                    <div class="connection-modal-skills" id="connModalSkillsList"></div>
+                </div>
+                <div class="connection-modal-message" id="connModalMessage"></div>
+            </div>
+            <div class="connection-modal-footer" id="connModalFooter"></div>
         </div>
     </div>
     
@@ -9048,14 +9244,14 @@
             } else {
                 empty.style.display = 'none';
                 list.innerHTML = conns.map(c => `
-                    <div class="new-feed-item" data-status="${c.status || 'connected'}">
+                    <div class="new-feed-item" data-status="${c.status || 'connected'}" onclick='openConnectionModal(${JSON.stringify(c).replace(/'/g, "&#39;")})' style="cursor: pointer;">
                         <div class="new-feed-avatar">${(c.name || 'U').charAt(0).toUpperCase()}</div>
                         <div class="new-feed-content">
                             <div class="new-feed-header">
                                 <span class="new-feed-name">${c.name || 'Unknown'}</span>
                                 <span class="new-feed-status ${c.status || 'connected'}">${(c.status || 'Connected').charAt(0).toUpperCase() + (c.status || 'connected').slice(1)}</span>
                             </div>
-                            <div class="new-feed-context">${c.role || c.title || 'Introduction from Taj'}</div>
+                            <div class="new-feed-context">${c.ask_title || c.role || 'Introduction from Taj'}</div>
                             <div class="new-feed-time">${formatNewDate(c.connected_at)}</div>
                         </div>
                     </div>
@@ -9063,6 +9259,72 @@
             }
         }
         
+        let currentConnectionData = null;
+
+        function openConnectionModal(connectionData) {
+            currentConnectionData = connectionData;
+            
+            const modal = document.getElementById('connectionModal');
+            document.getElementById('connModalAvatar').textContent = (connectionData.name || 'U').charAt(0).toUpperCase();
+            document.getElementById('connModalName').textContent = connectionData.name || 'Unknown';
+            
+            const isConnected = connectionData.status === 'connected';
+            const status = document.getElementById('connModalStatus');
+            status.textContent = isConnected ? 'Connected' : 'Pending';
+            status.className = 'connection-modal-status ' + (isConnected ? 'connected' : 'pending');
+            
+            document.getElementById('connModalContextText').textContent = connectionData.ask_title || 'Introduction from Taj';
+            
+            const bioSection = document.getElementById('connModalBio');
+            if (connectionData.bio) {
+                bioSection.style.display = 'block';
+                document.getElementById('connModalBioText').textContent = connectionData.bio;
+            } else {
+                bioSection.style.display = 'none';
+            }
+            
+            const skillsSection = document.getElementById('connModalSkills');
+            if (connectionData.skills && connectionData.skills.length > 0) {
+                skillsSection.style.display = 'block';
+                document.getElementById('connModalSkillsList').innerHTML = connectionData.skills.map(s => 
+                    `<span class="connection-modal-skill">${s}</span>`
+                ).join('');
+            } else {
+                skillsSection.style.display = 'none';
+            }
+            
+            const message = document.getElementById('connModalMessage');
+            const footer = document.getElementById('connModalFooter');
+            
+            if (isConnected) {
+                message.className = 'connection-modal-message success';
+                message.innerHTML = `
+                    <div class="connection-modal-message-icon">🎉</div>
+                    <div class="connection-modal-message-title">You're connected!</div>
+                    <div class="connection-modal-message-text">Taj has introduced you both via Telegram. Check your messages to start the conversation!</div>
+                `;
+                footer.innerHTML = `
+                    <button class="connection-modal-btn telegram" onclick="window.open('https://t.me/TapinXBot', '_blank'); closeConnectionModal();">Open Telegram</button>
+                    <button class="connection-modal-btn secondary" onclick="closeConnectionModal()">Close</button>
+                `;
+            } else {
+                message.className = 'connection-modal-message waiting';
+                message.innerHTML = `
+                    <div class="connection-modal-message-icon">⏳</div>
+                    <div class="connection-modal-message-title">Waiting for response</div>
+                    <div class="connection-modal-message-text">${connectionData.name || 'They'} hasn't responded yet. We'll notify you via Telegram as soon as they accept!</div>
+                `;
+                footer.innerHTML = `<button class="connection-modal-btn secondary" onclick="closeConnectionModal()">Got it</button>`;
+            }
+            
+            modal.classList.add('show');
+        }
+
+        function closeConnectionModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('connectionModal').classList.remove('show');
+        }
+
         function setNewConnectionsTab(btn, tab) {
             document.querySelectorAll('#newConnectionsPage .new-tab').forEach(t => t.classList.remove('active'));
             btn.classList.add('active');
