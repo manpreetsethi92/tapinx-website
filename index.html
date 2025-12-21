@@ -10808,7 +10808,9 @@
             }
         }
         
-        async function loadNewOpportunities() {
+        async function loadNewOpportunities(filter = 'all') {
+            console.log('[Opportunities] Loading with filter:', filter);
+            
             const { matches, count } = await fetchMatches();
             const list = document.getElementById('newOpportunitiesList');
             const empty = document.getElementById('newOpportunitiesEmpty');
@@ -10822,7 +10824,21 @@
                 badge.style.display = 'none';
             }
             
-            if (count === 0) {
+            // Apply filter if not 'all'
+            let filteredMatches = matches || [];
+            if (filter === 'professional') {
+                filteredMatches = matches.filter(m => {
+                    const matchType = m.match_type || '';
+                    return matchType === 'professional' || m.category === 'professional';
+                });
+            } else if (filter === 'community') {
+                filteredMatches = matches.filter(m => {
+                    const matchType = m.match_type || '';
+                    return matchType === 'community' || m.category === 'community';
+                });
+            }
+            
+            if (filteredMatches.length === 0) {
                 list.innerHTML = '';
                 empty.style.display = 'block';
             } else {
@@ -10830,7 +10846,7 @@
                 const matchTypes = ['professional', 'community'];
                 const matchLabels = { professional: 'Professional match', community: 'Community-relevant' };
                 
-                list.innerHTML = matches.map(m => {
+                list.innerHTML = filteredMatches.map(m => {
                     const matchType = m.match_type || matchTypes[Math.floor(Math.random() * matchTypes.length)];
                     const oppDataStr = JSON.stringify(m).replace(/"/g, '&quot;');
                     return `
@@ -10855,16 +10871,25 @@
         }
         
         function filterNewOpportunities(type, btn) {
-            // Update active tab
-            document.querySelectorAll('#newOpportunitiesPage .new-tab').forEach(t => t.classList.remove('active'));
-            if (btn) btn.classList.add('active');
+            console.log('[Filter] Switching to:', type);
             
-            if (type === 'archive') {
-                loadArchivedOpportunities();
-                return;
+            // Update active tab UI
+            document.querySelectorAll('#newOpportunitiesPage .new-tab').forEach(t => t.classList.remove('active'));
+            if (btn) {
+                btn.classList.add('active');
+            } else {
+                // If no button provided, find and activate the correct tab
+                const activeTab = document.querySelector(`#newOpportunitiesPage .new-tab[onclick*="${type}"]`);
+                if (activeTab) activeTab.classList.add('active');
             }
             
-            filterOpportunitiesItems(type);
+            if (type === 'archive') {
+                // Load archived opportunities
+                loadArchivedOpportunities();
+            } else {
+                // Load regular opportunities and filter them
+                loadNewOpportunities(type);
+            }
             
             // Also update sidebar sublinks
             updateOpportunitiesSidebarSublinks(type);
