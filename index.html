@@ -11190,8 +11190,10 @@
         function getReferralData() {
             const userId = localStorage.getItem('tapinx_user_id');
             const oppId = currentOppData.ask_id || currentOppData.id;
-            const title = currentOppData.ask_title || currentOppData.title || 'an opportunity';
-            const name = currentOppData.requester_name || currentOppData.other_name || 'someone';
+            
+            // The title is stored in intro_reason field
+            const title = currentOppData.intro_reason || currentOppData.ask_title || currentOppData.title || 'an opportunity';
+            const name = currentOppData.other_name || currentOppData.requester_name || 'someone';
             
             const referralLink = 'https://tapinx.com?ref=' + userId + '&opp=' + oppId;
             const message = "Hey! I found an opportunity on TapinX that might be perfect for you: \"" + title + "\" from " + name + ". Check it out: " + referralLink;
