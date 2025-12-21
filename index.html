@@ -7205,3 +7205,3452 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     
     <script>
+        // ============================================
+        // PROFESSIONAL URL ROUTER
+        // Complete routing system with all edge cases
+        // ============================================
+        
+        const Router = {
+            // Valid routes
+            routes: {
+                '/': { page: 'landing', title: 'TapinX - Text to Get Connected', requiresAuth: false },
+                '/opportunities': { page: 'opportunities', title: 'Opportunities - TapinX', requiresAuth: true },
+                '/requests': { page: 'requests', title: 'My Requests - TapinX', requiresAuth: true },
+                '/connections': { page: 'connections', title: 'My Connections - TapinX', requiresAuth: true },
+                '/speak': { page: 'speak', title: 'Speak to Taj - TapinX', requiresAuth: true },
+                '/settings': { page: 'settings', title: 'Settings - TapinX', requiresAuth: true },
+                '/referrals': { page: 'referrals', title: 'Referrals - TapinX', requiresAuth: true }
+            },
+            
+            // Track if this is first load
+            isFirstLoad: true,
+            
+            // Track current page to prevent duplicate navigation
+            currentPage: null,
+            
+            // Check if user is authenticated
+            isAuthenticated: function() {
+                return !!(localStorage.getItem('tapinx_user_id') || localStorage.getItem('tapinx_user_phone'));
+            },
+            
+            // Get route info from path
+            getRoute: function(path) {
+                return this.routes[path] || null;
+            },
+            
+            // Get current path
+            getCurrentPath: function() {
+                return window.location.pathname;
+            },
+            
+            // Navigate to a page (user action - adds to history)
+            navigate: function(page, options = {}) {
+                const path = page === 'landing' ? '/' : '/' + page;
+                const route = this.getRoute(path);
+                
+                console.log('[Router] Navigate to:', page, 'Path:', path);
+                
+                // Check if route exists
+                if (!route && page !== 'landing') {
+                    console.log('[Router] Invalid route, redirecting to opportunities');
+                    this.navigate('opportunities');
+                    return;
+                }
+                
+                // Check authentication
+                if (route && route.requiresAuth && !this.isAuthenticated()) {
+                    console.log('[Router] Auth required, redirecting to landing');
+                    this.navigate('landing');
+                    return;
+                }
+                
+                // Don't navigate if already on this page (prevents duplicate history)
+                if (this.currentPage === page && !options.force) {
+                    console.log('[Router] Already on page:', page);
+                    return;
+                }
+                
+                // Update history
+                if (this.isFirstLoad || options.replace) {
+                    history.replaceState({ page: page, path: path }, '', path);
+                } else {
+                    history.pushState({ page: page, path: path }, '', path);
+                }
+                
+                // Update page title
+                document.title = route ? route.title : 'TapinX';
+                
+                // Show the page
+                this.showPage(page);
+                
+                // Update state
+                this.currentPage = page;
+                this.isFirstLoad = false;
+            },
+            
+            // Show page (internal - doesn't modify history)
+            showPage: function(page) {
+                console.log('[Router] Showing page:', page);
+                
+                if (page === 'landing') {
+                    if (typeof showPage === 'function') showPage('landing');
+                } else {
+                    if (typeof showPage === 'function') showPage('dashboard');
+                    this.showAppPage(page);
+                }
+            },
+            
+            // Show app page without history modification
+            showAppPage: function(page) {
+                console.log('[Router] Showing app page:', page);
+                
+                // Add loading state
+                const mainColumn = document.querySelector('.new-main-column');
+                if (mainColumn) mainColumn.classList.add('page-loading');
+                
+                // Close mobile menu
+                try {
+                    if (typeof closeMobileMenu === 'function') closeMobileMenu();
+                } catch(e) {}
+                
+                // Page ID mapping
+                const pageIds = {
+                    'opportunities': 'newOpportunitiesPage',
+                    'requests': 'newRequestsPage',
+                    'connections': 'newConnectionsPage',
+                    'speak': 'newSpeakPage',
+                    'settings': 'newSettingsPage',
+                    'referrals': 'newReferralsPage'
+                };
+                
+                // Hide all pages
+                Object.values(pageIds).forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = 'none';
+                });
+                
+                // Show target page
+                const targetId = pageIds[page];
+                if (targetId) {
+                    const el = document.getElementById(targetId);
+                    if (el) {
+                        // Use 'block' for most pages, 'flex' only if needed
+                        el.style.display = 'block';
+                    }
+                }
+                
+                // Update mobile header title
+                const titles = {
+                    'speak': 'Speak to Taj',
+                    'requests': 'My Requests',
+                    'connections': 'My Connections',
+                    'opportunities': 'Opportunities',
+                    'referrals': 'Referrals',
+                    'settings': 'Settings'
+                };
+                if (typeof updateMobileHeader === 'function') {
+                    updateMobileHeader(titles[page] || 'TapinX');
+                }
+                
+                // Update sidebar active states
+                document.querySelectorAll('.new-sidebar-link').forEach(link => {
+                    link.classList.remove('active');
+                    const onclick = link.getAttribute('onclick');
+                    if (onclick && onclick.includes("'" + page + "'")) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                // Update sidebar nav by ID
+                const navLink = document.getElementById('nav' + page.charAt(0).toUpperCase() + page.slice(1));
+                if (navLink) navLink.classList.add('active');
+                
+                // Update sublinks
+                document.querySelectorAll('.new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+                
+                // Handle expand sections
+                document.querySelectorAll('.new-sidebar-expand').forEach(e => {
+                    e.style.display = 'none';
+                });
+                if (page === 'requests') {
+                    const expand = document.getElementById('requestsExpand');
+                    if (expand) expand.style.display = 'block';
+                    // Reset tabs to "All" when showing page
+                    const tabs = document.querySelectorAll('#newRequestsPage .new-tab');
+                    tabs.forEach(t => t.classList.remove('active'));
+                    if (tabs[0]) tabs[0].classList.add('active');
+                    // Reset sidebar sublinks for requests
+                    document.querySelectorAll('#requestsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+                    const requestSublinks = document.querySelectorAll('#requestsExpand .new-sidebar-sublink');
+                    if (requestSublinks[0]) requestSublinks[0].classList.add('active');
+                }
+                if (page === 'connections') {
+                    const expand = document.getElementById('connectionsExpand');
+                    if (expand) expand.style.display = 'block';
+                    // Reset tabs to "All" when showing page
+                    const tabs = document.querySelectorAll('#newConnectionsPage .new-tab');
+                    tabs.forEach(t => t.classList.remove('active'));
+                    if (tabs[0]) tabs[0].classList.add('active');
+                    // Reset sidebar sublinks for connections
+                    document.querySelectorAll('#connectionsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+                    const connectionSublinks = document.querySelectorAll('#connectionsExpand .new-sidebar-sublink');
+                    if (connectionSublinks[0]) connectionSublinks[0].classList.add('active');
+                }
+                if (page === 'opportunities') {
+                    const expand = document.getElementById('opportunitiesExpand');
+                    if (expand) expand.style.display = 'block';
+                    // Reset tabs to "All" when showing page
+                    const tabs = document.querySelectorAll('#newOpportunitiesPage .new-tab');
+                    tabs.forEach(t => t.classList.remove('active'));
+                    if (tabs[0]) tabs[0].classList.add('active');
+                    // Reset sidebar sublinks for opportunities
+                    document.querySelectorAll('#opportunitiesExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+                    const opportunitySublinks = document.querySelectorAll('#opportunitiesExpand .new-sidebar-sublink');
+                    if (opportunitySublinks[0]) opportunitySublinks[0].classList.add('active');
+                }
+                
+                // Load page data
+                this.loadPageData(page);
+                
+                // Update current page tracker
+                if (typeof currentNewAppPage !== 'undefined') {
+                    currentNewAppPage = page;
+                }
+                
+                // Remove loading state after data loads
+                setTimeout(() => {
+                    if (mainColumn) mainColumn.classList.remove('page-loading');
+                }, 300);
+            },
+            
+            // Load data for the page
+            loadPageData: function(page) {
+                console.log('[Router] Loading data for:', page);
+                
+                try {
+                    if (page === 'requests' && typeof loadNewRequests === 'function') {
+                        loadNewRequests();
+                    }
+                    if (page === 'connections' && typeof loadNewConnections === 'function') {
+                        loadNewConnections();
+                    }
+                    if (page === 'opportunities' && typeof loadNewOpportunities === 'function') {
+                        loadNewOpportunities();
+                    }
+                } catch(e) {
+                    console.error('[Router] Error loading page data:', e);
+                }
+            },
+            
+            // Handle browser back/forward
+            handlePopState: function(event) {
+                console.log('[Router] PopState event:', event.state);
+                
+                let page = 'landing';
+                
+                if (event.state && event.state.page) {
+                    page = event.state.page;
+                } else {
+                    // Derive from URL
+                    const path = window.location.pathname;
+                    const route = this.getRoute(path);
+                    page = route ? route.page : 'landing';
+                }
+                
+                // Check auth for protected pages
+                if (page !== 'landing' && !this.isAuthenticated()) {
+                    window.location.replace('/');
+                    return;
+                }
+                
+                // Update title
+                const route = this.getRoute(page === 'landing' ? '/' : '/' + page);
+                document.title = route ? route.title : 'TapinX';
+                
+                // Show page without modifying history
+                this.currentPage = page;
+                this.showPage(page);
+            },
+            
+            // Initialize router
+            init: function() {
+                console.log('[Router] Initializing...');
+                
+                // Handle legacy hash URLs (redirect #page to /page)
+                if (window.location.hash) {
+                    const hashPage = window.location.hash.replace('#', '');
+                    if (this.routes['/' + hashPage]) {
+                        window.location.replace('/' + hashPage);
+                        return;
+                    }
+                }
+                
+                const path = this.getCurrentPath();
+                const route = this.getRoute(path);
+                const isAuthenticated = this.isAuthenticated();
+                
+                console.log('[Router] Path:', path, 'Authenticated:', isAuthenticated);
+                
+                // Handle routing logic
+                if (!route) {
+                    // Invalid URL - redirect
+                    if (isAuthenticated) {
+                        window.location.replace('/opportunities');
+                    } else {
+                        window.location.replace('/');
+                    }
+                    return;
+                }
+                
+                if (route.requiresAuth && !isAuthenticated) {
+                    // Needs auth but not logged in
+                    window.location.replace('/');
+                    return;
+                }
+                
+                if (path === '/' && isAuthenticated) {
+                    // On landing but logged in - go to opportunities
+                    this.navigate('opportunities', { replace: true });
+                    return;
+                }
+                
+                // Show the current page
+                this.navigate(route.page, { replace: true });
+                
+                console.log('[Router] Initialization complete');
+            }
+        };
+        
+        // Set up popstate listener for back/forward buttons
+        window.addEventListener('popstate', function(event) {
+            Router.handlePopState(event);
+        });
+        
+        // Network status handlers
+        window.addEventListener('online', function() {
+            console.log('[Network] Back online');
+            // Optionally reload current page data
+            if (Router.currentPage) {
+                Router.loadPageData(Router.currentPage);
+            }
+        });
+        
+        window.addEventListener('offline', function() {
+            console.log('[Network] Went offline');
+            // Optionally show offline indicator
+        });
+        
+        // ========== API CONFIGURATION ==========
+        const API_URL = 'https://tapinx-backend-production.up.railway.app/api';
+        
+        // Fetch and sync profile from backend
+        async function fetchProfileFromBackend() {
+            const phone = localStorage.getItem('tapinx_user_phone');
+            if (!phone) return null;
+            
+            try {
+                const response = await fetch(`${API_URL}/users/${encodeURIComponent(phone)}/profile`);
+                if (!response.ok) return null;
+                
+                const profile = await response.json();
+                
+                // Sync to localStorage
+                if (profile.name) localStorage.setItem('tapinx_user_name', profile.name);
+                if (profile.age) localStorage.setItem('tapinx_user_age', profile.age);
+                if (profile.bio) localStorage.setItem('tapinx_user_bio', profile.bio);
+                if (profile.linkedin) localStorage.setItem('tapinx_user_linkedin', profile.linkedin);
+                if (profile.instagram) localStorage.setItem('tapinx_user_instagram', profile.instagram);
+                if (profile.twitter) localStorage.setItem('tapinx_user_twitter', profile.twitter);
+                if (profile.soundcloud) localStorage.setItem('tapinx_user_soundcloud', profile.soundcloud);
+                if (profile.imdb) localStorage.setItem('tapinx_user_imdb', profile.imdb);
+                if (profile.photo) localStorage.setItem('tapinx_user_photo', profile.photo);
+                if (profile.skills) localStorage.setItem('tapinx_user_skills', JSON.stringify(profile.skills));
+                
+                console.log('[TapinX] Profile synced from backend');
+                return profile;
+            } catch (error) {
+                console.error('[TapinX] Error fetching profile:', error);
+                return null;
+            }
+        }
+        
+        // Fetch matches (Attention Required) from API
+        async function fetchMatches() {
+            const userId = localStorage.getItem('tapinx_user_id');
+            const phone = localStorage.getItem('tapinx_user_phone');
+            const identifier = userId || phone;
+            if (!identifier) return { matches: [], count: 0 };
+            
+            try {
+                const response = await fetch(`${API_URL}/opportunities/${encodeURIComponent(identifier)}`);
+                const data = await response.json();
+                if (data.success) {
+                    // Map opportunities to match format expected by UI
+                    const matches = data.opportunities.map(opp => ({
+                        id: opp.id,
+                        other_name: opp.requester_name,
+                        match_type: opp.match_type || 'professional',
+                        intro_reason: opp.ask_title,
+                        created_at: opp.created_at
+                    }));
+                    return { matches, count: data.count };
+                }
+            } catch (error) {
+                console.error('Error fetching opportunities:', error);
+            }
+            return { matches: [], count: 0 };
+        }
+        
+        // Fetch connections from API
+        async function fetchConnections() {
+            let userId = null;
+            let phone = null;
+            
+            // Safely access localStorage (handles mobile browsers and private mode)
+            try {
+                userId = localStorage.getItem('tapinx_user_id');
+                phone = localStorage.getItem('tapinx_user_phone');
+            } catch (error) {
+                console.error('[TapinX] Error accessing localStorage:', error);
+            }
+            
+            // If userId is not in localStorage, try to get it from API using phone number
+            if (!userId && phone) {
+                try {
+                    console.log('[TapinX] userId not found in localStorage, fetching from API using phone:', phone);
+                    const profileResponse = await fetch(`${API_URL}/users/${encodeURIComponent(phone)}/profile`);
+                    if (profileResponse.ok) {
+                        const profileData = await profileResponse.json();
+                        // Check multiple possible field names for userId
+                        if (profileData.id) {
+                            userId = profileData.id;
+                            try {
+                                localStorage.setItem('tapinx_user_id', userId);
+                                console.log('[TapinX] userId retrieved from profileData.id and stored:', userId);
+                            } catch (e) {
+                                console.warn('[TapinX] Could not store userId in localStorage:', e);
+                            }
+                        } else if (profileData.user_id) {
+                            userId = profileData.user_id;
+                            try {
+                                localStorage.setItem('tapinx_user_id', userId);
+                                console.log('[TapinX] userId retrieved from profileData.user_id and stored:', userId);
+                            } catch (e) {
+                                console.warn('[TapinX] Could not store userId in localStorage:', e);
+                            }
+                        } else if (profileData.user?.id) {
+                            userId = profileData.user.id;
+                            try {
+                                localStorage.setItem('tapinx_user_id', userId);
+                                console.log('[TapinX] userId retrieved from profileData.user.id and stored:', userId);
+                            } catch (e) {
+                                console.warn('[TapinX] Could not store userId in localStorage:', e);
+                            }
+                        } else {
+                            console.warn('[TapinX] Profile API response does not contain userId field:', profileData);
+                        }
+                    } else {
+                        console.warn('[TapinX] Profile API response not OK:', profileResponse.status, profileResponse.statusText);
+                    }
+                } catch (error) {
+                    console.error('[TapinX] Error fetching userId from profile API:', error);
+                }
+            }
+            
+            const identifier = userId || phone;
+            if (!identifier) {
+                console.warn('[TapinX] No identifier available for fetching connections (userId or phone missing)');
+                return { connections: [], count: 0 };
+            }
+            
+            try {
+                console.log('[TapinX] Fetching connections for identifier:', identifier);
+                const response = await fetch(`${API_URL}/connections/${encodeURIComponent(identifier)}`);
+                
+                if (!response.ok) {
+                    console.error('[TapinX] Connections API response not OK:', response.status, response.statusText);
+                    return { connections: [], count: 0 };
+                }
+                
+                const data = await response.json();
+                console.log('[TapinX] Connections API response:', data);
+                
+                if (data.success) {
+                    console.log('[TapinX] Successfully fetched connections:', data.count);
+                    return { connections: data.connections || [], count: data.count || 0 };
+                } else {
+                    console.warn('[TapinX] Connections API returned success=false:', data);
+                    return { connections: [], count: 0 };
+                }
+            } catch (error) {
+                console.error('[TapinX] Error fetching connections:', error);
+                return { connections: [], count: 0 };
+            }
+        }
+        
+        // Respond to a match (accept/decline)
+        async function respondToMatch(matchId, action) {
+            const userId = localStorage.getItem('tapinx_user_id');
+            if (!userId) return false;
+            
+            try {
+                const response = await fetch(`${API_URL}/matches/${matchId}/respond`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        response: action === 'accept' ? 'yes' : 'no',
+                        user_id: userId
+                    })
+                });
+                const data = await response.json();
+                return data.success;
+            } catch (error) {
+                console.error('Error responding to match:', error);
+                return false;
+            }
+        }
+        // ========== FIREBASE CONFIGURATION ==========
+        let auth = null;
+        let recaptchaVerifier = null;
+        let confirmationResult = null;
+        let firebaseReady = false;
+        
+        // Initialize Firebase when ready
+        function initFirebase() {
+            if (typeof firebase === 'undefined') {
+                console.log('Firebase SDK not loaded yet, using demo mode');
+                return false;
+            }
+            
+            try {
+                const firebaseConfig = {
+                    apiKey: "AIzaSyDqV46aMnuk3OzF-VjQ_AtCiH3RxQ4RYUs",
+                    authDomain: "tapinx-e6a04.firebaseapp.com",
+                    projectId: "tapinx-e6a04",
+                    storageBucket: "tapinx-e6a04.firebasestorage.app",
+                    messagingSenderId: "898635790224",
+                    appId: "1:898635790224:web:0c2f5bcde9f20c27cb6515",
+                    measurementId: "G-95VQG4X74F"
+                };
+                
+                firebase.initializeApp(firebaseConfig);
+                auth = firebase.auth();
+                firebaseReady = true;
+                console.log('Firebase initialized successfully');
+                return true;
+            } catch (error) {
+                console.error('Firebase init error:', error);
+                return false;
+            }
+        }
+        
+        // Try to initialize Firebase on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Firebase first
+            if (typeof initFirebase === 'function') {
+                initFirebase();
+            }
+            
+            // Initialize router
+            Router.init();
+        });
+        
+        // Also try immediately in case DOM is already ready
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            if (typeof initFirebase === 'function') {
+                initFirebase();
+            }
+            Router.init();
+        }
+        
+        function initRecaptcha() {
+            if (!firebaseReady) return;
+            
+            // Clear any existing verifier
+            if (recaptchaVerifier) {
+                try {
+                    recaptchaVerifier.clear();
+                } catch(e) {}
+                recaptchaVerifier = null;
+            }
+            
+            try {
+                recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+                    'size': 'invisible',
+                    'siteKey': '6Lfq8issAAAAADs1c6CAivmsgzIVlV1W4uaYTLR7'
+                });
+                recaptchaVerifier.render().then(function(widgetId) {
+                    console.log('reCAPTCHA rendered successfully');
+                }).catch(function(error) {
+                    console.error('reCAPTCHA render error:', error);
+                    recaptchaVerifier = null;
+                });
+            } catch (error) {
+                console.error('reCAPTCHA init error:', error);
+                recaptchaVerifier = null;
+            }
+        }
+        
+        // ========== PAGE NAVIGATION ==========
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            
+            if (page === 'landing') {
+                document.getElementById('landingPage').classList.add('active');
+            } else if (page === 'editProfile') {
+                document.getElementById('editProfilePage').classList.add('active');
+                loadProfileData();
+            } else if (page === 'dashboard') {
+                document.getElementById('dashboardPage').classList.add('active');
+                loadDashboard();
+            } else if (page === 'connections') {
+                document.getElementById('connectionsPage').classList.add('active');
+                loadConnections();
+            } else if (page === 'attention') {
+                document.getElementById('attentionPage').classList.add('active');
+                loadAttention();
+            }
+        }
+        
+        function goBack() {
+            if (localStorage.getItem('tapinx_logged_in') === 'true') {
+                showPage('dashboard');
+            } else {
+                showPage('landing');
+            }
+        }
+        
+        // ========== COUNTRY DATA ==========
+        const countries = [
+            { name: 'United States', code: '+1', flag: '🇺🇸' },
+            { name: 'United Kingdom', code: '+44', flag: '🇬🇧' },
+            { name: 'Canada', code: '+1', flag: '🇨🇦' },
+            { name: 'India', code: '+91', flag: '🇮🇳' },
+            { name: 'Australia', code: '+61', flag: '🇦🇺' },
+            { name: 'Germany', code: '+49', flag: '🇩🇪' },
+            { name: 'France', code: '+33', flag: '🇫🇷' },
+            { name: 'Italy', code: '+39', flag: '🇮🇹' },
+            { name: 'Spain', code: '+34', flag: '🇪🇸' },
+            { name: 'Brazil', code: '+55', flag: '🇧🇷' },
+            { name: 'Mexico', code: '+52', flag: '🇲🇽' },
+            { name: 'Japan', code: '+81', flag: '🇯🇵' },
+            { name: 'South Korea', code: '+82', flag: '🇰🇷' },
+            { name: 'China', code: '+86', flag: '🇨🇳' },
+            { name: 'Singapore', code: '+65', flag: '🇸🇬' },
+            { name: 'United Arab Emirates', code: '+971', flag: '🇦🇪' },
+            { name: 'Netherlands', code: '+31', flag: '🇳🇱' },
+            { name: 'Sweden', code: '+46', flag: '🇸🇪' },
+            { name: 'Switzerland', code: '+41', flag: '🇨🇭' },
+            { name: 'Ireland', code: '+353', flag: '🇮🇪' },
+            { name: 'New Zealand', code: '+64', flag: '🇳🇿' },
+            { name: 'South Africa', code: '+27', flag: '🇿🇦' },
+            { name: 'Nigeria', code: '+234', flag: '🇳🇬' },
+            { name: 'Kenya', code: '+254', flag: '🇰🇪' },
+            { name: 'Israel', code: '+972', flag: '🇮🇱' },
+            { name: 'Poland', code: '+48', flag: '🇵🇱' },
+            { name: 'Portugal', code: '+351', flag: '🇵🇹' },
+            { name: 'Russia', code: '+7', flag: '🇷🇺' },
+            { name: 'Turkey', code: '+90', flag: '🇹🇷' },
+            { name: 'Argentina', code: '+54', flag: '🇦🇷' },
+            { name: 'Chile', code: '+56', flag: '🇨🇱' },
+            { name: 'Colombia', code: '+57', flag: '🇨🇴' },
+            { name: 'Philippines', code: '+63', flag: '🇵🇭' },
+            { name: 'Thailand', code: '+66', flag: '🇹🇭' },
+            { name: 'Vietnam', code: '+84', flag: '🇻🇳' },
+            { name: 'Indonesia', code: '+62', flag: '🇮🇩' },
+            { name: 'Malaysia', code: '+60', flag: '🇲🇾' },
+            { name: 'Pakistan', code: '+92', flag: '🇵🇰' },
+            { name: 'Bangladesh', code: '+880', flag: '🇧🇩' },
+            { name: 'Egypt', code: '+20', flag: '🇪🇬' }
+        ];
+        
+        let selectedCountry = countries[0];
+        let resendTimer = null;
+        let isSigningIn = false; // Track if signing in vs signing up
+        
+        // Initialize country list
+        function initCountryList() {
+            const container = document.getElementById('countryItems');
+            if (!container) return;
+            container.innerHTML = countries.map(c => `
+                <div class="country-item" onclick="selectCountry('${c.code}', '${c.flag}', '${c.name}')">
+                    <span class="flag">${c.flag}</span>
+                    <span class="name">${c.name}</span>
+                    <span class="code">${c.code}</span>
+                </div>
+            `).join('');
+        }
+        
+        function toggleCountryList() {
+            const list = document.getElementById('countryList');
+            list.classList.toggle('active');
+            if (list.classList.contains('active')) {
+                document.getElementById('countrySearch').focus();
+            }
+        }
+        
+        function toggleCountryList2() {
+            const list = document.getElementById('countryList2');
+            list.classList.toggle('active');
+            if (list.classList.contains('active')) {
+                document.getElementById('countrySearch2').focus();
+            }
+        }
+        
+        function selectCountry(code, flag, name) {
+            selectedCountry = { code, flag, name };
+            document.getElementById('selectedFlag').textContent = flag;
+            document.getElementById('selectedCode').textContent = code;
+            document.getElementById('countryList').classList.remove('active');
+            var phoneInput = document.getElementById('phoneInput');
+            if (phoneInput) {
+                phoneInput.value = '';
+                var formats = {'+1':'(000) 000-0000', '+91':'00000 00000', '+44':'0000 000000', '+61':'000 000 000', '+971':'00 000 0000'};
+                phoneInput.placeholder = formats[code] || '0000000000';
+            }
+        }
+        
+        function selectCountry2(code, flag, name) {
+            selectedCountry = { code, flag, name };
+            document.getElementById('selectedFlag2').textContent = flag;
+            document.getElementById('selectedCode2').textContent = code;
+            document.getElementById('countryList2').classList.remove('active');
+            var phoneInput = document.getElementById('phoneInput2');
+            if (phoneInput) {
+                phoneInput.value = '';
+                var formats = {'+1':'(000) 000-0000', '+91':'00000 00000', '+44':'0000 000000', '+61':'000 000 000', '+971':'00 000 0000'};
+                phoneInput.placeholder = formats[code] || '0000000000';
+            }
+        }
+        
+        function filterCountries() {
+            const query = document.getElementById('countrySearch').value.toLowerCase();
+            const items = document.querySelectorAll('#countryItems .country-item');
+            items.forEach(item => {
+                const name = item.querySelector('.name').textContent.toLowerCase();
+                item.style.display = name.includes(query) ? 'flex' : 'none';
+            });
+        }
+        
+        function filterCountries2() {
+            const query = document.getElementById('countrySearch2').value.toLowerCase();
+            const items = document.querySelectorAll('#countryItems2 .country-item');
+            items.forEach(item => {
+                const name = item.querySelector('.name').textContent.toLowerCase();
+                item.style.display = name.includes(query) ? 'flex' : 'none';
+            });
+        }
+        
+        function initCountryList2() {
+            const container = document.getElementById('countryItems2');
+            if (!container) return;
+            container.innerHTML = countries.map(c => `
+                <div class="country-item" onclick="selectCountry2('${c.code}', '${c.flag}', '${c.name}')">
+                    <span class="flag">${c.flag}</span>
+                    <span class="name">${c.name}</span>
+                    <span class="code">${c.code}</span>
+                </div>
+            `).join('');
+        }
+        
+        // Close country list when clicking outside
+        document.addEventListener('click', function(e) {
+            const countryList = document.getElementById('countryList');
+            const countryList2 = document.getElementById('countryList2');
+            const countryBtns = document.querySelectorAll('.country-btn');
+            let clickedBtn = false;
+            countryBtns.forEach(btn => { if (btn.contains(e.target)) clickedBtn = true; });
+            if (!clickedBtn) {
+                if (countryList && !countryList.contains(e.target)) countryList.classList.remove('active');
+                if (countryList2 && !countryList2.contains(e.target)) countryList2.classList.remove('active');
+            }
+        });
+        
+        // ========== SIGN UP / SIGN IN MODAL ==========
+        function openSignUp() {
+            // If already logged in, go straight to dashboard
+            if (localStorage.getItem('tapinx_logged_in') === 'true') {
+                showPage('dashboard');
+                return;
+            }
+            isSigningIn = false;
+            document.getElementById('signInModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            showSignupStep();
+            initCountryList();
+        }
+        
+        function openSignIn() {
+            // If already logged in, go straight to dashboard
+            if (localStorage.getItem('tapinx_logged_in') === 'true') {
+                showPage('dashboard');
+                return;
+            }
+            isSigningIn = true;
+            document.getElementById('signInModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            showSigninStep();
+            initCountryList();
+            initCountryList2();
+        }
+        
+        function closeSignIn(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('signInModal').classList.remove('active');
+            document.body.style.overflow = '';
+            resetModal();
+        }
+        
+        function resetModal() {
+            // Reset all steps
+            document.getElementById('signupStep').classList.remove('hidden');
+            document.getElementById('otpStep').classList.add('hidden');
+            document.getElementById('signinStep').classList.add('hidden');
+            
+            // Clear all inputs
+            document.getElementById('signupName').value = '';
+            document.getElementById('signupAge').value = '';
+            document.getElementById('phoneInput').value = '';
+            if (document.getElementById('phoneInput2')) document.getElementById('phoneInput2').value = '';
+            document.getElementById('termsCheckbox').checked = false;
+            ['otp1','otp2','otp3','otp4','otp5','otp6'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            
+            // Hide all errors
+            document.querySelectorAll('.modal-error').forEach(el => el.style.display = 'none');
+            
+            // Clear timer
+            if (resendTimer) clearInterval(resendTimer);
+        }
+        
+        function showSignupStep() {
+            document.getElementById('signupStep').classList.remove('hidden');
+            document.getElementById('otpStep').classList.add('hidden');
+            document.getElementById('signinStep').classList.add('hidden');
+        }
+        
+        function showSigninStep() {
+            document.getElementById('signupStep').classList.add('hidden');
+            document.getElementById('otpStep').classList.add('hidden');
+            document.getElementById('signinStep').classList.remove('hidden');
+        }
+        
+        function showOtpStep() {
+            document.getElementById('signupStep').classList.add('hidden');
+            document.getElementById('signinStep').classList.add('hidden');
+            document.getElementById('otpStep').classList.remove('hidden');
+            document.getElementById('otp1').focus();
+            startResendTimer();
+        }
+        
+        function formatPhoneNumber(input) {
+            let value = input.value.replace(/\D/g, '');
+            value = value.substring(0, 10);
+            
+            if (value.length > 6) {
+                value = '(' + value.substring(0, 3) + ') ' + value.substring(3, 6) + '-' + value.substring(6);
+            } else if (value.length > 3) {
+                value = '(' + value.substring(0, 3) + ') ' + value.substring(3);
+            } else if (value.length > 0) {
+                value = '(' + value;
+            }
+            
+            input.value = value;
+        }
+        
+        function validatePhoneNumber(phone) {
+            const digits = phone.replace(/\D/g, '');
+            return digits.length >= 10;
+        }
+        
+        function validateSignupForm() {
+            const name = document.getElementById('signupName').value.trim();
+            const age = document.getElementById('signupAge').value;
+            const phone = document.getElementById('phoneInput').value;
+            const terms = document.getElementById('termsCheckbox').checked;
+            const btn = document.getElementById('submitBtn');
+            
+            // Check if all fields are valid
+            const hasValidName = name && name.split(' ').filter(n => n).length >= 2;
+            const hasAge = age !== '';
+            const hasValidPhone = validatePhoneNumber(phone);
+            const hasTerms = terms;
+            
+            if (hasValidName && hasAge && hasValidPhone && hasTerms) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        }
+        
+        function submitSignup() {
+            const name = document.getElementById('signupName').value.trim();
+            const age = document.getElementById('signupAge').value;
+            const phone = document.getElementById('phoneInput').value;
+            const terms = document.getElementById('termsCheckbox').checked;
+            
+            let hasError = false;
+            
+            // Validate name (must have first and last name)
+            if (!name || name.split(' ').filter(n => n).length < 2) {
+                document.getElementById('nameError').textContent = 'Please enter your full name (first and last)';
+                document.getElementById('nameError').style.display = 'block';
+                hasError = true;
+            } else {
+                document.getElementById('nameError').style.display = 'none';
+            }
+            
+            // Validate age
+            if (!age) {
+                document.getElementById('ageError').style.display = 'block';
+                hasError = true;
+            } else {
+                document.getElementById('ageError').style.display = 'none';
+            }
+            
+            // Validate phone
+            if (!validatePhoneNumber(phone)) {
+                document.getElementById('phoneError').textContent = 'Please enter a valid phone number';
+                document.getElementById('phoneError').style.display = 'block';
+                hasError = true;
+            } else {
+                document.getElementById('phoneError').style.display = 'none';
+            }
+            
+            // Validate terms
+            if (!terms) {
+                alert('Please agree to the Terms of Service');
+                hasError = true;
+            }
+            
+            if (hasError) return;
+            
+            // Store signup data temporarily
+            localStorage.setItem('tapinx_signup_name', name);
+            localStorage.setItem('tapinx_signup_age', age);
+            localStorage.setItem('tapinx_signup_phone', selectedCountry.code + ' ' + phone);
+            
+            // Format phone for Firebase (E.164 format)
+            const phoneDigits = phone.replace(/\D/g, '');
+            const fullPhoneNumber = selectedCountry.code + phoneDigits;
+            
+            // Show loading state
+            const btn = document.getElementById('submitBtn');
+            btn.textContent = 'Sending code...';
+            btn.disabled = true;
+            
+            // Store phone display
+            document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
+            
+            // Check if Firebase is ready
+            if (!firebaseReady || !auth) {
+                // Demo mode - go straight to OTP step
+                console.log('Using demo mode (Firebase not ready)');
+                isSigningIn = false;
+                showOtpStep();
+                btn.textContent = 'Submit';
+                btn.disabled = false;
+                return;
+            }
+            
+            // Try Firebase phone auth
+            try {
+                initRecaptcha();
+                
+                if (!recaptchaVerifier) {
+                    // reCAPTCHA failed, use demo mode
+                    console.log('Using demo mode (reCAPTCHA not ready)');
+                    isSigningIn = false;
+                    showOtpStep();
+                    btn.textContent = 'Submit';
+                    btn.disabled = false;
+                    return;
+                }
+                
+                // Format phone for Firebase (E.164 format)
+                const phoneDigits = phone.replace(/\D/g, '');
+                const fullPhoneNumber = selectedCountry.code + phoneDigits;
+                
+                auth.signInWithPhoneNumber(fullPhoneNumber, recaptchaVerifier)
+                    .then((result) => {
+                        confirmationResult = result;
+                        isSigningIn = false;
+                        showOtpStep();
+                        btn.textContent = 'Submit';
+                        btn.disabled = false;
+                    })
+                    .catch((error) => {
+                        console.error('SMS Error:', error);
+                        // On error, fall back to demo mode
+                        console.log('Firebase failed, using demo mode');
+                        isSigningIn = false;
+                        showOtpStep();
+                        btn.textContent = 'Submit';
+                        btn.disabled = false;
+                        recaptchaVerifier = null;
+                    });
+            } catch (error) {
+                console.error('Firebase error:', error);
+                // Fallback to demo mode
+                isSigningIn = false;
+                showOtpStep();
+                btn.textContent = 'Submit';
+                btn.disabled = false;
+            }
+        }
+        
+        function sendSigninCode() {
+            const phone = document.getElementById('phoneInput2').value;
+            
+            if (!validatePhoneNumber(phone)) {
+                document.getElementById('phoneError2').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('phoneError2').style.display = 'none';
+            
+            // Show loading state
+            const btn = document.getElementById('signinBtn');
+            btn.textContent = 'Sending code...';
+            btn.disabled = true;
+            
+            // Store phone display
+            document.getElementById('phoneDisplay').textContent = selectedCountry.code + ' ' + phone;
+            
+            // Check if Firebase is ready
+            if (!firebaseReady || !auth) {
+                // Demo mode
+                console.log('Using demo mode (Firebase not ready)');
+                isSigningIn = true;
+                showOtpStep();
+                btn.textContent = 'Send Code';
+                btn.disabled = false;
+                return;
+            }
+            
+            // Try Firebase phone auth
+            try {
+                initRecaptcha();
+                
+                if (!recaptchaVerifier) {
+                    console.log('Using demo mode (reCAPTCHA not ready)');
+                    isSigningIn = true;
+                    showOtpStep();
+                    btn.textContent = 'Send Code';
+                    btn.disabled = false;
+                    return;
+                }
+                
+                const phoneDigits = phone.replace(/\D/g, '');
+                const fullPhoneNumber = selectedCountry.code + phoneDigits;
+                
+                auth.signInWithPhoneNumber(fullPhoneNumber, recaptchaVerifier)
+                    .then((result) => {
+                        confirmationResult = result;
+                        isSigningIn = true;
+                        showOtpStep();
+                        btn.textContent = 'Send Code';
+                        btn.disabled = false;
+                    })
+                    .catch((error) => {
+                        console.error('SMS Error:', error);
+                        // Fallback to demo mode
+                        console.log('Firebase failed, using demo mode');
+                        isSigningIn = true;
+                        showOtpStep();
+                        btn.textContent = 'Send Code';
+                        btn.disabled = false;
+                        recaptchaVerifier = null;
+                    });
+            } catch (error) {
+                console.error('Firebase error:', error);
+                isSigningIn = true;
+                showOtpStep();
+                btn.textContent = 'Send Code';
+                btn.disabled = false;
+            }
+        }
+        
+        function startResendTimer() {
+            let seconds = 60;
+            const timerEl = document.getElementById('resendTimer');
+            const linkEl = document.getElementById('resendLink');
+            
+            timerEl.style.display = 'inline';
+            linkEl.style.display = 'none';
+            
+            if (resendTimer) clearInterval(resendTimer);
+            
+            resendTimer = setInterval(() => {
+                seconds--;
+                timerEl.textContent = `Resend code in ${seconds}s`;
+                
+                if (seconds <= 0) {
+                    clearInterval(resendTimer);
+                    timerEl.style.display = 'none';
+                    linkEl.style.display = 'inline';
+                }
+            }, 1000);
+        }
+        
+        function otpInput(current, nextId, prevId) {
+            current.value = current.value.replace(/\D/g, '');
+            
+            if (current.value.length === 1 && nextId) {
+                document.getElementById(nextId).focus();
+            }
+            
+            const otp = ['otp1','otp2','otp3','otp4','otp5','otp6'].map(id => document.getElementById(id).value).join('');
+            if (otp.length === 6) {
+                verifyOtp();
+            }
+        }
+        
+        function otpKeydown(event, prevId) {
+            if (event.key === 'Backspace' && event.target.value === '' && prevId) {
+                document.getElementById(prevId).focus();
+            }
+        }
+        
+        function verifyOtp() {
+            const otp = ['otp1','otp2','otp3','otp4','otp5','otp6'].map(id => document.getElementById(id).value).join('');
+            
+            if (otp.length === 6) {
+                // Show loading state on verify button
+                const verifyBtn = document.querySelector('#otpStep .modal-btn');
+                verifyBtn.textContent = 'Verifying...';
+                verifyBtn.disabled = true;
+                
+                // Verify with Firebase
+                if (confirmationResult) {
+                    confirmationResult.confirm(otp)
+                    .then(async (result) => {
+                            // User signed in successfully
+                            const user = result.user;
+                            console.log('User verified:', user.phoneNumber);
+                            
+                            // Store Firebase UID
+                            localStorage.setItem('tapinx_uid', user.uid);
+                            
+                            verifyBtn.textContent = 'Verify';
+                            verifyBtn.disabled = false;
+                            closeSignIn();
+                            
+                            if (isSigningIn) {
+                                // Returning user - save phone and sync with backend
+                                localStorage.setItem('tapinx_logged_in', 'true');
+                                localStorage.setItem('tapinx_user_phone', user.phoneNumber);
+                                
+                                // Sync with backend to get user ID
+                                try {
+                                    const API_URL = 'https://tapinx-backend-production.up.railway.app';
+                                    const response = await fetch(`${API_URL}/api/signup`, {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ phone: user.phoneNumber, name: 'User' })
+                                    });
+                                    const data = await response.json();
+                                    if (data.success && data.user) {
+                                        localStorage.setItem('tapinx_user_id', data.user.id);
+                                        if (data.user.name) localStorage.setItem('tapinx_user_name', data.user.name);
+                                        console.log('[TapinX] User synced:', data.user.id);
+                                    }
+                                } catch (e) {
+                                    console.error('[TapinX] Backend sync error:', e);
+                                }
+                                
+                                Router.navigate('opportunities');
+                        } else {
+                                // New user - transfer signup data to profile
+                                const name = localStorage.getItem('tapinx_signup_name') || '';
+                                const age = localStorage.getItem('tapinx_signup_age') || '';
+                                const phone = localStorage.getItem('tapinx_signup_phone') || '';
+                                
+                                localStorage.setItem('tapinx_user_name', name);
+                                localStorage.setItem('tapinx_user_age', age);
+                                localStorage.setItem('tapinx_user_phone', phone);
+                                
+                                // Clean up signup data
+                                localStorage.removeItem('tapinx_signup_name');
+                                localStorage.removeItem('tapinx_signup_age');
+                                localStorage.removeItem('tapinx_signup_phone');
+                                
+                                // Sync profile from backend (in case they have existing data)
+                                fetchProfileFromBackend().then(() => {
+                                    updateNewSidebar();
+                                });
+                                
+                                Router.navigate('opportunities');
+                                setTimeout(() => openEditProfileModal(), 300);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Verification error:', error);
+                            verifyBtn.textContent = 'Verify';
+                            verifyBtn.disabled = false;
+                            
+                            if (error.code === 'auth/invalid-verification-code') {
+                                alert('Invalid code. Please check and try again.');
+                            } else if (error.code === 'auth/code-expired') {
+                                alert('Code expired. Please request a new one.');
+                            } else {
+                                alert('Verification failed. Please try again.');
+                            }
+                            
+                            // Clear OTP inputs
+                            ['otp1','otp2','otp3','otp4','otp5','otp6'].forEach(id => {
+                                document.getElementById(id).value = '';
+                            });
+                            document.getElementById('otp1').focus();
+                        });
+                } else {
+                    // No confirmation result - show error
+                    alert('Something went wrong. Please try again.');
+                    verifyBtn.textContent = 'Verify';
+                    verifyBtn.disabled = false;
+                }
+            }
+        }
+        
+        function resendCode() {
+            // Resend OTP using Firebase
+            const phone = document.getElementById('phoneDisplay').textContent;
+            const phoneDigits = phone.replace(/[^\d+]/g, '');
+            
+            initRecaptcha();
+            
+            auth.signInWithPhoneNumber(phoneDigits, recaptchaVerifier)
+                .then((result) => {
+                    confirmationResult = result;
+                    startResendTimer();
+                })
+                .catch((error) => {
+                    console.error('Resend error:', error);
+                    alert('Failed to resend code. Please try again.');
+                    recaptchaVerifier = null;
+                });
+        }
+        
+        // ========== TELEGRAM MODAL ==========
+        function showTelegramModal() {
+            document.getElementById('telegramModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeTelegramModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('telegramModal').classList.remove('active');
+            document.body.style.overflow = '';
+            Router.navigate('opportunities');
+        }
+        
+        function goToTelegram() {
+            // Close modal and go to opportunities after a short delay
+            setTimeout(() => {
+                document.getElementById('telegramModal').classList.remove('active');
+                document.body.style.overflow = '';
+                showNewAppPage('opportunities');
+            }, 500);
+        }
+        
+        // ========== EDIT PROFILE MODAL ==========
+        let originalProfileData = {};
+        
+        // Initialize age dropdown for modal
+        (function initEditAgeDropdown() {
+            const select = document.getElementById('editAgeInput');
+            if (select) {
+                for (let i = 18; i <= 80; i++) {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = i;
+                    select.appendChild(opt);
+                }
+            }
+        })();
+        
+        function openEditProfileModal() {
+            // Close any dropdowns
+            document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('active'));
+            
+            // Load current data
+            const name = localStorage.getItem('tapinx_user_name') || '';
+            const age = localStorage.getItem('tapinx_user_age') || '';
+            const bio = localStorage.getItem('tapinx_user_bio') || '';
+            const photo = localStorage.getItem('tapinx_user_photo');
+            const linkedin = localStorage.getItem('tapinx_user_linkedin') || '';
+            const instagram = localStorage.getItem('tapinx_user_instagram') || '';
+            const twitter = localStorage.getItem('tapinx_user_twitter') || '';
+            const soundcloud = localStorage.getItem('tapinx_user_soundcloud') || '';
+            const imdb = localStorage.getItem('tapinx_user_imdb') || '';
+            const savedSkills = localStorage.getItem('tapinx_user_skills');
+            const skills = savedSkills ? JSON.parse(savedSkills) : [];
+            
+            // Store original data for comparison (including skills)
+            originalProfileData = { name, age, bio, photo, linkedin, instagram, twitter, soundcloud, imdb, skills };
+            
+            // Populate form
+            document.getElementById('editNameInput').value = name;
+            document.getElementById('editAgeInput').value = age;
+            document.getElementById('editBioInput').value = bio;
+            document.getElementById('editLinkedinInput').value = linkedin;
+            document.getElementById('editInstagramInput').value = instagram;
+            document.getElementById('editTwitterInput').value = twitter;
+            document.getElementById('editSoundcloudInput').value = soundcloud;
+            document.getElementById('editImdbInput').value = imdb;
+            
+            // Set photo
+            const initial = name ? name.charAt(0).toUpperCase() : 'T';
+            document.getElementById('editPhotoPlaceholder').textContent = initial;
+            
+            if (photo) {
+                document.getElementById('editPhotoPreview').src = photo;
+                document.getElementById('editPhotoPreview').style.display = 'block';
+                document.getElementById('editPhotoPlaceholder').style.display = 'none';
+            } else {
+                document.getElementById('editPhotoPreview').style.display = 'none';
+                document.getElementById('editPhotoPlaceholder').style.display = 'flex';
+            }
+            
+            // Initialize skills
+            initSkills();
+            
+            // Validate links
+            validateEditLinks();
+            checkEditForm();
+            
+            // Show modal
+            document.getElementById('editProfileOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeEditProfileModal(e) {
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById('editProfileOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        function handleEditPhoto(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('editPhotoPreview').src = e.target.result;
+                    document.getElementById('editPhotoPreview').style.display = 'block';
+                    document.getElementById('editPhotoPlaceholder').style.display = 'none';
+                    checkEditForm();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        function validateEditUrl(url, type) {
+            if (!url) return 'empty';
+            const patterns = {
+                linkedin: /linkedin\.com\/(in|company)\//i,
+                instagram: /instagram\.com\//i,
+                twitter: /(twitter\.com|x\.com)\//i,
+                soundcloud: /soundcloud\.com\//i,
+                imdb: /imdb\.com\/(name|title)\//i
+            };
+            return patterns[type].test(url) ? 'valid' : 'invalid';
+        }
+        
+        function validateEditLinks() {
+            const fields = ['linkedin', 'instagram', 'twitter', 'soundcloud', 'imdb'];
+            
+            fields.forEach(field => {
+                const input = document.getElementById('edit' + field.charAt(0).toUpperCase() + field.slice(1) + 'Input');
+                const status = document.getElementById('edit' + field.charAt(0).toUpperCase() + field.slice(1) + 'Status');
+                const val = input.value;
+                const result = validateEditUrl(val, field);
+                
+                status.className = 'edit-validation-icon';
+                status.textContent = '';
+                
+                if (result === 'valid') {
+                    status.classList.add('valid');
+                    status.textContent = '✓';
+                } else if (result === 'invalid') {
+                    status.classList.add('invalid');
+                    status.textContent = '✕';
+                }
+            });
+            
+            checkEditForm();
+        }
+        
+        function checkEditForm() {
+            const name = document.getElementById('editNameInput').value.trim();
+            const instagram = document.getElementById('editInstagramInput').value;
+            const instagramValid = validateEditUrl(instagram, 'instagram') === 'valid';
+            
+            const saveBtn = document.getElementById('editSaveBtn');
+            if (saveBtn) {
+                // Just require name and valid Instagram - no change detection
+                saveBtn.disabled = !(name && instagramValid);
+            }
+        }
+        
+        function saveEditProfile() {
+            const name = document.getElementById('editNameInput').value.trim();
+            const instagram = document.getElementById('editInstagramInput').value;
+            
+            if (!name || validateEditUrl(instagram, 'instagram') !== 'valid') return;
+            
+            // Gather all profile data
+            const profileData = {
+                name: name,
+                age: document.getElementById('editAgeInput').value,
+                bio: document.getElementById('editBioInput').value,
+                linkedin: document.getElementById('editLinkedinInput').value,
+                instagram: instagram,
+                twitter: document.getElementById('editTwitterInput').value,
+                soundcloud: document.getElementById('editSoundcloudInput').value,
+                imdb: document.getElementById('editImdbInput').value,
+                skills: selectedSkills,
+                photo: document.getElementById('editPhotoPreview').style.display === 'block' 
+                    ? document.getElementById('editPhotoPreview').src 
+                    : null
+            };
+            
+            // Save to localStorage (immediate)
+            localStorage.setItem('tapinx_logged_in', 'true');
+            localStorage.setItem('tapinx_user_name', profileData.name);
+            localStorage.setItem('tapinx_user_age', profileData.age);
+            localStorage.setItem('tapinx_user_bio', profileData.bio);
+            localStorage.setItem('tapinx_user_linkedin', profileData.linkedin);
+            localStorage.setItem('tapinx_user_instagram', profileData.instagram);
+            localStorage.setItem('tapinx_user_twitter', profileData.twitter);
+            localStorage.setItem('tapinx_user_soundcloud', profileData.soundcloud);
+            localStorage.setItem('tapinx_user_imdb', profileData.imdb);
+            localStorage.setItem('tapinx_user_skills', JSON.stringify(profileData.skills));
+            if (profileData.photo) {
+                localStorage.setItem('tapinx_user_photo', profileData.photo);
+            }
+            
+            // Save to backend database
+            saveProfileToBackend(profileData);
+            
+            // Close modal and show toast
+            closeEditProfileModal();
+            showNewToast('Profile saved');
+            
+            // Update the new sidebar with saved data
+            updateNewSidebar();
+            
+            // Reload dashboard if on it
+            if (document.getElementById('dashboardPage').classList.contains('active')) {
+                loadDashboard();
+            }
+            
+            // Trigger profile scraping webhook if Instagram was added
+            if (instagram && validateEditUrl(instagram, 'instagram') === 'valid') {
+                triggerProfileScrape(instagram);
+            }
+        }
+        
+        // Save profile to backend database
+        async function saveProfileToBackend(profileData) {
+            const phone = localStorage.getItem('tapinx_user_phone');
+            if (!phone) {
+                console.log('No phone number - skipping backend save');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/users/${encodeURIComponent(phone)}/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        full_name: profileData.name,
+                        age: profileData.age,
+                        bio: profileData.bio,
+                        linkedin_url: profileData.linkedin,
+                        instagram_url: profileData.instagram,
+                        twitter_url: profileData.twitter,
+                        soundcloud_url: profileData.soundcloud,
+                        imdb_url: profileData.imdb,
+                        skills: profileData.skills,
+                        photo_url: profileData.photo
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('[TapinX] Profile saved to backend');
+                } else {
+                    console.error('[TapinX] Failed to save profile to backend:', response.status);
+                }
+            } catch (error) {
+                console.error('[TapinX] Error saving profile to backend:', error);
+                // Don't show error to user - localStorage save already succeeded
+            }
+        }
+        
+        // ========== SKILLS SYSTEM ==========
+        let selectedSkills = [];
+        const maxSkills = 5;
+        
+        const skillsData = {
+            tech: [
+                'JavaScript', 'Python', 'React', 'Node.js', 'TypeScript', 'AWS', 'Machine Learning', 
+                'AI/ML', 'Data Science', 'iOS Development', 'Android', 'DevOps', 'Cloud Architecture',
+                'Blockchain', 'Cybersecurity', 'Full Stack', 'Frontend', 'Backend', 'Mobile Development',
+                'Database Design', 'API Design', 'System Design', 'Product Engineering'
+            ],
+            creative: [
+                'UI/UX Design', 'Graphic Design', 'Brand Design', 'Video Production', 'Photography',
+                'Motion Graphics', 'Illustration', '3D Design', 'Animation', 'Art Direction',
+                'Content Creation', 'Copywriting', 'Creative Direction', 'Music Production',
+                'Sound Design', 'Film Making', 'Podcast Production', 'Social Media Content'
+            ],
+            business: [
+                'Product Management', 'Project Management', 'Strategy', 'Marketing', 'Sales',
+                'Business Development', 'Operations', 'Finance', 'Consulting', 'Analytics',
+                'Growth Marketing', 'SEO/SEM', 'Partnerships', 'Fundraising', 'Investor Relations',
+                'Customer Success', 'Account Management', 'Team Leadership', 'Executive Leadership'
+            ],
+            other: [
+                'Public Speaking', 'Writing', 'Coaching', 'Mentorship', 'Community Building',
+                'Event Planning', 'Recruiting', 'HR', 'Legal', 'Real Estate', 'Healthcare',
+                'Education', 'Research', 'Non-profit', 'Sustainability', 'Fitness', 'Wellness'
+            ]
+        };
+        
+        function initSkills() {
+            // Load saved skills
+            const saved = localStorage.getItem('tapinx_user_skills');
+            if (saved) {
+                selectedSkills = JSON.parse(saved);
+            } else {
+                selectedSkills = [];
+            }
+            renderSelectedSkills();
+            renderSkillsGrid('all');
+        }
+        
+        function renderSelectedSkills() {
+            const container = document.getElementById('selectedSkills');
+            if (!container) return;
+            
+            if (selectedSkills.length === 0) {
+                container.innerHTML = '<span style="color: #536471; font-size: 13px;">No skills selected yet</span>';
+                return;
+            }
+            
+            container.innerHTML = selectedSkills.map(skill => `
+                <span class="skill-tag">
+                    ${skill}
+                    <button class="skill-tag-remove" onclick="removeSkill('${skill}')">×</button>
+                </span>
+            `).join('');
+        }
+        
+        function renderSkillsGrid(category) {
+            const grid = document.getElementById('skillsGrid');
+            if (!grid) return;
+            
+            let skills = [];
+            if (category === 'all') {
+                skills = [...skillsData.tech, ...skillsData.creative, ...skillsData.business, ...skillsData.other];
+            } else {
+                skills = skillsData[category] || [];
+            }
+            
+            // Sort alphabetically
+            skills.sort();
+            
+            grid.innerHTML = skills.map(skill => {
+                const isSelected = selectedSkills.includes(skill);
+                const isDisabled = !isSelected && selectedSkills.length >= maxSkills;
+                return `
+                    <button class="skill-option ${isSelected ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}" 
+                            onclick="toggleSkill('${skill}')" 
+                            ${isDisabled ? 'disabled' : ''}>
+                        ${skill}
+                    </button>
+                `;
+            }).join('');
+        }
+        
+        function showSkillCategory(category, btn) {
+            document.querySelectorAll('.skills-category-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderSkillsGrid(category);
+        }
+        
+        function toggleSkill(skill) {
+            if (selectedSkills.includes(skill)) {
+                removeSkill(skill);
+            } else if (selectedSkills.length < maxSkills) {
+                selectedSkills.push(skill);
+                renderSelectedSkills();
+                renderSkillsGrid(getCurrentCategory());
+                checkEditForm();
+            }
+        }
+        
+        function removeSkill(skill) {
+            selectedSkills = selectedSkills.filter(s => s !== skill);
+            renderSelectedSkills();
+            renderSkillsGrid(getCurrentCategory());
+            checkEditForm();
+        }
+        
+        function getCurrentCategory() {
+            const activeBtn = document.querySelector('.skills-category-btn.active');
+            if (activeBtn) {
+                const text = activeBtn.textContent.toLowerCase();
+                if (text === 'all') return 'all';
+                return text;
+            }
+            return 'all';
+        }
+        
+        function filterSkills(query) {
+            const dropdown = document.getElementById('skillsDropdown');
+            if (!query.trim()) {
+                dropdown.classList.remove('show');
+                return;
+            }
+            
+            const allSkills = [...skillsData.tech, ...skillsData.creative, ...skillsData.business, ...skillsData.other];
+            const filtered = allSkills.filter(s => 
+                s.toLowerCase().includes(query.toLowerCase()) && !selectedSkills.includes(s)
+            ).slice(0, 5);
+            
+            let html = filtered.map(skill => `
+                <div class="skills-dropdown-item" onclick="selectSkillFromDropdown('${skill}')">${skill}</div>
+            `).join('');
+            
+            // Add custom skill option if no exact match
+            const exactMatch = allSkills.some(s => s.toLowerCase() === query.toLowerCase());
+            if (!exactMatch && query.trim().length > 1 && selectedSkills.length < maxSkills) {
+                html += `<div class="skills-dropdown-item add-custom" onclick="addCustomSkill('${query.trim()}')">+ Add "${query.trim()}"</div>`;
+            }
+            
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+        
+        function showSkillsDropdown() {
+            const input = document.getElementById('skillsSearchInput');
+            if (input.value.trim()) {
+                filterSkills(input.value);
+            }
+        }
+        
+        function selectSkillFromDropdown(skill) {
+            if (selectedSkills.length < maxSkills) {
+                selectedSkills.push(skill);
+                renderSelectedSkills();
+                renderSkillsGrid(getCurrentCategory());
+                document.getElementById('skillsSearchInput').value = '';
+                document.getElementById('skillsDropdown').classList.remove('show');
+                checkEditForm();
+            }
+        }
+        
+        function addCustomSkill(skill) {
+            if (selectedSkills.length < maxSkills && !selectedSkills.includes(skill)) {
+                selectedSkills.push(skill);
+                renderSelectedSkills();
+                document.getElementById('skillsSearchInput').value = '';
+                document.getElementById('skillsDropdown').classList.remove('show');
+                checkEditForm();
+            }
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('skillsDropdown');
+            const input = document.getElementById('skillsSearchInput');
+            if (dropdown && input && !dropdown.contains(e.target) && e.target !== input) {
+                dropdown.classList.remove('show');
+            }
+        });
+        
+        // ========== PROFILE SCRAPING ==========
+        async function triggerProfileScrape(instagramUrl) {
+            // This sends a webhook to your n8n workflow
+            // The workflow will scrape the profile and update via API
+            try {
+                const webhookUrl = 'https://your-n8n-instance.com/webhook/scrape-profile';
+                const userId = localStorage.getItem('tapinx_user_id') || 'user_' + Date.now();
+                
+                // Store user ID if not exists
+                if (!localStorage.getItem('tapinx_user_id')) {
+                    localStorage.setItem('tapinx_user_id', userId);
+                }
+                
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: userId,
+                        instagramUrl: instagramUrl,
+                        linkedinUrl: document.getElementById('editLinkedinInput').value || null
+                    })
+                });
+                
+                console.log('Profile scrape triggered');
+            } catch (error) {
+                console.log('Profile scrape webhook not configured');
+            }
+        }
+        
+        function showProfileBuilding() {
+            document.getElementById('profileBuildingOverlay').classList.add('show');
+        }
+        
+        function hideProfileBuilding() {
+            document.getElementById('profileBuildingOverlay').classList.remove('show');
+        }
+        
+        // Function to receive scraped data (called by webhook callback or polling)
+        function applyScrapedProfile(data) {
+            if (data.name) {
+                document.getElementById('editNameInput').value = data.name;
+            }
+            if (data.bio) {
+                document.getElementById('editBioInput').value = data.bio;
+            }
+            if (data.photo) {
+                const preview = document.getElementById('editPhotoPreview');
+                preview.src = data.photo;
+                preview.style.display = 'block';
+                document.getElementById('editPhotoPlaceholder').style.display = 'none';
+            }
+            if (data.skills && Array.isArray(data.skills)) {
+                selectedSkills = data.skills.slice(0, maxSkills);
+                renderSelectedSkills();
+                renderSkillsGrid(getCurrentCategory());
+            }
+            
+            hideProfileBuilding();
+            showNewToast('Profile updated from your social links!');
+            checkEditForm();
+        }
+        
+        // ========== PROFILE PAGE ==========
+        function handlePhoto(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('photoPreview').src = e.target.result;
+                    document.getElementById('photoPreview').style.display = 'block';
+                    document.getElementById('photoPlaceholder').style.display = 'none';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        function validateUrl(url, type) {
+            if (!url) return 'empty';
+            const patterns = {
+                linkedin: /linkedin\.com\/(in|company)\//i,
+                instagram: /instagram\.com\//i,
+                twitter: /(twitter\.com|x\.com)\//i,
+                soundcloud: /soundcloud\.com\//i,
+                imdb: /imdb\.com\/(name|title)\//i
+            };
+            return patterns[type].test(url) ? 'valid' : 'invalid';
+        }
+        
+        function validateAllSocials() {
+            const fields = ['linkedin', 'instagram', 'twitter', 'soundcloud', 'imdb'];
+            fields.forEach(field => {
+                const val = document.getElementById(field + 'Input').value;
+                const status = validateUrl(val, field);
+                const el = document.getElementById(field + 'Status');
+                el.className = 'social-status ' + status;
+                el.textContent = status === 'valid' ? '✓' : status === 'invalid' ? '✕' : '';
+            });
+            
+            const linkedin = document.getElementById('linkedinInput').value;
+            document.getElementById('linkedinRequired').style.display = linkedin ? 'none' : 'inline';
+            checkForm();
+        }
+        
+        function checkForm() {
+            const name = document.getElementById('nameInput').value.trim();
+            const linkedin = document.getElementById('linkedinInput').value;
+            document.getElementById('doneBtn').disabled = !(name && validateUrl(linkedin, 'linkedin') === 'valid');
+        }
+        
+        function loadProfileData() {
+            const name = localStorage.getItem('tapinx_user_name') || '';
+            const bio = localStorage.getItem('tapinx_user_bio') || '';
+            const photo = localStorage.getItem('tapinx_user_photo');
+            
+            document.getElementById('nameInput').value = name;
+            document.getElementById('bioInput').value = bio;
+            document.getElementById('linkedinInput').value = localStorage.getItem('tapinx_user_linkedin') || '';
+            document.getElementById('instagramInput').value = localStorage.getItem('tapinx_user_instagram') || '';
+            document.getElementById('twitterInput').value = localStorage.getItem('tapinx_user_twitter') || '';
+            document.getElementById('soundcloudInput').value = localStorage.getItem('tapinx_user_soundcloud') || '';
+            document.getElementById('imdbInput').value = localStorage.getItem('tapinx_user_imdb') || '';
+            
+            if (photo) {
+                document.getElementById('photoPreview').src = photo;
+                document.getElementById('photoPreview').style.display = 'block';
+                document.getElementById('photoPlaceholder').style.display = 'none';
+            }
+            
+            if (name) {
+                document.getElementById('photoPlaceholder').textContent = name.charAt(0).toUpperCase();
+            }
+            
+            validateAllSocials();
+            checkForm();
+        }
+        
+        function saveProfile() {
+            const name = document.getElementById('nameInput').value.trim();
+            const bio = document.getElementById('bioInput').value.trim();
+            const linkedin = document.getElementById('linkedinInput').value;
+            
+            if (!name || validateUrl(linkedin, 'linkedin') !== 'valid') return;
+            
+            // Check if this is a new user (first time saving)
+            const isNewUser = !localStorage.getItem('tapinx_logged_in');
+            
+            localStorage.setItem('tapinx_logged_in', 'true');
+            localStorage.setItem('tapinx_user_name', name);
+            localStorage.setItem('tapinx_user_bio', bio);
+            localStorage.setItem('tapinx_user_linkedin', linkedin);
+            localStorage.setItem('tapinx_user_instagram', document.getElementById('instagramInput').value);
+            localStorage.setItem('tapinx_user_twitter', document.getElementById('twitterInput').value);
+            localStorage.setItem('tapinx_user_soundcloud', document.getElementById('soundcloudInput').value);
+            localStorage.setItem('tapinx_user_imdb', document.getElementById('imdbInput').value);
+            
+            const photo = document.getElementById('photoPreview');
+            if (photo.style.display === 'block') {
+                localStorage.setItem('tapinx_user_photo', photo.src);
+            }
+            
+            showToast('Profile saved!');
+            
+            if (isNewUser) {
+                // Show Telegram modal for new users
+                setTimeout(() => showTelegramModal(), 1500);
+            } else {
+                // Go to opportunities for returning users
+                setTimeout(() => Router.navigate('opportunities'), 1500);
+            }
+        }
+        
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+        
+    
+       // ========== DASHBOARD PAGE ==========
+       async function loadDashboard() {
+            const name = localStorage.getItem('tapinx_user_name') || 'User';
+            const bio = localStorage.getItem('tapinx_user_bio') || 'No bio yet';
+            const photo = localStorage.getItem('tapinx_user_photo');
+            const initial = name.charAt(0).toUpperCase();
+            
+            document.getElementById('dashHeaderName').textContent = name;
+            document.getElementById('welcomeName').textContent = name.split(' ')[0];
+            document.getElementById('dashProfileName').textContent = name;
+            document.getElementById('dashProfileBio').textContent = bio;
+            document.getElementById('dashAvatarInitial').textContent = initial;
+            document.getElementById('dashProfileInitial').textContent = initial;
+            
+            if (photo) {
+                ['dashAvatarImg', 'dashProfileImg'].forEach(id => {
+                    document.getElementById(id).src = photo;
+                    document.getElementById(id).style.display = 'block';
+                });
+                document.getElementById('dashAvatarInitial').style.display = 'none';
+                document.getElementById('dashProfileInitial').style.display = 'none';
+            }
+            
+            const socials = document.getElementById('dashProfileSocials');
+            socials.innerHTML = '';
+            const links = [
+                ['linkedin', '💼', 'LinkedIn'],
+                ['instagram', '📸', 'Instagram'],
+                ['twitter', '𝕏', 'Twitter'],
+                ['soundcloud', '🎵', 'SoundCloud'],
+                ['imdb', '🎬', 'IMDB']
+            ];
+            links.forEach(([key, icon, label]) => {
+                const url = localStorage.getItem('tapinx_user_' + key);
+                if (url) {
+                    socials.innerHTML += `<a href="${url}" target="_blank" class="social-badge">${icon} ${label}</a>`;
+                }
+            });
+            
+            // Fetch real data from API
+            const { count: matchCount } = await fetchMatches();
+            const { count: connectionCount } = await fetchConnections();
+            
+            // Update Attention Required count
+            const attentionCard = document.getElementById('attentionCard');
+            const attentionDesc = attentionCard ? attentionCard.querySelector('.action-desc') : null;
+            if (attentionDesc) {
+                if (matchCount === 0) {
+                    attentionDesc.textContent = 'No pending requests';
+                } else if (matchCount === 1) {
+                    attentionDesc.textContent = '1 opportunity waiting';
+                } else {
+                    attentionDesc.textContent = `${matchCount} opportunities waiting`;
+                }
+                // Toggle highlight based on match count
+                if (matchCount > 0) {
+                    attentionCard.classList.add('attention-card-highlight');
+                } else {
+                    attentionCard.classList.remove('attention-card-highlight');
+                }
+            }
+            
+            // Update connections count
+            const connectionsCard = document.getElementById('connectionsCard');
+            const connectionsDesc = connectionsCard ? connectionsCard.querySelector('.action-desc') : null;
+            if (connectionsDesc) {
+                if (connectionCount === 0) {
+                    connectionsDesc.textContent = 'View your network';
+                } else if (connectionCount === 1) {
+                    connectionsDesc.textContent = '1 connection';
+                } else {
+                    connectionsDesc.textContent = `${connectionCount} connections`;
+                }
+                // Toggle highlight based on connection count
+                if (connectionCount > 0) {
+                    connectionsCard.classList.add('attention-card-highlight');
+                } else {
+                    connectionsCard.classList.remove('attention-card-highlight');
+                }
+            }
+        }
+        function toggleDropdown(e) {
+            e.stopPropagation();
+            document.getElementById('dashDropdown').classList.toggle('active');
+        }
+        
+        function toggleConnectionsDropdown(e) {
+            e.stopPropagation();
+            document.getElementById('connDropdown').classList.toggle('active');
+        }
+        
+        document.addEventListener('click', () => {
+            document.getElementById('dashDropdown').classList.remove('active');
+            const connDropdown = document.getElementById('connDropdown');
+            if (connDropdown) connDropdown.classList.remove('active');
+            const attnDropdown = document.getElementById('attnDropdown');
+            if (attnDropdown) attnDropdown.classList.remove('active');
+        });
+        
+        function logout() {
+            console.log('[Logout] Logging out user');
+            
+            // Clear all user data
+            localStorage.clear();
+            
+            // Use replace to prevent back-button into logged-in state
+            window.location.replace('/');
+        }
+        
+        // ========== CONNECTIONS PAGE ==========
+        async function loadConnections() {
+            const name = localStorage.getItem('tapinx_user_name') || 'User';
+            const photo = localStorage.getItem('tapinx_user_photo');
+            const initial = name.charAt(0).toUpperCase();
+            
+            // Update header
+            document.getElementById('connHeaderName').textContent = name;
+            document.getElementById('connAvatarInitial').textContent = initial;
+            
+            if (photo) {
+                document.getElementById('connAvatarImg').src = photo;
+                document.getElementById('connAvatarImg').style.display = 'block';
+                document.getElementById('connAvatarInitial').style.display = 'none';
+            }
+            
+            // Update context rail
+            const railInitial = document.getElementById('connRailInitial');
+            const railImg = document.getElementById('connRailImg');
+            const railName = document.getElementById('connRailName');
+            
+            if (railInitial) railInitial.textContent = initial;
+            if (railName) railName.textContent = name;
+            if (railImg && photo) {
+                railImg.src = photo;
+                railImg.style.display = 'block';
+                if (railInitial) railInitial.style.display = 'none';
+            }
+            
+            // Get elements
+            const connList = document.getElementById('connList');
+            const emptyConnections = document.getElementById('emptyConnections');
+            const searchBar = document.getElementById('connSearchBar');
+            
+            // Show loading
+            connList.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">Loading...</div>';
+            if (emptyConnections) emptyConnections.style.display = 'none';
+            
+            // Fetch real connections from API
+            const { connections, count } = await fetchConnections();
+            
+            // Update counts
+            const pendingCount = 0; // Will come from API later
+            document.getElementById('connAllCount').textContent = count;
+            document.getElementById('connPendingCount').textContent = pendingCount;
+            document.getElementById('connConnectedCount').textContent = count;
+            
+            // Update rail counts
+            const railConnCount = document.getElementById('railConnCount');
+            if (railConnCount) railConnCount.textContent = count;
+            
+            // Handle tabs - conditional red and softening
+            document.querySelectorAll('.workspace-tab').forEach(tab => {
+                const countEl = tab.querySelector('.workspace-tab-count');
+                const tabCount = countEl ? parseInt(countEl.textContent) : 0;
+                
+                // Remove all state classes first
+                tab.classList.remove('has-action');
+            });
+            
+            // Red only when pending > 0 (action required)
+            if (pendingCount > 0) {
+                const pendingTab = document.querySelector('.workspace-tab[onclick*="pending"]');
+                if (pendingTab) {
+                    pendingTab.classList.add('has-action');
+                }
+            }
+            
+            // De-emphasize search when empty
+            if (searchBar) {
+                if (count === 0) {
+                    searchBar.classList.add('subdued');
+                } else {
+                    searchBar.classList.remove('subdued');
+                }
+            }
+            
+            if (count === 0) {
+                connList.innerHTML = '';
+                connList.style.display = 'none';
+                if (emptyConnections) emptyConnections.style.display = 'block';
+            } else {
+                if (emptyConnections) emptyConnections.style.display = 'none';
+                connList.style.display = 'block';
+                connList.innerHTML = connections.map(c => renderConnectionRow(c)).join('');
+            }
+        }
+        
+        function renderConnectionRow(conn) {
+            const initial = conn.name ? conn.name.charAt(0).toUpperCase() : '?';
+            const timeAgo = formatTimeAgo(conn.connected_at);
+            const context = conn.role || conn.title || '';
+            
+            return `
+                <div class="workspace-row" data-conn-status="connected" data-name="${conn.name || 'Unknown'}">
+                    <div class="workspace-row-avatar">${initial}</div>
+                    <div class="workspace-row-content">
+                        <div class="workspace-row-name">${conn.name || 'Unknown'}</div>
+                        <div class="workspace-row-context">${context}</div>
+                        <div class="workspace-row-meta">Introduced by Taj · ${timeAgo}</div>
+                    </div>
+                    <div class="workspace-row-actions">
+                        <button class="workspace-btn workspace-btn-primary" onclick="messageConnection(this, '${conn.name}')">Message</button>
+                        ${conn.linkedin_url ? `<button class="workspace-btn workspace-btn-secondary" onclick="window.open('${conn.linkedin_url}', '_blank')">View</button>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Current connection status view
+        let currentConnStatus = 'all';
+        
+        function setConnStatus(btn, status) {
+            document.querySelectorAll('#connectionsPage .workspace-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            currentConnStatus = status;
+            
+            const connList = document.getElementById('connList');
+            const emptyConnections = document.getElementById('emptyConnections');
+            
+            // Count items
+            const connectedCount = document.querySelectorAll('.workspace-row[data-conn-status="connected"]').length;
+            
+            if (status === 'all' || status === 'connected') {
+                if (connectedCount > 0) {
+                    connList.style.display = 'block';
+                    if (emptyConnections) emptyConnections.style.display = 'none';
+                } else {
+                    connList.style.display = 'none';
+                    if (emptyConnections) emptyConnections.style.display = 'block';
+                }
+            } else if (status === 'pending') {
+                // No pending items yet - show empty
+                connList.style.display = 'none';
+                if (emptyConnections) emptyConnections.style.display = 'block';
+            }
+        }
+        
+        function setConnFilter(btn, category) {
+            // Filter pills removed - this function kept for compatibility
+        }
+        
+        function filterConnections() {
+            const query = document.getElementById('connSearchInput').value.toLowerCase();
+            
+            document.querySelectorAll('.workspace-row').forEach(row => {
+                const name = row.dataset.name ? row.dataset.name.toLowerCase() : '';
+                const context = row.querySelector('.workspace-row-context');
+                const contextText = context ? context.textContent.toLowerCase() : '';
+                
+                if (name.includes(query) || contextText.includes(query)) {
+                    row.style.display = 'flex';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        function updateConnCounts() {
+            const connectedCount = document.querySelectorAll('.workspace-row[data-conn-status="connected"]').length;
+            
+            document.getElementById('connAllCount').textContent = connectedCount;
+            document.getElementById('connPendingCount').textContent = 0;
+            document.getElementById('connConnectedCount').textContent = connectedCount;
+            document.getElementById('pendingBadge').textContent = pendingCount;
+        }
+        
+        function showConnToast(message) {
+            const toast = document.getElementById('connToast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+        
+        function acceptConnection(btn) {
+            const card = btn.closest('.attention-card');
+            const name = card.dataset.name;
+            
+            // Animate card
+            card.classList.add('accepting');
+            
+            setTimeout(() => {
+                // Remove from pending
+                card.remove();
+                
+                // Update counts
+                updateConnCounts();
+                showConnToast(`Intro accepted! Taj will connect you with ${name}`);
+                
+                // Check empty state
+                checkConnEmptyState();
+                
+                // Open Telegram
+                const message = encodeURIComponent(`Hey Taj, I accepted the intro to ${name}. Please connect us!`);
+                window.open(`https://t.me/TapinXBot?text=${message}`, '_blank');
+            }, 300);
+        }
+        
+        function declineConnection(btn) {
+            const card = btn.closest('.attention-card');
+            const name = card.dataset.name;
+            
+            // Animate card
+            card.classList.add('declining');
+            
+            setTimeout(() => {
+                // Remove from pending
+                card.remove();
+                
+                // Update counts
+                updateConnCounts();
+                showConnToast('Connection declined');
+                
+                // Check empty state
+                checkConnEmptyState();
+            }, 300);
+        }
+        
+        function replyToConnection(btn, name) {
+            const message = encodeURIComponent(`Hey Taj, I'd like to reply to ${name}'s message: `);
+            window.open(`https://t.me/TapinXBot?text=${message}`, '_blank');
+        }
+        
+        function messageConnection(btn, name) {
+            const message = encodeURIComponent(`Hey Taj, can you help me reach out to ${name}?`);
+            window.open(`https://t.me/TapinXBot?text=${message}`, '_blank');
+        }
+        
+        function checkConnEmptyState() {
+            const connectedCount = document.querySelectorAll('.workspace-row[data-conn-status="connected"]').length;
+            const connList = document.getElementById('connList');
+            const emptyConnections = document.getElementById('emptyConnections');
+            
+            if (connectedCount === 0) {
+                if (connList) connList.style.display = 'none';
+                if (emptyConnections) emptyConnections.style.display = 'block';
+            } else {
+                if (connList) connList.style.display = 'block';
+                if (emptyConnections) emptyConnections.style.display = 'none';
+            }
+        }
+        
+        // Keyboard shortcut for search
+        document.addEventListener('keydown', function(e) {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                const searchInput = document.getElementById('connSearchInput');
+                if (searchInput) searchInput.focus();
+            }
+        });
+        
+        // ========== ATTENTION REQUIRED PAGE ==========
+        async function loadAttention() {
+            const name = localStorage.getItem('tapinx_user_name') || 'User';
+            const photo = localStorage.getItem('tapinx_user_photo');
+            const initial = name.charAt(0).toUpperCase();
+            
+            // Update header
+            document.getElementById('attnHeaderName').textContent = name;
+            document.getElementById('attnAvatarInitial').textContent = initial;
+            
+            if (photo) {
+                document.getElementById('attnAvatarImg').src = photo;
+                document.getElementById('attnAvatarImg').style.display = 'block';
+                document.getElementById('attnAvatarInitial').style.display = 'none';
+            }
+            
+            // Update context rail
+            const railInitial = document.getElementById('attnRailInitial');
+            const railImg = document.getElementById('attnRailImg');
+            const railName = document.getElementById('attnRailName');
+            
+            if (railInitial) railInitial.textContent = initial;
+            if (railName) railName.textContent = name;
+            if (railImg && photo) {
+                railImg.src = photo;
+                railImg.style.display = 'block';
+                if (railInitial) railInitial.style.display = 'none';
+            }
+            
+            // Get elements
+            const attnList = document.getElementById('attnList');
+            const emptyAttnActive = document.getElementById('emptyAttnActive');
+            
+            // Show loading
+            if (attnList) attnList.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">Loading...</div>';
+            if (emptyAttnActive) emptyAttnActive.style.display = 'none';
+            
+            // Fetch real matches from API
+            const { matches, count } = await fetchMatches();
+            
+            // Update counts
+            const needsCount = document.getElementById('attnNeedsCount');
+            const interestedCount = document.getElementById('attnInterestedCount');
+            const passedCount = document.getElementById('attnPassedCount');
+            
+            if (needsCount) needsCount.textContent = count;
+            if (interestedCount) interestedCount.textContent = '0';
+            if (passedCount) passedCount.textContent = '0';
+            
+            // Update rail counts
+            const railAttnCount = document.getElementById('attnRailAttnCount');
+            if (railAttnCount) railAttnCount.textContent = count;
+            
+            // Handle red tab when action required
+            const needsTab = document.getElementById('attnTabNeeds');
+            if (needsTab) {
+                if (count > 0) {
+                    needsTab.classList.add('has-action');
+                } else {
+                    needsTab.classList.remove('has-action');
+                }
+            }
+            
+            if (count === 0) {
+                if (attnList) attnList.innerHTML = '';
+                if (attnList) attnList.style.display = 'none';
+                if (emptyAttnActive) emptyAttnActive.style.display = 'block';
+            } else {
+                if (emptyAttnActive) emptyAttnActive.style.display = 'none';
+                if (attnList) {
+                    attnList.style.display = 'block';
+                    attnList.innerHTML = matches.map(m => renderAttnRow(m)).join('');
+                }
+            }
+        }
+        
+        function renderAttnRow(match) {
+            const initial = match.other_name ? match.other_name.charAt(0).toUpperCase() : 'T';
+            const timeAgo = formatTimeAgo(match.created_at);
+            
+            return `
+                <div class="workspace-row" data-status="active" data-id="${match.id}">
+                    <div class="workspace-row-avatar">${initial}</div>
+                    <div class="workspace-row-content">
+                        <div class="workspace-row-name">${match.other_name || 'New Connection'}</div>
+                        <div class="workspace-row-context">${match.intro_message || 'Taj wants to introduce you'}</div>
+                        <div class="workspace-row-meta">Introduced by Taj · ${timeAgo}</div>
+                    </div>
+                    <div class="workspace-row-actions">
+                        <button class="workspace-btn workspace-btn-primary" onclick="markInterestedNew(this)">Interested</button>
+                        <button class="workspace-btn workspace-btn-secondary" onclick="markPassedNew(this)">Pass</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function setAttnStatusNew(btn, status) {
+            document.querySelectorAll('#attentionPage .workspace-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const attnList = document.getElementById('attnList');
+            const emptyActive = document.getElementById('emptyAttnActive');
+            const emptyInterested = document.getElementById('emptyAttnInterested');
+            const emptyPassed = document.getElementById('emptyAttnPassed');
+            
+            // Hide all empty states
+            if (emptyActive) emptyActive.style.display = 'none';
+            if (emptyInterested) emptyInterested.style.display = 'none';
+            if (emptyPassed) emptyPassed.style.display = 'none';
+            
+            // Show appropriate empty state based on status
+            if (status === 'active') {
+                const activeRows = document.querySelectorAll('.workspace-row[data-status="active"]');
+                if (activeRows.length === 0 && emptyActive) emptyActive.style.display = 'block';
+            } else if (status === 'interested') {
+                if (emptyInterested) emptyInterested.style.display = 'block';
+            } else if (status === 'passed') {
+                if (emptyPassed) emptyPassed.style.display = 'block';
+            }
+        }
+        
+        function markInterestedNew(btn) {
+            const row = btn.closest('.workspace-row');
+            row.style.opacity = '0.5';
+            setTimeout(() => {
+                row.remove();
+                showWorkspaceToast('Marked as interested');
+                updateAttnCounts();
+            }, 200);
+        }
+        
+        function markPassedNew(btn) {
+            const row = btn.closest('.workspace-row');
+            row.style.opacity = '0.5';
+            setTimeout(() => {
+                row.remove();
+                showWorkspaceToast('Passed');
+                updateAttnCounts();
+            }, 200);
+        }
+        
+        function updateAttnCounts() {
+            const activeCount = document.querySelectorAll('#attnList .workspace-row[data-status="active"]').length;
+            const needsCount = document.getElementById('attnNeedsCount');
+            if (needsCount) needsCount.textContent = activeCount;
+            
+            // Update rail
+            const railAttnCount = document.getElementById('attnRailAttnCount');
+            if (railAttnCount) railAttnCount.textContent = activeCount;
+            
+            // Show empty state if no more
+            if (activeCount === 0) {
+                const emptyActive = document.getElementById('emptyAttnActive');
+                if (emptyActive) emptyActive.style.display = 'block';
+            }
+        }
+        
+        function showWorkspaceToast(message) {
+            const toast = document.getElementById('attnToast') || document.getElementById('connToast');
+            if (toast) {
+                toast.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2500);
+            }
+        }
+        
+        // Keep old functions for compatibility
+        function renderProposalCard(match) {
+            return renderAttnRow(match);
+        }
+        
+        function formatTimeAgo(dateString) {
+            if (!dateString) return 'recently';
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            if (diffMins < 60) return diffMins + ' mins ago';
+            if (diffHours < 24) return diffHours + ' hours ago';
+            if (diffDays < 7) return diffDays + ' days ago';
+            return Math.floor(diffDays / 7) + ' weeks ago';
+        }
+        
+        function toggleAttentionDropdown(e) {
+            e.stopPropagation();
+            document.getElementById('attnDropdown').classList.toggle('active');
+        }
+        
+        // Current status view
+        let currentAttnStatus = 'active';
+        
+        function setAttnStatus(btn, status) {
+            document.querySelectorAll('.attn-status-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            currentAttnStatus = status;
+            
+            // Show/hide cards based on status
+            const cards = document.querySelectorAll('.proposal-card');
+            let visibleCount = 0;
+            
+            cards.forEach(card => {
+                if (card.dataset.status === status) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Show appropriate empty state
+            document.getElementById('emptyActive').style.display = (status === 'active' && visibleCount === 0) ? 'block' : 'none';
+            document.getElementById('emptyInterested').style.display = (status === 'interested' && visibleCount === 0) ? 'block' : 'none';
+            document.getElementById('emptyPassed').style.display = (status === 'passed' && visibleCount === 0) ? 'block' : 'none';
+            document.getElementById('attnProposals').style.display = visibleCount > 0 ? 'block' : 'none';
+            
+            // Show/hide category filters (only for active)
+            document.querySelector('.attn-filter-tabs').style.display = status === 'active' ? 'flex' : 'none';
+        }
+        
+        function setAttnFilter(btn, type) {
+            document.querySelectorAll('.attn-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const cards = document.querySelectorAll('.proposal-card');
+            
+            cards.forEach(card => {
+                const matchesType = type === 'all' || card.dataset.type === type;
+                const matchesStatus = card.dataset.status === currentAttnStatus;
+                card.style.display = (matchesType && matchesStatus) ? 'block' : 'none';
+            });
+        }
+        
+        function updateCounts() {
+            let activeCount = 0;
+            let interestedCount = 0;
+            let passedCount = 0;
+            
+            document.querySelectorAll('.proposal-card').forEach(card => {
+                if (card.dataset.status === 'active') activeCount++;
+                else if (card.dataset.status === 'interested') interestedCount++;
+                else if (card.dataset.status === 'passed') passedCount++;
+            });
+            
+            document.getElementById('activeCount').textContent = activeCount;
+            document.getElementById('interestedCount').textContent = interestedCount;
+            document.getElementById('passedCount').textContent = passedCount;
+        }
+        
+        function showAttnToast(message) {
+            const toast = document.getElementById('attnToast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+        
+        function markInterested(btn) {
+            const card = btn.closest('.proposal-card');
+            const title = card.querySelector('.proposal-title').textContent;
+            
+            // Animate card
+            card.classList.add('interested');
+            
+            setTimeout(() => {
+                // Update card status
+                card.dataset.status = 'interested';
+                card.classList.remove('interested');
+                
+                // Replace action buttons with status
+                const actionsDiv = card.querySelector('.proposal-actions');
+                actionsDiv.innerHTML = `
+                    <div class="proposal-status">
+                        <span class="proposal-status-text interested">Taj will connect you soon</span>
+                        <button class="proposal-status-btn message" onclick="window.open('https://t.me/TapinXBot?text=Hey Taj, following up on: ${encodeURIComponent(title)}', '_blank')">Message Taj</button>
+                    </div>
+                `;
+                
+                // Hide card if not in interested view
+                if (currentAttnStatus !== 'interested') {
+                    card.style.display = 'none';
+                }
+                
+                updateCounts();
+                showAttnToast('Nice! Taj will connect you shortly');
+                
+                // Check if we need to show empty state
+                checkEmptyState();
+            }, 300);
+        }
+        
+        function markPassed(btn) {
+            const card = btn.closest('.proposal-card');
+            const title = card.querySelector('.proposal-title').textContent;
+            
+            // Animate card
+            card.classList.add('removing');
+            
+            setTimeout(() => {
+                // Update card status
+                card.dataset.status = 'passed';
+                card.classList.remove('removing');
+                
+                // Replace action buttons with status
+                const actionsDiv = card.querySelector('.proposal-actions');
+                actionsDiv.innerHTML = `
+                    <div class="proposal-status">
+                        <span class="proposal-status-text passed">Passed on this opportunity</span>
+                        <button class="proposal-status-btn restore" onclick="restoreCard(this)">Restore</button>
+                    </div>
+                `;
+                
+                // Hide card if not in passed view
+                if (currentAttnStatus !== 'passed') {
+                    card.style.display = 'none';
+                }
+                
+                updateCounts();
+                showAttnToast('Removed from your list');
+                
+                // Check if we need to show empty state
+                checkEmptyState();
+            }, 300);
+        }
+        
+        function restoreCard(btn) {
+            const card = btn.closest('.proposal-card');
+            const title = card.querySelector('.proposal-title').textContent;
+            
+            // Update card status back to active
+            card.dataset.status = 'active';
+            
+            // Restore action buttons
+            const actionsDiv = card.querySelector('.proposal-actions');
+            actionsDiv.innerHTML = `
+                <button class="proposal-btn primary" onclick="markInterested(this)">I'm Interested</button>
+                <button class="proposal-btn secondary" onclick="markPassed(this)">Not for me</button>
+                <button class="proposal-btn tertiary" onclick="askTajMore(this, '${title}')">Ask Taj more</button>
+            `;
+            
+            // Hide card if not in active view
+            if (currentAttnStatus !== 'active') {
+                card.style.display = 'none';
+            }
+            
+            updateCounts();
+            showAttnToast('Restored to your list');
+            
+            // Check if we need to show empty state
+            checkEmptyState();
+        }
+        
+        function askTajMore(btn, title) {
+            const message = encodeURIComponent(`Hey Taj, can you tell me more about: ${title}`);
+            window.open(`https://t.me/TapinXBot?text=${message}`, '_blank');
+        }
+        
+        function checkEmptyState() {
+            let visibleCount = 0;
+            document.querySelectorAll('.proposal-card').forEach(card => {
+                if (card.dataset.status === currentAttnStatus && card.style.display !== 'none') {
+                    visibleCount++;
+                }
+            });
+            
+            // Count all cards with current status (regardless of display)
+            let statusCount = 0;
+            document.querySelectorAll('.proposal-card').forEach(card => {
+                if (card.dataset.status === currentAttnStatus) {
+                    statusCount++;
+                }
+            });
+            
+            document.getElementById('emptyActive').style.display = (currentAttnStatus === 'active' && statusCount === 0) ? 'block' : 'none';
+            document.getElementById('emptyInterested').style.display = (currentAttnStatus === 'interested' && statusCount === 0) ? 'block' : 'none';
+            document.getElementById('emptyPassed').style.display = (currentAttnStatus === 'passed' && statusCount === 0) ? 'block' : 'none';
+            document.getElementById('attnProposals').style.display = statusCount > 0 ? 'block' : 'none';
+        }
+        
+        // ========== INIT ==========
+        // Landing page always shows first
+        // User clicks "Sign in" to go to dashboard if already logged in
+        
+        // ========== ROTATING WORDS ==========
+        (function() {
+            const words = document.querySelectorAll('.rotating-word .word');
+            let currentIndex = 0;
+            
+            setInterval(() => {
+                words[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % words.length;
+                words[currentIndex].classList.add('active');
+            }, 3000);
+        })();
+        
+        // ========== NEW X.COM-STYLE APP FUNCTIONS ==========
+        let currentNewAppPage = 'opportunities';
+        
+        // Mobile menu functions
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('mobileSidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
+        }
+        
+        function closeMobileMenu() {
+            const sidebar = document.getElementById('mobileSidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            if (sidebar) sidebar.classList.remove('mobile-open');
+            if (overlay) overlay.classList.remove('active');
+        }
+        
+        function updateMobileHeader(title) {
+            const headerTitle = document.getElementById('mobileHeaderTitle');
+            if (headerTitle) headerTitle.textContent = title;
+        }
+        
+        function showNewAppPage(page) {
+            Router.navigate(page);
+        }
+        
+        async function loadNewConnections() {
+            try {
+                console.log('[TapinX] Loading connections...');
+                const { connections: conns, count } = await fetchConnections();
+                const list = document.getElementById('newConnectionsList');
+                const empty = document.getElementById('newConnectionsEmpty');
+                
+                if (!list || !empty) {
+                    console.error('[TapinX] Connections page DOM elements not found');
+                    return;
+                }
+                
+                console.log('[TapinX] Connections loaded:', count, 'connections');
+                
+                if (count === 0 || !conns || conns.length === 0) {
+                    list.innerHTML = '';
+                    empty.style.display = 'block';
+                    console.log('[TapinX] No connections found, showing empty state');
+                } else {
+                    empty.style.display = 'none';
+                    list.innerHTML = conns.map(c => `
+                        <div class="new-feed-item" data-status="${c.status || 'connected'}" onclick='openConnectionModal(${JSON.stringify(c).replace(/'/g, "&#39;")})' style="cursor: pointer;">
+                            <div class="new-feed-avatar">${(c.name || 'U').charAt(0).toUpperCase()}</div>
+                            <div class="new-feed-content">
+                                <div class="new-feed-header">
+                                    <span class="new-feed-name">${c.name || 'Unknown'}</span>
+                                    <span class="new-feed-status ${c.status || 'connected'}">${(c.status || 'Connected').charAt(0).toUpperCase() + (c.status || 'connected').slice(1)}</span>
+                                </div>
+                                <div class="new-feed-context">${c.ask_title || c.role || c.title || 'Introduction from Taj'}</div>
+                                <div class="new-feed-time">${formatNewDate(c.connected_at)}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                    console.log('[TapinX] Connections rendered successfully');
+                }
+            } catch (error) {
+                console.error('[TapinX] Error in loadNewConnections:', error);
+                const list = document.getElementById('newConnectionsList');
+                const empty = document.getElementById('newConnectionsEmpty');
+                if (list) list.innerHTML = '';
+                if (empty) empty.style.display = 'block';
+            }
+        }
+        
+        let currentConnectionData = null;
+
+        function openConnectionModal(connectionData) {
+            currentConnectionData = connectionData;
+            document.getElementById('connModalAvatar').textContent = (connectionData.name || 'U').charAt(0).toUpperCase();
+            document.getElementById('connModalName').textContent = connectionData.name || 'Unknown';
+            
+            const isConnected = connectionData.status === 'connected';
+            const status = document.getElementById('connModalStatus');
+            status.textContent = isConnected ? 'Connected' : 'Pending';
+            status.className = 'connection-modal-status ' + (isConnected ? 'connected' : 'pending');
+            
+            document.getElementById('connModalContextText').textContent = connectionData.ask_title || 'Introduction from Taj';
+            
+            const bioSection = document.getElementById('connModalBio');
+            if (connectionData.bio) { bioSection.style.display = 'block'; document.getElementById('connModalBioText').textContent = connectionData.bio; } 
+            else { bioSection.style.display = 'none'; }
+            
+            const skillsSection = document.getElementById('connModalSkills');
+            if (connectionData.skills && connectionData.skills.length > 0) {
+                skillsSection.style.display = 'block';
+                document.getElementById('connModalSkillsList').innerHTML = connectionData.skills.map(s => '<span class="connection-modal-skill">' + s + '</span>').join('');
+            } else { skillsSection.style.display = 'none'; }
+            
+            const message = document.getElementById('connModalMessage');
+            const footer = document.getElementById('connModalFooter');
+            
+            if (isConnected) {
+                message.className = 'connection-modal-message success';
+                message.innerHTML = '<div class="connection-modal-message-icon">🎉</div><div class="connection-modal-message-title">You\'re connected!</div><div class="connection-modal-message-text">Taj has introduced you both via Telegram. Check your messages to start the conversation!</div>';
+                footer.innerHTML = '<button class="connection-modal-btn primary" onclick="window.open(\'https://t.me/TapinXBot\', \'_blank\'); closeConnectionModal();">Open Telegram</button><button class="connection-modal-btn secondary" onclick="closeConnectionModal()">Close</button>';
+            } else {
+                message.className = 'connection-modal-message waiting';
+                message.innerHTML = '<div class="connection-modal-message-icon">⏳</div><div class="connection-modal-message-title">Waiting for response</div><div class="connection-modal-message-text">' + (connectionData.name || 'They') + ' hasn\'t responded yet. We\'ll notify you via Telegram as soon as they accept!</div>';
+                footer.innerHTML = '<button class="connection-modal-btn secondary" onclick="closeConnectionModal()">Got it</button>';
+            }
+            
+            document.getElementById('connectionModal').classList.add('show');
+        }
+
+        function closeConnectionModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('connectionModal').classList.remove('show');
+        }
+        
+        // Request Modal Functions
+        let currentRequestData = null;
+
+        function openRequestModal(requestData) {
+            currentRequestData = requestData;
+            
+            // Status labels mapping
+            const statusLabels = {
+                'active': 'In progress',
+                'waiting': 'Waiting',
+                'matched': 'Matched',
+                'completed': 'Completed'
+            };
+            
+            // Intent to category mapping
+            const intentLabels = {
+                'professional': 'Professional',
+                'community': 'Community',
+                'personal': 'Personal'
+            };
+            
+            document.getElementById('requestModalTitle').textContent = requestData.title || requestData.description || 'Request';
+            
+            const status = requestData.status || 'active';
+            document.getElementById('requestModalStatus').textContent = statusLabels[status] || 'Active';
+            
+            const intent = requestData.intent || requestData.category || 'professional';
+            document.getElementById('requestModalCategory').textContent = intentLabels[intent] || 'Professional';
+            
+            // Format date - try formatNewDate first, fallback to formatRequestTime or raw date
+            let dateText = 'Just now';
+            if (requestData.created_at) {
+                try {
+                    dateText = formatNewDate(requestData.created_at);
+                } catch (e) {
+                    try {
+                        dateText = formatRequestTime ? formatRequestTime(requestData.created_at) : new Date(requestData.created_at).toLocaleDateString();
+                    } catch (e2) {
+                        dateText = requestData.created_at;
+                    }
+                }
+            }
+            document.getElementById('requestModalDate').textContent = dateText;
+            
+            const skillsContainer = document.getElementById('requestModalSkills');
+            if (requestData.skills_needed && requestData.skills_needed.length > 0) {
+                skillsContainer.innerHTML = requestData.skills_needed.map(s => 
+                    '<span class="request-modal-skill">' + s + '</span>'
+                ).join('');
+            } else {
+                skillsContainer.innerHTML = '<span class="request-modal-value">Not specified</span>';
+            }
+            
+            const matchSection = document.getElementById('requestModalMatchSection');
+            if (requestData.match_name) {
+                matchSection.style.display = 'block';
+                document.getElementById('requestModalMatch').textContent = requestData.match_name;
+            } else {
+                matchSection.style.display = 'none';
+            }
+            
+            document.getElementById('requestModal').classList.add('show');
+        }
+
+        function closeRequestModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('requestModal').classList.remove('show');
+            currentRequestData = null;
+        }
+
+        function followUpRequestFromModal() {
+            const requestTitle = currentRequestData ? (currentRequestData.title || currentRequestData.description || 'request') : 'request';
+            window.open('https://t.me/TapinXBot?text=' + encodeURIComponent("What's the update on my " + requestTitle + " request I had asked you about?"), '_blank');
+            closeRequestModal();
+        }
+        
+        function setNewConnectionsTab(btn, tab) {
+            document.querySelectorAll('#newConnectionsPage .new-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            filterNewConnections(tab, true);
+        }
+        
+        function filterNewConnections(status, fromHorizontalTab = false) {
+            document.querySelectorAll('#newConnectionsList .new-feed-item').forEach(item => {
+                const itemStatus = item.dataset.status;
+                if (status === 'all') {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = itemStatus === status ? 'flex' : 'none';
+                }
+            });
+            
+            // Update sidebar sublinks for connections only
+            document.querySelectorAll('#connectionsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+            const sublinks = document.querySelectorAll('#connectionsExpand .new-sidebar-sublink');
+            if (status === 'all' && sublinks[0]) sublinks[0].classList.add('active');
+            if (status === 'connected' && sublinks[1]) sublinks[1].classList.add('active');
+            if (status === 'pending' && sublinks[2]) sublinks[2].classList.add('active');
+            
+            // Also update horizontal tabs when clicking from sidebar
+            if (!fromHorizontalTab) {
+                const tabs = document.querySelectorAll('#newConnectionsPage .new-tab');
+                tabs.forEach(t => t.classList.remove('active'));
+                if (status === 'all' && tabs[0]) tabs[0].classList.add('active');
+                if (status === 'connected' && tabs[1]) tabs[1].classList.add('active');
+                if (status === 'pending' && tabs[2]) tabs[2].classList.add('active');
+            }
+        }
+        
+        async function loadNewOpportunities() {
+            const { matches, count } = await fetchMatches();
+            const list = document.getElementById('newOpportunitiesList');
+            const empty = document.getElementById('newOpportunitiesEmpty');
+            
+            // Update badge
+            const badge = document.getElementById('opportunitiesBadge');
+            if (count > 0) {
+                badge.textContent = count;
+                badge.style.display = 'inline';
+            } else {
+                badge.style.display = 'none';
+            }
+            
+            if (count === 0) {
+                list.innerHTML = '';
+                empty.style.display = 'block';
+            } else {
+                empty.style.display = 'none';
+                const matchTypes = ['professional', 'community'];
+                const matchLabels = { professional: 'Professional match', community: 'Community-relevant' };
+                
+                list.innerHTML = matches.map(m => {
+                    const matchType = m.match_type || matchTypes[Math.floor(Math.random() * matchTypes.length)];
+                    return `
+                    <div class="new-feed-item" data-id="${m.id}" data-type="${matchType}">
+                        <div class="new-feed-avatar">${(m.other_name || 'T').charAt(0).toUpperCase()}</div>
+                        <div class="new-feed-content">
+                            <div class="new-feed-header">
+                                <span class="new-feed-name">${m.other_name || 'New opportunity'}</span>
+                                <span class="new-match-type ${matchType}">${matchLabels[matchType]}</span>
+                            </div>
+                            <div class="new-feed-text">Taj wants to introduce you to ${m.other_name || 'someone'}${m.intro_reason ? ' for ' + m.intro_reason : ''}</div>
+                            <div class="new-feed-time">${formatNewTimeAgo(m.created_at)}</div>
+                            <div class="new-feed-actions">
+                                <button class="new-feed-btn primary" onclick="acceptNewOpportunity('${m.id}')">Approve</button>
+                                <button class="new-feed-btn secondary" onclick="declineNewOpportunity('${m.id}')">Decline</button>
+                            </div>
+                        </div>
+                    </div>
+                `}).join('');
+            }
+        }
+        
+        function filterNewOpportunities(type, btn) {
+            document.querySelectorAll('#newOpportunitiesPage .new-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            
+            filterOpportunitiesItems(type);
+            
+            // Also update sidebar sublinks
+            updateOpportunitiesSidebarSublinks(type);
+        }
+        
+        function filterOpportunitiesFromSidebar(type) {
+            filterOpportunitiesItems(type);
+            
+            // Update sidebar sublinks
+            updateOpportunitiesSidebarSublinks(type);
+            
+            // Update horizontal tabs
+            const tabs = document.querySelectorAll('#newOpportunitiesPage .new-tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            if (type === 'all' && tabs[0]) tabs[0].classList.add('active');
+            if (type === 'professional' && tabs[1]) tabs[1].classList.add('active');
+            if (type === 'community' && tabs[2]) tabs[2].classList.add('active');
+            if (type === 'saved' && tabs[3]) tabs[3].classList.add('active');
+        }
+        
+        function filterOpportunitiesItems(type) {
+            document.querySelectorAll('#newOpportunitiesList .new-feed-item').forEach(item => {
+                const itemType = item.dataset.type;
+                if (type === 'all') {
+                    item.style.display = 'flex';
+                } else if (type === 'saved') {
+                    item.style.display = item.dataset.saved === 'true' ? 'flex' : 'none';
+                } else {
+                    item.style.display = itemType === type ? 'flex' : 'none';
+                }
+            });
+        }
+        
+        function updateOpportunitiesSidebarSublinks(type) {
+            document.querySelectorAll('#opportunitiesExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+            const sublinks = document.querySelectorAll('#opportunitiesExpand .new-sidebar-sublink');
+            if (type === 'all' && sublinks[0]) sublinks[0].classList.add('active');
+            if (type === 'professional' && sublinks[1]) sublinks[1].classList.add('active');
+            if (type === 'community' && sublinks[2]) sublinks[2].classList.add('active');
+            if (type === 'saved' && sublinks[3]) sublinks[3].classList.add('active');
+        }
+        
+        async function acceptNewOpportunity(id) {
+            await respondToMatch(id, 'accept');
+            showNewToast('Introduction accepted!');
+            loadNewOpportunities();
+        }
+        
+        async function declineNewOpportunity(id) {
+            await respondToMatch(id, 'decline');
+            showNewToast('Passed');
+            loadNewOpportunities();
+        }
+        
+        function submitNewReferral() {
+            const name = document.getElementById('newReferralName').value;
+            const contact = document.getElementById('newReferralContact').value;
+            if (name && contact) {
+                showNewToast('Referral sent!');
+                document.getElementById('newReferralName').value = '';
+                document.getElementById('newReferralContact').value = '';
+                document.getElementById('newReferralContext').value = '';
+            }
+        }
+        
+        async function loadNewRequests() {
+            const list = document.getElementById('newRequestsList');
+            const empty = document.getElementById('newRequestsEmpty');
+            
+            // Try to fetch from API
+            let requests = [];
+            try {
+                const userPhone = localStorage.getItem('tapinx_user_phone');
+                if (userPhone) {
+                    // Clean phone format for API
+                    const cleanPhone = userPhone.replace(/\s/g, '').replace(/[()-]/g, '');
+                    const API_URL = 'https://tapinx-backend-production.up.railway.app';
+                    const response = await fetch(`${API_URL}/api/requests/${encodeURIComponent(cleanPhone)}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            requests = data.requests || [];
+                        }
+                    }
+                }
+            } catch (e) {
+                console.log('[TapinX] Could not fetch requests:', e.message);
+            }
+            
+            // Fallback to localStorage for demo
+            if (requests.length === 0) {
+                requests = JSON.parse(localStorage.getItem('tapinx_requests') || '[]');
+            }
+            
+            // Update badge
+            const activeCount = requests.filter(r => r.status === 'active' || r.status === 'matched').length;
+            const badge = document.getElementById('requestsBadge');
+            if (activeCount > 0) {
+                badge.textContent = activeCount;
+                badge.style.display = 'inline';
+            } else {
+                badge.style.display = 'none';
+            }
+            
+            if (requests.length === 0) {
+                list.innerHTML = '';
+                empty.style.display = 'block';
+            } else {
+                empty.style.display = 'none';
+                
+                // Status styling
+                const statusLabels = {
+                    'active': 'In progress',
+                    'waiting': 'Waiting',
+                    'matched': 'Matched',
+                    'completed': 'Completed'
+                };
+                
+                // Intent badge styling
+                const intentLabels = {
+                    'professional': 'Professional',
+                    'community': 'Community',
+                    'personal': 'Personal'
+                };
+                
+                list.innerHTML = requests.map(r => {
+                    const status = r.status || 'active';
+                    const intent = r.intent || 'professional';
+                    const timestamp = r.created_at ? formatRequestTime(r.created_at) : 'Just now';
+                    
+                    // Determine actions based on status
+                    let actions = '';
+                    if (status === 'active' || status === 'waiting') {
+                        actions = `
+                            <button class="new-request-action" onclick="event.stopPropagation(); openRequestModal(${JSON.stringify(r).replace(/"/g, "&quot;")})">View details</button>
+                            <button class="new-request-action" onclick="event.stopPropagation(); followUpRequest('${r.id}')">Follow up</button>
+                        `;
+                    } else if (status === 'matched') {
+                        actions = `
+                            <button class="new-request-action" onclick="event.stopPropagation(); openRequestModal(${JSON.stringify(r).replace(/"/g, "&quot;")})">View details</button>
+                        `;
+                    } else if (status === 'completed') {
+                        actions = `
+                            <button class="new-request-action" onclick="event.stopPropagation(); openRequestModal(${JSON.stringify(r).replace(/"/g, "&quot;")})">View details</button>
+                            <button class="new-request-action" onclick="event.stopPropagation(); archiveRequest('${r.id}')">Archive</button>
+                        `;
+                    }
+                    
+                    return `
+                    <div class="new-feed-item new-request-row" data-id="${r.id}" data-status="${status}" onclick='openRequestModal(${JSON.stringify(r).replace(/"/g, "&quot;")})' style="cursor: pointer;">
+                        <div class="new-request-content">
+                            <div class="new-request-header">
+                                <span class="new-request-title">${r.title || r.description || 'Introduction request'}</span>
+                                <div class="new-request-badges">
+                                    <span class="new-request-intent">${intentLabels[intent] || 'Professional'}</span>
+                                    <span class="new-request-status ${status}">${statusLabels[status] || 'In progress'}</span>
+                                </div>
+                            </div>
+                            <div class="new-request-meta">
+                                <span class="new-request-time">Requested ${timestamp}</span>
+                            </div>
+                        </div>
+                        <div class="new-request-actions">
+                            ${actions}
+                        </div>
+                    </div>
+                `}).join('');
+            }
+        }
+        
+        function formatRequestTime(dateStr) {
+            if (!dateStr) return 'Just now';
+            const now = new Date();
+            const d = new Date(dateStr);
+            const diffMs = now - d;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 60) return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
+            if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+            if (diffDays === 1) return 'yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+        
+        function filterRequests(status, btn) {
+            if (btn) {
+                document.querySelectorAll('#newRequestsPage .new-tab').forEach(t => t.classList.remove('active'));
+                btn.classList.add('active');
+            }
+            
+            filterRequestsItems(status);
+            
+            // Update sidebar sublinks
+            updateRequestsSidebarSublinks(status);
+        }
+        
+        function filterRequestsFromSidebar(status) {
+            filterRequestsItems(status);
+            
+            // Update sidebar sublinks
+            updateRequestsSidebarSublinks(status);
+            
+            // Update horizontal tabs
+            const tabs = document.querySelectorAll('#newRequestsPage .new-tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            if (status === 'all' && tabs[0]) tabs[0].classList.add('active');
+            if (status === 'active' && tabs[1]) tabs[1].classList.add('active');
+            if (status === 'matched' && tabs[2]) tabs[2].classList.add('active');
+            if (status === 'completed' && tabs[3]) tabs[3].classList.add('active');
+        }
+        
+        function filterRequestsItems(status) {
+            document.querySelectorAll('#newRequestsList .new-feed-item').forEach(item => {
+                const itemStatus = item.dataset.status;
+                if (status === 'all') {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = itemStatus === status ? 'flex' : 'none';
+                }
+            });
+        }
+        
+        function updateRequestsSidebarSublinks(status) {
+            document.querySelectorAll('#requestsExpand .new-sidebar-sublink').forEach(l => l.classList.remove('active'));
+            const sublinks = document.querySelectorAll('#requestsExpand .new-sidebar-sublink');
+            if (status === 'all' && sublinks[0]) sublinks[0].classList.add('active');
+            if (status === 'active' && sublinks[1]) sublinks[1].classList.add('active');
+            if (status === 'matched' && sublinks[2]) sublinks[2].classList.add('active');
+            if (status === 'completed' && sublinks[3]) sublinks[3].classList.add('active');
+        }
+        
+        function viewRequestDetails(requestId) {
+            // Show request details - could open a modal or navigate
+            showNewToast('Opening request details...');
+        }
+        
+        function followUpRequest(requestId) {
+            // Open Telegram to follow up with Taj
+            window.open('https://t.me/TapinXBot', '_blank');
+            showNewToast('Following up with Taj...');
+        }
+        
+        function archiveRequest(requestId) {
+            // Archive the request
+            let requests = JSON.parse(localStorage.getItem('tapinx_requests') || '[]');
+            requests = requests.filter(r => r.id !== requestId);
+            localStorage.setItem('tapinx_requests', JSON.stringify(requests));
+            loadNewRequests();
+            showNewToast('Request archived');
+        }
+        
+        function cancelRequest(requestId) {
+            // Update in localStorage
+            let requests = JSON.parse(localStorage.getItem('tapinx_requests') || '[]');
+            requests = requests.map(r => {
+                if (r.id === requestId) {
+                    r.status = 'cancelled';
+                }
+                return r;
+            });
+            localStorage.setItem('tapinx_requests', JSON.stringify(requests));
+            loadNewRequests();
+            showNewToast('Request cancelled');
+        }
+        // ========== END MY REQUESTS FUNCTIONS ==========
+        
+        function showBlockedContacts() {
+            // For now, show a toast - can be expanded to a modal later
+            showNewToast('No blocked contacts');
+        }
+        
+        function confirmDeleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                // Clear all user data
+                localStorage.clear();
+                showNewToast('Account deleted');
+                setTimeout(() => {
+                    showPage('landing');
+                }, 1500);
+            }
+        }
+        
+        // ========== TASKS SYSTEM ==========
+        let tasks = [];
+        
+        function initTasks() {
+            // Load saved tasks from localStorage
+            const saved = localStorage.getItem('tapinx_tasks');
+            if (saved) {
+                tasks = JSON.parse(saved);
+            }
+            
+            // Add system tasks based on state
+            generateSystemTasks();
+            renderTasks();
+        }
+        
+        function generateSystemTasks() {
+            // Remove old system tasks
+            tasks = tasks.filter(t => t.type !== 'system');
+            
+            // Check profile completion (Instagram is required)
+            const hasProfile = localStorage.getItem('tapinx_user_instagram');
+            if (!hasProfile) {
+                tasks.unshift({
+                    id: 'sys_profile',
+                    title: 'Complete your profile',
+                    meta: 'Help Taj make better matches',
+                    type: 'system',
+                    action: 'openNewEditProfile()',
+                    done: false
+                });
+            }
+            
+            // Check if user has messaged Taj
+            const hasMessaged = localStorage.getItem('tapinx_has_messaged');
+            if (!hasMessaged) {
+                tasks.unshift({
+                    id: 'sys_message',
+                    title: 'Message Taj',
+                    meta: 'Tell Taj who you want to meet',
+                    type: 'system',
+                    action: "window.open('https://t.me/TapinXBot', '_blank')",
+                    done: false
+                });
+            }
+            
+            // Check for pending opportunities (mock - would be real data)
+            const pendingCount = parseInt(localStorage.getItem('tapinx_pending_opps') || '0');
+            if (pendingCount > 0) {
+                tasks.unshift({
+                    id: 'sys_opportunities',
+                    title: `Review ${pendingCount} new ${pendingCount === 1 ? 'opportunity' : 'opportunities'}`,
+                    meta: 'Pending introductions',
+                    type: 'system',
+                    action: "showNewAppPage('opportunities')",
+                    done: false
+                });
+            }
+        }
+        
+        function renderTasks() {
+            const list = document.getElementById('tasksList');
+            const empty = document.getElementById('tasksEmpty');
+            
+            if (!list) return;
+            
+            // Filter out done tasks that are older than 5 seconds (auto-dismiss)
+            const activeTasks = tasks.filter(t => !t.done || (t.doneAt && Date.now() - t.doneAt < 5000));
+            
+            if (activeTasks.length === 0) {
+                list.innerHTML = '';
+                if (empty) empty.style.display = 'block';
+                return;
+            }
+            
+            if (empty) empty.style.display = 'none';
+            
+            // Separate system and custom tasks
+            const systemTasks = activeTasks.filter(t => t.type === 'system');
+            const customTasks = activeTasks.filter(t => t.type === 'custom');
+            
+            let html = '';
+            
+            // System tasks
+            if (systemTasks.length > 0) {
+                html += '<div class="new-tasks-divider">To do</div>';
+                systemTasks.forEach(task => {
+                    html += renderTaskItem(task);
+                });
+            }
+            
+            // Custom tasks
+            if (customTasks.length > 0) {
+                if (systemTasks.length > 0) {
+                    html += '<div class="new-tasks-divider">My tasks</div>';
+                }
+                customTasks.forEach(task => {
+                    html += renderTaskItem(task);
+                });
+            }
+            
+            list.innerHTML = html;
+        }
+        
+        function renderTaskItem(task) {
+            const doneClass = task.done ? 'done' : '';
+            const checkmark = task.done ? '✓' : '';
+            const typeClass = task.type === 'system' ? 'system' : '';
+            
+            return `
+                <div class="new-task-item ${doneClass}" onclick="handleTaskClick('${task.id}')" data-id="${task.id}">
+                    <div class="new-task-checkbox">${checkmark}</div>
+                    <div class="new-task-content">
+                        <div class="new-task-title">${task.title}</div>
+                        ${task.meta ? `<div class="new-task-meta">${task.meta}</div>` : ''}
+                    </div>
+                    <button class="new-task-dismiss" onclick="event.stopPropagation(); dismissTask('${task.id}')" title="Dismiss">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            `;
+        }
+        
+        function handleTaskClick(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+            
+            if (task.done) return; // Already done
+            
+            // If it has an action, execute it
+            if (task.action) {
+                eval(task.action);
+            }
+            
+            // Mark as done
+            task.done = true;
+            task.doneAt = Date.now();
+            saveTasks();
+            renderTasks();
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                renderTasks();
+            }, 3000);
+        }
+        
+        function dismissTask(taskId) {
+            tasks = tasks.filter(t => t.id !== taskId);
+            saveTasks();
+            renderTasks();
+        }
+        
+        function openAddTaskModal() {
+            const modal = document.getElementById('addTaskModal');
+            modal.classList.add('show');
+            document.getElementById('taskModalInput').focus();
+        }
+        
+        function closeAddTaskModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            const modal = document.getElementById('addTaskModal');
+            modal.classList.remove('show');
+            document.getElementById('taskModalInput').value = '';
+            document.getElementById('taskModalNote').value = '';
+        }
+        
+        function handleTaskModalKeypress(e) {
+            if (e.key === 'Enter') {
+                addCustomTaskFromModal();
+            }
+        }
+        
+        function addCustomTaskFromModal() {
+            const titleInput = document.getElementById('taskModalInput');
+            const noteInput = document.getElementById('taskModalNote');
+            const title = titleInput.value.trim();
+            const note = noteInput.value.trim();
+            
+            if (!title) return;
+            
+            tasks.push({
+                id: 'custom_' + Date.now(),
+                title: title,
+                meta: note || null,
+                type: 'custom',
+                done: false,
+                createdAt: Date.now()
+            });
+            
+            saveTasks();
+            renderTasks();
+            closeAddTaskModal();
+            showNewToast('Task added');
+        }
+        
+        function saveTasks() {
+            // Only save custom tasks
+            const customTasks = tasks.filter(t => t.type === 'custom');
+            localStorage.setItem('tapinx_tasks', JSON.stringify(customTasks));
+        }
+        
+        function openNewEditProfile() {
+            openEditProfileModal();
+        }
+        
+        function formatNewDate(dateStr) {
+            if (!dateStr) return '';
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+        
+        function formatNewTimeAgo(dateStr) {
+            if (!dateStr) return '';
+            const now = new Date();
+            const d = new Date(dateStr);
+            const diffMs = now - d;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            return `${diffDays}d ago`;
+        }
+        
+        // Intent selector
+        function setIntent(intent, btn) {
+            // Update UI
+            document.querySelectorAll('.intent-seg-btn').forEach(opt => opt.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Save to localStorage
+            localStorage.setItem('tapinx_user_intent', intent);
+            
+            // Show confirmation
+            showNewToast(`Intent set to ${intent.charAt(0).toUpperCase() + intent.slice(1)}`);
+        }
+        
+        // Load saved intent on page load
+        function loadSavedIntent() {
+            const savedIntent = localStorage.getItem('tapinx_user_intent') || 'professional';
+            const intentBtn = document.querySelector(`.intent-seg-btn[data-intent="${savedIntent}"]`);
+            if (intentBtn) {
+                document.querySelectorAll('.intent-seg-btn').forEach(opt => opt.classList.remove('active'));
+                intentBtn.classList.add('active');
+            }
+        }
+        
+        function showNewToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'conn-toast show';
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        // Update sidebar with user data
+        function updateNewSidebar() {
+            const name = localStorage.getItem('tapinx_user_name') || 'User';
+            const photo = localStorage.getItem('tapinx_user_photo');
+            
+            document.getElementById('newSidebarName').textContent = name;
+            document.getElementById('newSidebarAvatarInitial').textContent = name.charAt(0).toUpperCase();
+            
+            if (photo) {
+                document.getElementById('newSidebarAvatarImg').src = photo;
+                document.getElementById('newSidebarAvatarImg').style.display = 'block';
+                document.getElementById('newSidebarAvatarInitial').style.display = 'none';
+            } else {
+                document.getElementById('newSidebarAvatarImg').style.display = 'none';
+                document.getElementById('newSidebarAvatarInitial').style.display = 'flex';
+            }
+            
+            // Refresh tasks when sidebar updates
+            if (typeof initTasks === 'function') {
+                initTasks();
+            }
+        }
+        
+        // Call when page loads
+        if (document.getElementById('dashboardPage')) {
+            updateNewSidebar();
+            loadSavedIntent();
+            initTasks();
+        }
+    </script>
+</body>
+</html>
