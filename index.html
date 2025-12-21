@@ -5500,14 +5500,172 @@
         /* Mobile Responsive */
         @media (max-width: 480px) {
             .opp-detail-footer,
-            .refer-confirm-footer,
-            .refer-success-footer,
             .decline-confirm-footer {
                 flex-direction: column;
             }
             
             .opp-detail-btn {
                 width: 100%;
+            }
+        }
+        
+        /* ========== SHARE MODAL STYLES ========== */
+        .share-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .share-modal-overlay.show {
+            display: flex;
+        }
+        
+        .share-modal {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: modalSlideIn 0.2s ease;
+        }
+        
+        .share-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #f5f5f5;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            z-index: 1;
+        }
+        
+        .share-modal-close:hover {
+            background: #e0e0e0;
+        }
+        
+        .share-modal-body {
+            padding: 24px;
+        }
+        
+        .share-modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0f1419;
+            margin: 0 0 20px 0;
+        }
+        
+        .share-modal-preview {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #f7f7f7;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .share-preview-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .share-preview-info {
+            flex: 1;
+        }
+        
+        .share-preview-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0f1419;
+        }
+        
+        .share-preview-title {
+            font-size: 13px;
+            color: #536471;
+            margin-top: 2px;
+        }
+        
+        .share-options {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 90px;
+        }
+        
+        .share-option:hover {
+            background: #f7f7f7;
+            border-color: #ccc;
+        }
+        
+        .share-option-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+        
+        .share-option-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #0f1419;
+        }
+        
+        /* Mobile responsive for share modal */
+        @media (max-width: 480px) {
+            .share-options {
+                flex-direction: column;
+            }
+            
+            .share-option {
+                flex-direction: row;
+                justify-content: flex-start;
+                padding: 12px 16px;
+            }
+            
+            .share-option-icon {
+                width: 40px;
+                height: 40px;
             }
         }
         
@@ -6998,46 +7156,56 @@
         </div>
     </div>
     
-    <!-- ========== REFERRAL CONFIRMATION MODAL ========== -->
-    <div class="refer-confirm-overlay" id="referConfirmModal" onclick="closeReferConfirmModal(event)">
-        <div class="refer-confirm-modal" onclick="event.stopPropagation()">
-            <button class="opp-modal-close" onclick="closeReferConfirmModal()">
+    <!-- ========== SHARE MODAL (Airbnb-style) ========== -->
+    <div class="share-modal-overlay" id="shareModal" onclick="closeShareModal(event)">
+        <div class="share-modal" onclick="event.stopPropagation()">
+            <button class="share-modal-close" onclick="closeShareModal()">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="18" y1="6" x2="6" y2="18"/>
                     <line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
             </button>
             
-            <div class="refer-confirm-body">
-                <div class="refer-confirm-icon">🎯</div>
-                <h2 class="refer-confirm-title">Refer this opportunity</h2>
-                <p class="refer-confirm-subtitle">You're about to refer "<span id="referConfirmOppTitle">Video Editor</span>" to a friend.</p>
+            <div class="share-modal-body">
+                <h2 class="share-modal-title">Share this opportunity</h2>
                 
-                <div class="refer-confirm-input-group">
-                    <label class="refer-confirm-label">Friend's name (optional)</label>
-                    <input type="text" class="refer-confirm-input" id="referFriendName" placeholder="Enter their name">
+                <div class="share-modal-preview">
+                    <div class="share-preview-avatar" id="sharePreviewAvatar">S</div>
+                    <div class="share-preview-info">
+                        <div class="share-preview-name" id="sharePreviewName">Sarah Johnson</div>
+                        <div class="share-preview-title" id="sharePreviewTitle">Video Editor for Social Media</div>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="refer-confirm-footer">
-                <button class="opp-detail-btn primary" onclick="sendReferral()">Send Referral</button>
-                <button class="opp-detail-btn secondary" onclick="closeReferConfirmModal()">Cancel</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- ========== SUCCESS CELEBRATION MODAL ========== -->
-    <div class="refer-success-overlay" id="referSuccessModal" onclick="closeReferSuccessModal(event)">
-        <div class="refer-success-modal" onclick="event.stopPropagation()">
-            <div class="refer-success-body">
-                <div class="refer-success-icon">🎉</div>
-                <h2 class="refer-success-title">Referral Sent!</h2>
-                <p class="refer-success-subtitle">This opportunity has been moved to your Archive. Your friend will receive a link to check it out.</p>
-            </div>
-            
-            <div class="refer-success-footer">
-                <button class="opp-detail-btn primary" onclick="goToArchive()">View Archive</button>
-                <button class="opp-detail-btn secondary" onclick="closeReferSuccessModal()">Done</button>
+                
+                <div class="share-options">
+                    <button class="share-option" onclick="shareViaCopyLink()">
+                        <div class="share-option-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </div>
+                        <span class="share-option-label">Copy Link</span>
+                    </button>
+                    
+                    <button class="share-option" onclick="shareViaMessages()">
+                        <div class="share-option-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                        <span class="share-option-label">Messages</span>
+                    </button>
+                    
+                    <button class="share-option" onclick="shareViaTelegram()">
+                        <div class="share-option-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                            </svg>
+                        </div>
+                        <span class="share-option-label">Telegram</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -10887,12 +11055,16 @@
             if (nameEl) nameEl.textContent = name;
             if (bioEl) bioEl.textContent = opportunity.requester_bio || 'TapinX member';
             
-            // Set opportunity details
+            // Set opportunity details - Fix: Use ask_title first, then title, then ask_text
             const titleEl = document.getElementById('oppDetailTitle');
             const descEl = document.getElementById('oppDetailDesc');
             
-            if (titleEl) titleEl.textContent = opportunity.ask_title || opportunity.title || 'Connection Request';
-            if (descEl) descEl.textContent = opportunity.ask_text || opportunity.intro_reason || 'No description provided.';
+            const title = opportunity.ask_title || opportunity.title || 'Connection Request';
+            if (titleEl) titleEl.textContent = title;
+            
+            // Description - use ask_text
+            const desc = opportunity.ask_text || opportunity.description || '';
+            if (descEl) descEl.textContent = desc || 'No description provided.';
             
             // Set skills
             const skillsContainer = document.getElementById('oppDetailSkills');
@@ -10944,18 +11116,50 @@
         
         function handleOppRefer() {
             if (!currentOppData) return;
+            
+            // Close detail modal
             closeOppDetailModal();
-            // Show referral confirmation
-            document.getElementById('referConfirmOppTitle').textContent = currentOppData.ask_title || currentOppData.title || 'this opportunity';
-            document.getElementById('referFriendName').value = '';
-            document.getElementById('referConfirmModal').classList.add('show');
+            
+            // Populate share modal
+            const name = currentOppData.requester_name || currentOppData.other_name || 'Someone';
+            const title = currentOppData.ask_title || currentOppData.title || 'Opportunity';
+            
+            const avatarEl = document.getElementById('sharePreviewAvatar');
+            const nameEl = document.getElementById('sharePreviewName');
+            const titleEl = document.getElementById('sharePreviewTitle');
+            
+            if (avatarEl) avatarEl.textContent = name.charAt(0).toUpperCase();
+            if (nameEl) nameEl.textContent = name;
+            if (titleEl) titleEl.textContent = title;
+            
+            // Open share modal
+            const shareModal = document.getElementById('shareModal');
+            if (shareModal) {
+                shareModal.classList.add('show');
+            }
         }
         
         function openReferFromCard(opportunity) {
+            console.log('[Modal] Opening refer modal from card for:', opportunity);
             currentOppData = opportunity;
-            document.getElementById('referConfirmOppTitle').textContent = opportunity.ask_title || opportunity.title || 'this opportunity';
-            document.getElementById('referFriendName').value = '';
-            document.getElementById('referConfirmModal').classList.add('show');
+            
+            // Populate share modal
+            const name = opportunity.requester_name || opportunity.other_name || 'Someone';
+            const title = opportunity.ask_title || opportunity.title || 'Opportunity';
+            
+            const avatarEl = document.getElementById('sharePreviewAvatar');
+            const nameEl = document.getElementById('sharePreviewName');
+            const titleEl = document.getElementById('sharePreviewTitle');
+            
+            if (avatarEl) avatarEl.textContent = name.charAt(0).toUpperCase();
+            if (nameEl) nameEl.textContent = name;
+            if (titleEl) titleEl.textContent = title;
+            
+            // Open share modal
+            const shareModal = document.getElementById('shareModal');
+            if (shareModal) {
+                shareModal.classList.add('show');
+            }
         }
         
         // ========== DECLINE MODAL FUNCTIONS ==========
@@ -10972,26 +11176,36 @@
             declineNewOpportunity(currentOppData.id);
         }
         
-        // ========== REFERRAL MODAL FUNCTIONS ==========
+        // ========== SHARE MODAL FUNCTIONS ==========
         
-        function closeReferConfirmModal(event) {
+        function closeShareModal(event) {
             if (event && event.target !== event.currentTarget) return;
-            document.getElementById('referConfirmModal').classList.remove('show');
+            const shareModal = document.getElementById('shareModal');
+            if (shareModal) {
+                shareModal.classList.remove('show');
+            }
         }
         
-        async function sendReferral() {
+        // Generate referral link and message
+        function getReferralData() {
+            const userId = localStorage.getItem('tapinx_user_id');
+            const oppId = currentOppData.ask_id || currentOppData.id;
+            const title = currentOppData.ask_title || currentOppData.title || 'an opportunity';
+            const name = currentOppData.requester_name || currentOppData.other_name || 'someone';
+            
+            const referralLink = 'https://tapinx.com?ref=' + userId + '&opp=' + oppId;
+            const message = "Hey! I found an opportunity on TapinX that might be perfect for you: \"" + title + "\" from " + name + ". Check it out: " + referralLink;
+            
+            return { referralLink, message, title };
+        }
+        
+        // Mark opportunity as referred in backend
+        async function markAsReferred() {
             if (!currentOppData) return;
             
-            const friendName = document.getElementById('referFriendName').value.trim();
             const matchId = currentOppData.id;
-            const title = currentOppData.ask_title || currentOppData.title || 'an opportunity';
-            const oppId = currentOppData.ask_id;
             const userId = localStorage.getItem('tapinx_user_id');
             
-            // Close confirmation modal
-            closeReferConfirmModal();
-            
-            // Update match status to 'referred' in backend
             try {
                 await fetch(API_URL + '/matches/' + matchId + '/respond', {
                     method: 'POST',
@@ -11002,62 +11216,53 @@
                     })
                 });
             } catch (e) {
-                console.error('Error updating match status:', e);
+                console.error('Error marking as referred:', e);
             }
-            
-            // Create referral link
-            const referralLink = 'https://tapinx.com?ref=' + userId + '&opp=' + oppId;
-            
-            // Create share message
-            let shareMessage = "Hey";
-            if (friendName) {
-                shareMessage += " " + friendName;
-            }
-            shareMessage += "! I found an opportunity on TapinX that might be perfect for you: \"" + title + "\". Check it out: " + referralLink;
-            
-            // Open share/SMS
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            
-            if (isMobile) {
-                window.location.href = 'sms:?body=' + encodeURIComponent(shareMessage);
-            } else {
-                if (navigator.share) {
-                    navigator.share({
-                        title: 'TapinX Opportunity',
-                        text: shareMessage
-                    }).catch(console.error);
-                } else {
-                    navigator.clipboard.writeText(shareMessage).then(() => {
-                        // Show success after copy
-                    }).catch(() => {
-                        window.open(referralLink, '_blank');
-                    });
-                }
-            }
-            
-            // Show success modal
-            document.getElementById('referSuccessModal').classList.add('show');
             
             // Reload opportunities
             loadNewOpportunities();
         }
         
-        // ========== SUCCESS MODAL FUNCTIONS ==========
-        
-        function closeReferSuccessModal(event) {
-            if (event && event.target !== event.currentTarget) return;
-            document.getElementById('referSuccessModal').classList.remove('show');
-            currentOppData = null;
+        // Share via Copy Link
+        function shareViaCopyLink() {
+            const { referralLink, message } = getReferralData();
+            
+            navigator.clipboard.writeText(message).then(() => {
+                alert('Link copied to clipboard!');
+                closeShareModal();
+                markAsReferred();
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                // Fallback
+                prompt('Copy this link:', message);
+                closeShareModal();
+                markAsReferred();
+            });
         }
         
-        function goToArchive() {
-            closeReferSuccessModal();
-            // Click the archive tab
-            const archiveTab = document.querySelector('.new-tab[onclick*="archive"]');
-            if (archiveTab) {
-                filterNewOpportunities('archive', archiveTab);
-            }
+        // Share via Messages (SMS)
+        function shareViaMessages() {
+            const { message } = getReferralData();
+            
+            window.location.href = 'sms:?body=' + encodeURIComponent(message);
+            
+            closeShareModal();
+            markAsReferred();
         }
+        
+        // Share via Telegram
+        function shareViaTelegram() {
+            const { referralLink, message, title } = getReferralData();
+            
+            // Open Telegram share
+            const telegramUrl = 'https://t.me/share/url?url=' + encodeURIComponent(referralLink) + '&text=' + encodeURIComponent('Check out this opportunity on TapinX: "' + title + '"');
+            
+            window.open(telegramUrl, '_blank');
+            
+            closeShareModal();
+            markAsReferred();
+        }
+        
         
         // ========== ARCHIVE ACTIONS ==========
         
