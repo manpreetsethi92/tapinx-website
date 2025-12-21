@@ -5148,6 +5148,38 @@
             background: rgba(0, 0, 0, 0.05);
         }
         
+        /* Archive Status Styles */
+        .archive-status {
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+        
+        .archive-status.declined {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .archive-status.referred {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .new-feed-item.archived {
+            opacity: 0.8;
+        }
+        
+        .new-feed-item.archived .new-feed-content {
+            color: #666;
+        }
+        
+        .archive-empty {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
         /* Empty States - Centered within content area */
         .new-empty-state {
             flex: 1;
@@ -6146,7 +6178,7 @@
                             <div class="new-sidebar-sublink active" onclick="filterOpportunitiesFromSidebar('all')">All</div>
                             <div class="new-sidebar-sublink" onclick="filterOpportunitiesFromSidebar('professional')">Professional</div>
                             <div class="new-sidebar-sublink" onclick="filterOpportunitiesFromSidebar('community')">Community</div>
-                            <div class="new-sidebar-sublink" onclick="filterOpportunitiesFromSidebar('saved')">Saved</div>
+                            <div class="new-sidebar-sublink" onclick="filterOpportunitiesFromSidebar('archive')">Archive</div>
                         </div>
                     </div>
                     
@@ -6290,7 +6322,7 @@
                         <button class="new-tab active" onclick="filterNewOpportunities('all', this)">All</button>
                         <button class="new-tab" onclick="filterNewOpportunities('professional', this)">Professional</button>
                         <button class="new-tab" onclick="filterNewOpportunities('community', this)">Community</button>
-                        <button class="new-tab" onclick="filterNewOpportunities('saved', this)">Saved</button>
+                        <button class="new-tab" onclick="filterNewOpportunities('archive', this)">Archive</button>
                     </div>
                     <div class="invite-banner" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #f8f9fa; border-radius: 10px; margin-bottom: 16px;">
                         <span style="color: #536471; font-size: 14px;">Know someone who'd benefit from TapinX?</span>
@@ -7798,7 +7830,26 @@
         }
         
         // Try to initialize Firebase on page load
+        // Check for referral parameters
+        function checkReferralParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refUserId = urlParams.get('ref');
+            const refOppId = urlParams.get('opp');
+            
+            if (refUserId) {
+                localStorage.setItem('tapinx_referred_by', refUserId);
+                console.log('[Referral] Referred by user:', refUserId);
+            }
+            if (refOppId) {
+                localStorage.setItem('tapinx_referred_opportunity', refOppId);
+                console.log('[Referral] Referred for opportunity:', refOppId);
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
+            // Check for referral parameters first
+            checkReferralParams();
+            
             // Initialize Firebase first
             if (typeof initFirebase === 'function') {
                 initFirebase();
@@ -8399,16 +8450,30 @@
                                 // Sync with backend to get user ID
                                 try {
                                     const API_URL = 'https://tapinx-backend-production.up.railway.app';
+                                    const referredBy = localStorage.getItem('tapinx_referred_by');
+                                    const referredOpp = localStorage.getItem('tapinx_referred_opportunity');
+                                    
+                                    const signupData = {
+                                        phone: user.phoneNumber,
+                                        name: 'User',
+                                        referred_by: referredBy ? parseInt(referredBy) : null,
+                                        referred_opportunity_id: referredOpp ? parseInt(referredOpp) : null
+                                    };
+                                    
                                     const response = await fetch(`${API_URL}/api/signup`, {
                                         method: 'POST',
                                         headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({ phone: user.phoneNumber, name: 'User' })
+                                        body: JSON.stringify(signupData)
                                     });
                                     const data = await response.json();
                                     if (data.success && data.user) {
                                         localStorage.setItem('tapinx_user_id', data.user.id);
                                         if (data.user.name) localStorage.setItem('tapinx_user_name', data.user.name);
                                         console.log('[TapinX] User synced:', data.user.id);
+                                        
+                                        // Clear referral data after successful signup
+                                        localStorage.removeItem('tapinx_referred_by');
+                                        localStorage.removeItem('tapinx_referred_opportunity');
                                     }
                                 } catch (e) {
                                     console.error('[TapinX] Backend sync error:', e);
@@ -8420,6 +8485,8 @@
                                 const name = localStorage.getItem('tapinx_signup_name') || '';
                                 const age = localStorage.getItem('tapinx_signup_age') || '';
                                 const phone = localStorage.getItem('tapinx_signup_phone') || '';
+                                const referredBy = localStorage.getItem('tapinx_referred_by');
+                                const referredOpp = localStorage.getItem('tapinx_referred_opportunity');
                                 
                                 localStorage.setItem('tapinx_user_name', name);
                                 localStorage.setItem('tapinx_user_age', age);
@@ -8433,9 +8500,37 @@
                                 // Sync profile from backend (in case they have existing data)
                                 fetchProfileFromBackend().then(() => {
                                     updateNewSidebar();
+                                    
+                                    // If referred for specific opportunity, save referral data
+                                    if (referredBy || referredOpp) {
+                                        const userId = localStorage.getItem('tapinx_user_id');
+                                        if (userId) {
+                                            fetch(API_URL + '/api/users/' + userId, {
+                                                method: 'PATCH',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify({
+                                                    referred_by: referredBy ? parseInt(referredBy) : null,
+                                                    referred_opportunity_id: referredOpp ? parseInt(referredOpp) : null
+                                                })
+                                            }).catch(console.error);
+                                        }
+                                    }
+                                    
+                                    // Clear referral data after saving
+                                    localStorage.removeItem('tapinx_referred_by');
+                                    localStorage.removeItem('tapinx_referred_opportunity');
                                 });
                                 
                                 Router.navigate('opportunities');
+                                
+                                // If referred for specific opportunity, show it
+                                if (referredOpp) {
+                                    setTimeout(() => {
+                                        // The opportunity should appear in their feed
+                                        // Could show a banner: "You were referred for this opportunity!"
+                                    }, 500);
+                                }
+                                
                                 setTimeout(() => openEditProfileModal(), 300);
                             }
                         })
@@ -10148,6 +10243,11 @@
             document.querySelectorAll('#newOpportunitiesPage .new-tab').forEach(t => t.classList.remove('active'));
             btn.classList.add('active');
             
+            if (type === 'archive') {
+                loadArchivedOpportunities();
+                return;
+            }
+            
             filterOpportunitiesItems(type);
             
             // Also update sidebar sublinks
@@ -10155,6 +10255,15 @@
         }
         
         function filterOpportunitiesFromSidebar(type) {
+            if (type === 'archive') {
+                loadArchivedOpportunities();
+                // Update horizontal tabs
+                const tabs = document.querySelectorAll('#newOpportunitiesPage .new-tab');
+                tabs.forEach(t => t.classList.remove('active'));
+                if (tabs[3]) tabs[3].classList.add('active'); // Archive is 4th tab
+                return;
+            }
+            
             filterOpportunitiesItems(type);
             
             // Update sidebar sublinks
@@ -10166,7 +10275,7 @@
             if (type === 'all' && tabs[0]) tabs[0].classList.add('active');
             if (type === 'professional' && tabs[1]) tabs[1].classList.add('active');
             if (type === 'community' && tabs[2]) tabs[2].classList.add('active');
-            if (type === 'saved' && tabs[3]) tabs[3].classList.add('active');
+            if (type === 'archive' && tabs[3]) tabs[3].classList.add('active');
         }
         
         function filterOpportunitiesItems(type) {
@@ -10203,21 +10312,87 @@
             loadNewOpportunities();
         }
         
-        function referOpportunity(opportunity) {
+        async function loadArchivedOpportunities() {
+            const userId = localStorage.getItem('tapinx_user_id');
+            if (!userId) return;
+            
+            try {
+                const response = await fetch(API_URL + '/opportunities/' + userId + '/archive');
+                const data = await response.json();
+                
+                if (data.success) {
+                    renderArchivedOpportunities(data.opportunities || []);
+                } else {
+                    renderArchivedOpportunities([]);
+                }
+            } catch (e) {
+                console.error('Error loading archive:', e);
+                renderArchivedOpportunities([]);
+            }
+        }
+        
+        function renderArchivedOpportunities(opportunities) {
+            const list = document.getElementById('newOpportunitiesList');
+            const empty = document.getElementById('newOpportunitiesEmpty');
+            
+            if (opportunities.length === 0) {
+                list.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+            
+            empty.style.display = 'none';
+            list.innerHTML = opportunities.map(o => {
+                const statusLabel = o.status === 'declined' ? 'Declined' : 'Referred';
+                const statusMessage = o.status === 'declined' 
+                    ? 'You passed on this opportunity'
+                    : 'You referred this to a friend';
+                
+                return `
+                    <div class="new-feed-item archived" data-status="${o.status}">
+                        <div class="new-feed-avatar">${(o.requester_name || o.other_name || 'S').charAt(0).toUpperCase()}</div>
+                        <div class="new-feed-content">
+                            <div class="new-feed-header">
+                                <span class="new-feed-name">${o.requester_name || o.other_name || 'Someone'}</span>
+                                <span class="archive-status ${o.status}">${statusLabel}</span>
+                            </div>
+                            <div class="new-feed-text" style="font-weight: 600; margin-bottom: 8px;">${o.ask_title || o.title || 'Opportunity'}</div>
+                            <div class="new-feed-time">${statusMessage}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        async function referOpportunity(opportunity) {
+            const matchId = opportunity.id;
             const title = opportunity.ask_title || opportunity.title || opportunity.other_name || 'an opportunity';
-            const requester = opportunity.requester_name || opportunity.other_name || 'someone';
+            const oppId = opportunity.ask_id;
+            const userId = localStorage.getItem('tapinx_user_id');
             
-            // Create Telegram deep link with pre-filled message for the bot
-            const botMessage = "Hey Taj! My friend referred me for: " + title;
-            const telegramLink = "https://t.me/TapinXBot?text=" + encodeURIComponent(botMessage);
+            // 1. Update match status to 'referred' in backend
+            try {
+                await fetch(API_URL + '/matches/' + matchId + '/respond', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        response: 'referred',
+                        user_id: userId
+                    })
+                });
+            } catch (e) {
+                console.error('Error updating match status:', e);
+            }
             
-            // Message to send to friend
-            const shareMessage = "Hey! I saw an opportunity on TapinX that might be perfect for you: \"" + title + "\" from " + requester + ". Click here to check it out and tell Taj you're interested: " + telegramLink;
+            // 2. Create referral link
+            const referralLink = 'https://tapinx.com?ref=' + userId + '&opp=' + oppId;
+            
+            // 3. Message to send to friend
+            const shareMessage = "Hey! I found an opportunity on TapinX that might be perfect for you: \"" + title + "\". Check it out: " + referralLink;
             
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             
             if (isMobile) {
-                // Open SMS on mobile
                 window.location.href = 'sms:?body=' + encodeURIComponent(shareMessage);
             } else {
                 if (navigator.share) {
@@ -10229,10 +10404,13 @@
                     navigator.clipboard.writeText(shareMessage).then(() => {
                         alert('Message copied! Share it with your friend.');
                     }).catch(() => {
-                        window.open(telegramLink, '_blank');
+                        window.open(referralLink, '_blank');
                     });
                 }
             }
+            
+            // 4. Reload opportunities to remove the referred one
+            loadNewOpportunities();
         }
         
         function inviteFriend() {
