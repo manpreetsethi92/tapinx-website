@@ -10136,7 +10136,7 @@
                             <div class="new-feed-actions">
                                 <button class="new-feed-btn primary" onclick="acceptNewOpportunity('${m.id}')">Approve</button>
                                 <button class="new-feed-btn secondary" onclick="declineNewOpportunity('${m.id}')">Decline</button>
-                                <button class="opportunity-refer-btn" onclick="referOpportunity('${m.id}', '${String(m.other_name || 'New opportunity').replace(/'/g, "\\'").replace(/"/g, "&quot;")}', '${String(m.intro_reason || '').replace(/'/g, "\\'").replace(/"/g, "&quot;")}')">Refer a Friend</button>
+                                <button class="opportunity-refer-btn" data-opportunity='${JSON.stringify(m)}' onclick="referOpportunity(JSON.parse(this.getAttribute('data-opportunity')))">Refer a Friend</button>
                             </div>
                         </div>
                     </div>
@@ -10203,18 +10203,35 @@
             loadNewOpportunities();
         }
         
-        function referOpportunity(id, name, reason) {
-            const title = name || 'this opportunity';
-            const message = `Hey! I saw an opportunity on TapinX that might be perfect for you: "${title}"${reason ? ' - ' + reason : ''}. Check it out: https://t.me/TapinXBot`;
+        function referOpportunity(opportunity) {
+            const title = opportunity.ask_title || opportunity.title || opportunity.other_name || 'an opportunity';
+            const requester = opportunity.requester_name || opportunity.other_name || 'someone';
             
-            if (navigator.share) {
-                navigator.share({
-                    title: 'TapinX Opportunity',
-                    text: message,
-                    url: 'https://t.me/TapinXBot'
-                }).catch(console.error);
+            // Create Telegram deep link with pre-filled message for the bot
+            const botMessage = "Hey Taj! My friend referred me for: " + title;
+            const telegramLink = "https://t.me/TapinXBot?text=" + encodeURIComponent(botMessage);
+            
+            // Message to send to friend
+            const shareMessage = "Hey! I saw an opportunity on TapinX that might be perfect for you: \"" + title + "\" from " + requester + ". Click here to check it out and tell Taj you're interested: " + telegramLink;
+            
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // Open SMS on mobile
+                window.location.href = 'sms:?body=' + encodeURIComponent(shareMessage);
             } else {
-                window.open('https://t.me/share/url?url=' + encodeURIComponent('https://t.me/TapinXBot') + '&text=' + encodeURIComponent(message), '_blank');
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'TapinX Opportunity',
+                        text: shareMessage
+                    }).catch(console.error);
+                } else {
+                    navigator.clipboard.writeText(shareMessage).then(() => {
+                        alert('Message copied! Share it with your friend.');
+                    }).catch(() => {
+                        window.open(telegramLink, '_blank');
+                    });
+                }
             }
         }
         
