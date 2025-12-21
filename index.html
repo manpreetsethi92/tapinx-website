@@ -6065,11 +6065,20 @@
                 
                 <nav class="new-sidebar-nav">
                     <div class="new-sidebar-section">
-                        <div class="new-sidebar-link active" id="navSpeak" onclick="showNewAppPage('speak'); closeMobileMenu();">
+                        <div class="new-sidebar-link active" id="navOpportunities" onclick="showNewAppPage('opportunities'); closeMobileMenu();">
                             <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
                             </svg>
-                            <span class="new-sidebar-label">Speak to Taj</span>
+                            <span class="new-sidebar-label">Opportunities</span>
+                            <span class="new-sidebar-badge" id="opportunitiesBadge" style="display: none;">0</span>
+                        </div>
+                        <div class="new-sidebar-expand" id="opportunitiesExpand" style="display: none;">
+                            <div class="new-sidebar-sublink active" onclick="filterOpportunitiesFromSidebar('all')">All</div>
+                            <div class="new-sidebar-sublink" onclick="filterOpportunitiesFromSidebar('professional')">Professional</div>
+                            <div class="new-sidebar-sublink" onclick="filterOpportunitiesFromSidebar('community')">Community</div>
+                            <div class="new-sidebar-sublink" onclick="filterOpportunitiesFromSidebar('saved')">Saved</div>
                         </div>
                     </div>
                     
@@ -6111,31 +6120,11 @@
                     </div>
                     
                     <div class="new-sidebar-section">
-                        <div class="new-sidebar-link" id="navOpportunities" onclick="showNewAppPage('opportunities'); closeMobileMenu();">
+                        <div class="new-sidebar-link" id="navSpeak" onclick="showNewAppPage('speak'); closeMobileMenu();">
                             <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                                <path d="M2 17l10 5 10-5"/>
-                                <path d="M2 12l10 5 10-5"/>
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                             </svg>
-                            <span class="new-sidebar-label">Opportunities</span>
-                            <span class="new-sidebar-badge" id="opportunitiesBadge" style="display: none;">0</span>
-                        </div>
-                        <div class="new-sidebar-expand" id="opportunitiesExpand" style="display: none;">
-                            <div class="new-sidebar-sublink active" onclick="filterOpportunitiesFromSidebar('all')">All</div>
-                            <div class="new-sidebar-sublink" onclick="filterOpportunitiesFromSidebar('professional')">Professional</div>
-                            <div class="new-sidebar-sublink" onclick="filterOpportunitiesFromSidebar('community')">Community</div>
-                            <div class="new-sidebar-sublink" onclick="filterOpportunitiesFromSidebar('saved')">Saved</div>
-                        </div>
-                    </div>
-                    
-                    <div class="new-sidebar-section">
-                        <div class="new-sidebar-link" id="navReferrals" onclick="showNewAppPage('referrals'); closeMobileMenu();">
-                            <svg class="new-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-                                <polyline points="16 6 12 2 8 6"/>
-                                <line x1="12" y1="2" x2="12" y2="15"/>
-                            </svg>
-                            <span class="new-sidebar-label">Referrals</span>
+                            <span class="new-sidebar-label">Speak to Taj</span>
                         </div>
                     </div>
                     
@@ -8016,7 +8005,7 @@
                                     console.error('[TapinX] Backend sync error:', e);
                                 }
                                 
-                                showPage('dashboard');
+                                showNewAppPage('opportunities');
                         } else {
                                 // New user - transfer signup data to profile
                                 const name = localStorage.getItem('tapinx_signup_name') || '';
@@ -8037,7 +8026,7 @@
                                     updateNewSidebar();
                                 });
                                 
-                                showPage('dashboard');
+                                showNewAppPage('opportunities');
                                 setTimeout(() => openEditProfileModal(), 300);
                             }
                         })
@@ -8098,15 +8087,15 @@
             if (event && event.target !== event.currentTarget) return;
             document.getElementById('telegramModal').classList.remove('active');
             document.body.style.overflow = '';
-            showPage('dashboard');
+            showNewAppPage('opportunities');
         }
         
         function goToTelegram() {
-            // Close modal and go to dashboard after a short delay
+            // Close modal and go to opportunities after a short delay
             setTimeout(() => {
                 document.getElementById('telegramModal').classList.remove('active');
                 document.body.style.overflow = '';
-                showPage('dashboard');
+                showNewAppPage('opportunities');
             }, 500);
         }
         
@@ -8693,8 +8682,8 @@
                 // Show Telegram modal for new users
                 setTimeout(() => showTelegramModal(), 1500);
             } else {
-                // Go to dashboard for returning users
-                setTimeout(() => showPage('dashboard'), 1500);
+                // Go to opportunities for returning users
+                setTimeout(() => showNewAppPage('opportunities'), 1500);
             }
         }
         
@@ -9457,7 +9446,7 @@
         })();
         
         // ========== NEW X.COM-STYLE APP FUNCTIONS ==========
-        let currentNewAppPage = 'speak';
+        let currentNewAppPage = 'opportunities';
         
         // Mobile menu functions
         function toggleMobileMenu() {
