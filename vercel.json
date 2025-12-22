@@ -1,12 +1,16 @@
 {
-  "rewrites": [
-    { "source": "/opportunities", "destination": "/index.html" },
-    { "source": "/requests", "destination": "/index.html" },
-    { "source": "/connections", "destination": "/index.html" },
-    { "source": "/speak", "destination": "/index.html" },
-    { "source": "/settings", "destination": "/index.html" },
-    { "source": "/referrals", "destination": "/index.html" },
-    { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/admin/(.*)", "destination": "/admin.html" }
+  "headers": [
+    {
+      "source": "/(.*)\\.(js|css|png|jpg|jpeg|gif|webp|svg|ico|woff|woff2)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    }
   ]
 }
