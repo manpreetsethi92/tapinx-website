@@ -8191,6 +8191,12 @@
                 console.log('[Router] Path:', path, 'Authenticated:', isAuthenticated);
                 
                 // Handle routing logic
+                // Skip routing for /admin - it's a separate page
+                if (path === '/admin' || path.startsWith('/admin/')) {
+                    console.log('[Router] Admin page - skipping router');
+                    return;
+                }
+                
                 if (!route) {
                     // Invalid URL - redirect
                     if (isAuthenticated) {

@@ -6,7 +6,7 @@
     { "source": "/speak", "destination": "/index.html" },
     { "source": "/settings", "destination": "/index.html" },
     { "source": "/referrals", "destination": "/index.html" },
-    { "source": "/admin", "destination": "/index.html" },
-    { "source": "/admin/(.*)", "destination": "/index.html" }
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/admin/(.*)", "destination": "/admin.html" }
   ]
 }
