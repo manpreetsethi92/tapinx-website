@@ -944,17 +944,86 @@
         async function loadDashboard() {
             try {
                 // Fetch from all working endpoints in parallel
-                const [usersRes, asksRes, matchesRes, gapsRes] = await Promise.all([
-                    fetch(API_BASE + '/users?limit=1000').catch(() => null),
-                    fetch(API_BASE + '/asks?limit=1000').catch(() => null),
-                    fetch(API_BASE + '/matches?limit=1000').catch(() => null),
-                    fetch(API_BASE + '/talent-gaps').catch(() => null)
-                ]);
+                let usersRes, asksRes, matchesRes, gapsRes;
+                let errors = [];
                 
-                const usersData = usersRes ? await usersRes.json() : {};
-                const asksData = asksRes ? await asksRes.json() : {};
-                const matchesData = matchesRes ? await matchesRes.json() : {};
-                const gapsData = gapsRes ? await gapsRes.json() : {};
+                try {
+                    usersRes = await fetch(API_BASE + '/users?limit=1000');
+                    if (!usersRes.ok) {
+                        errors.push(`Users API: ${usersRes.status} ${usersRes.statusText || 'Error'}`);
+                        usersRes = null;
+                    }
+                } catch (e) {
+                    errors.push(`Users API: ${e.message || 'Network error'}`);
+                    usersRes = null;
+                }
+                
+                try {
+                    asksRes = await fetch(API_BASE + '/asks?limit=1000');
+                    if (!asksRes.ok) {
+                        errors.push(`Asks API: ${asksRes.status} ${asksRes.statusText || 'Error'}`);
+                        asksRes = null;
+                    }
+                } catch (e) {
+                    errors.push(`Asks API: ${e.message || 'Network error'}`);
+                    asksRes = null;
+                }
+                
+                try {
+                    matchesRes = await fetch(API_BASE + '/matches?limit=1000');
+                    if (!matchesRes.ok) {
+                        errors.push(`Matches API: ${matchesRes.status} ${matchesRes.statusText || 'Error'}`);
+                        matchesRes = null;
+                    }
+                } catch (e) {
+                    errors.push(`Matches API: ${e.message || 'Network error'}`);
+                    matchesRes = null;
+                }
+                
+                try {
+                    gapsRes = await fetch(API_BASE + '/talent-gaps');
+                    if (!gapsRes.ok) {
+                        errors.push(`Talent Gaps API: ${gapsRes.status} ${gapsRes.statusText || 'Error'}`);
+                        gapsRes = null;
+                    }
+                } catch (e) {
+                    errors.push(`Talent Gaps API: ${e.message || 'Network error'}`);
+                    gapsRes = null;
+                }
+                
+                let usersData = {}, asksData = {}, matchesData = {}, gapsData = {};
+                
+                if (usersRes) {
+                    try {
+                        usersData = await usersRes.json();
+                    } catch (e) {
+                        errors.push('Failed to parse users data');
+                    }
+                }
+                
+                if (asksRes) {
+                    try {
+                        asksData = await asksRes.json();
+                    } catch (e) {
+                        errors.push('Failed to parse asks data');
+                    }
+                }
+                
+                if (matchesRes) {
+                    try {
+                        matchesData = await matchesRes.json();
+                    } catch (e) {
+                        errors.push('Failed to parse matches data');
+                    }
+                }
+                
+                if (gapsRes) {
+                    try {
+                        gapsData = await gapsRes.json();
+                    } catch (e) {
+                        errors.push('Failed to parse talent gaps data');
+                    }
+                }
                 
                 // Count from actual data
                 const users = usersData.users || usersData.data || [];
@@ -1000,15 +1069,28 @@
                 }
                 
                 document.getElementById('refreshTime').textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                // Show errors if any
+                if (errors.length > 0) {
+                    const errorMsg = errors.join(', ');
+                    console.error('Dashboard API errors:', errors);
+                    const currentSummary = document.getElementById('summaryContent').innerHTML;
+                    document.getElementById('summaryContent').innerHTML = 
+                        currentSummary + '<br><br><span style="color: #ef4444; font-size: 12px;">⚠️ API Errors: ' + errorMsg + '</span>';
+                }
             } catch (error) {
                 console.error('Dashboard error:', error);
-                document.getElementById('summaryContent').innerHTML = 'Error loading data: ' + error.message;
+                document.getElementById('summaryContent').innerHTML = 
+                    '<span style="color: #ef4444;">Error loading dashboard: ' + error.message + '</span><br><small style="color: var(--text-muted);">Check browser console (F12) and Network tab for details</small>';
             }
         }
         
         async function loadAsks() {
             try {
                 const res = await fetch(API_BASE + '/asks?limit=100');
+                if (!res.ok) {
+                    throw new Error(`API error: ${res.status} ${res.statusText}`);
+                }
                 const data = await res.json();
                 const asks = data.asks || data.data || [];
                 let html = '';
@@ -1027,12 +1109,16 @@
                 document.getElementById('asksTable').innerHTML = html || '<tr><td colspan="8" style="text-align: center; color: var(--text-muted);">No asks found</td></tr>';
             } catch (error) {
                 console.error('Asks error:', error);
+                document.getElementById('asksTable').innerHTML = `<tr><td colspan="8" style="text-align: center; color: #ef4444; padding: 20px;">Error loading asks: ${error.message}<br><small style="color: var(--text-muted);">Check console (F12) for details</small></td></tr>`;
             }
         }
         
         async function loadUsers() {
             try {
                 const res = await fetch(API_BASE + '/users?limit=100');
+                if (!res.ok) {
+                    throw new Error(`API error: ${res.status} ${res.statusText}`);
+                }
                 const data = await res.json();
                 const users = data.users || data.data || [];
                 let html = '';
@@ -1052,12 +1138,16 @@
                 document.getElementById('usersTable').innerHTML = html || '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No users found</td></tr>';
             } catch (error) {
                 console.error('Users error:', error);
+                document.getElementById('usersTable').innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ef4444; padding: 20px;">Error loading users: ${error.message}<br><small style="color: var(--text-muted);">Check console (F12) for details</small></td></tr>`;
             }
         }
         
         async function loadMatches() {
             try {
                 const res = await fetch(API_BASE + '/matches?limit=100');
+                if (!res.ok) {
+                    throw new Error(`API error: ${res.status} ${res.statusText}`);
+                }
                 const data = await res.json();
                 const matches = data.matches || data.data || [];
                 let html = '';
@@ -1076,12 +1166,16 @@
                 document.getElementById('matchesTable').innerHTML = html || '<tr><td colspan="8" style="text-align: center; color: var(--text-muted);">No matches found</td></tr>';
             } catch (error) {
                 console.error('Matches error:', error);
+                document.getElementById('matchesTable').innerHTML = `<tr><td colspan="8" style="text-align: center; color: #ef4444; padding: 20px;">Error loading matches: ${error.message}<br><small style="color: var(--text-muted);">Check console (F12) for details</small></td></tr>`;
             }
         }
         
         async function loadAgentStats() {
             try {
                 const res = await fetch(API_BASE + '/agents/stats');
+                if (!res.ok) {
+                    throw new Error(`API error: ${res.status} ${res.statusText}`);
+                }
                 const data = await res.json();
                 const stats = data.stats || data.data || {};
                 
@@ -1124,6 +1218,7 @@
                 document.getElementById('agentGrid').innerHTML = html;
             } catch (error) {
                 console.error('Agent stats error:', error);
+                document.getElementById('agentGrid').innerHTML = `<div style="text-align: center; color: #ef4444; padding: 40px;">Error loading agent stats: ${error.message}<br><small style="color: var(--text-muted);">Check console (F12) for details</small></div>`;
             }
         }
         
@@ -1155,6 +1250,9 @@
         
         async function loadSarahDetails() {
             const res = await fetch(API_BASE + '/talent-gaps');
+            if (!res.ok) {
+                throw new Error(`API error: ${res.status} ${res.statusText}`);
+            }
             const data = await res.json();
             const gaps = data.gaps || data.data || [];
             
@@ -1194,6 +1292,9 @@
         
         async function loadSamDetails() {
             const res = await fetch(API_BASE + '/matches?limit=10');
+            if (!res.ok) {
+                throw new Error(`API error: ${res.status} ${res.statusText}`);
+            }
             const data = await res.json();
             const matches = data.matches || data.data || [];
             
@@ -1232,6 +1333,9 @@
         
         async function loadTimDetails() {
             const res = await fetch(API_BASE + '/asks?limit=20');
+            if (!res.ok) {
+                throw new Error(`API error: ${res.status} ${res.statusText}`);
+            }
             const data = await res.json();
             const asks = data.asks || data.data || [];
             
@@ -1257,6 +1361,9 @@
         
         async function loadMayaDetails() {
             const res = await fetch(API_BASE + '/matches?limit=50');
+            if (!res.ok) {
+                throw new Error(`API error: ${res.status} ${res.statusText}`);
+            }
             const data = await res.json();
             const matches = data.matches || data.data || [];
             
@@ -1285,6 +1392,9 @@
         
         async function loadGenericDetails(agentName) {
             const res = await fetch(API_BASE + '/agent-logs?agent=' + agentName.toLowerCase() + '&limit=10');
+            if (!res.ok) {
+                throw new Error(`API error: ${res.status} ${res.statusText}`);
+            }
             const data = await res.json();
             const logs = data.logs || data.data || [];
             
@@ -1306,6 +1416,9 @@
             try {
                 const agent = document.getElementById('logFilter').value;
                 const res = await fetch(API_BASE + '/agent-logs?limit=100' + (agent ? '&agent=' + agent : ''));
+                if (!res.ok) {
+                    throw new Error(`API error: ${res.status} ${res.statusText}`);
+                }
                 const data = await res.json();
                 const logs = data.logs || data.data || [];
                 let html = '';
@@ -1322,6 +1435,7 @@
                 document.getElementById('logsTable').innerHTML = html || '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No logs</td></tr>';
             } catch (error) {
                 console.error('Logs error:', error);
+                document.getElementById('logsTable').innerHTML = `<tr><td colspan="6" style="text-align: center; color: #ef4444; padding: 20px;">Error loading logs: ${error.message}<br><small style="color: var(--text-muted);">Check console (F12) for details</small></td></tr>`;
             }
         }
         
