@@ -538,6 +538,26 @@
 
 .country-btn {
     display: flex !important;
+
+    
+    /* Footer - Mobile */
+    .site-footer {
+        padding: 16px !important;
+        position: relative !important; /* Not absolute on mobile - flows naturally */
+    }
+    
+    .footer-links {
+        gap: 20px !important;
+    }
+    
+    .footer-links a {
+        font-size: 12px !important;
+    }
+    
+    .footer-copyright {
+        font-size: 11px !important;
+    }
+
 }
 
 /* DO NOT put .country-list styles here - they're in index.html */
