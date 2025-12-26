@@ -8,7 +8,7 @@
         left: 0 !important;
         right: 0 !important;
         z-index: 100 !important;
-        background: rgba(255,255,255,0.95) !important;
+        background: transparent !important;
         height: 50px !important;
     }
     
@@ -41,7 +41,7 @@
         align-items: center !important;
         justify-content: flex-start !important;
         text-align: center !important;
-        padding: 10px 20px 60px !important;
+        padding: 0 20px 60px !important;
         min-height: 100vh !important;
         gap: 0 !important;
     }
@@ -64,6 +64,7 @@
         left: auto !important;
         right: auto !important;
         margin: 0 auto !important;
+        margin-top: 0 !important;
         transform: scale(0.85) !important;
         transform-origin: center center !important;
     }
@@ -114,7 +115,7 @@
         flex-direction: column !important;
         align-items: center !important;
         width: 100% !important;
-        margin-top: 15px !important;
+        margin-top: 0 !important;
     }
     
     .hero-text h1 {
@@ -158,6 +159,7 @@
     
     #dashboardPage .header {
         position: fixed !important;
+    
     }
     
     .dashboard-content {
@@ -281,6 +283,8 @@
     .tab-nav {
         margin-top: 12px !important;
         margin-bottom: 15px !important;
+    
+        background: transparent !important;
     }
     
     .tab-btn {
@@ -341,6 +345,8 @@
     
     .phone-container {
         transform: scale(0.7) !important;
+    
+        margin-top: 0 !important;
     }
     
     .hero-visual {
