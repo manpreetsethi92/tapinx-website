@@ -437,6 +437,13 @@
     body:has(.modal-overlay.active),
     body:has([id*="Modal"].active) {
         overflow: hidden !important;
+        background: transparent !important;
+    }
+    
+    html.modal-open,
+    html:has(.modal-overlay.active),
+    html:has([id*="Modal"].active) {
+        background: transparent !important;
     }
     
     /* OTP Inputs */
