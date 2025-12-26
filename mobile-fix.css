@@ -13,6 +13,8 @@
         z-index: 100 !important;
         background: transparent !important;
         height: 50px !important;
+        box-shadow: none !important;
+    
     }
     
     .logo {
@@ -21,14 +23,16 @@
     
     .header-signin {
         display: block !important;
-        color: #E50914 !important;
+        color: #333 !important;
         font-size: 14px !important;
         font-weight: 500 !important;
         text-decoration: none !important;
         cursor: pointer !important;
         padding: 0 !important;
-        background: none !important;
+        background: transparent !important;
         border: none !important;
+        box-shadow: none !important;
+    
     }
     
     /* ========== ALL PAGES - minimal top padding ========== */
@@ -96,7 +100,10 @@
      * Taj (incoming/dark) = LEFT side
      * Pushed down to not cover phone header
      */
-    .bubble-1 { top: 22% !important; right: 8% !important; left: auto !important; }   /* User: "I need a producer..." */
+    .bubble-1 { top: 22% !important; right: 8% !important; left: auto !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }   /* User: "I need a producer..." */
     .bubble-2 { top: 36% !important; left: 8% !important; right: auto !important; }   /* Taj: "What's your budget?" */
     .bubble-3 { top: 51% !important; right: 8% !important; left: auto !important; }   /* User: "$2-3k..." */
     .bubble-4 { top: 66% !important; left: 8% !important; right: auto !important; }   /* Taj: "Found 2 producers..." */
@@ -173,6 +180,8 @@
         justify-content: space-between !important;
         align-items: center !important;
         position: fixed !important;
+        background: transparent !important;
+        box-shadow: none !important;
     
     }
     
@@ -273,6 +282,8 @@
         margin-top: 0 !important;
         margin-bottom: 10px !important;
         padding-top: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
     }
     
     /* Page titles - no extra margin */
@@ -299,6 +310,7 @@
         margin-bottom: 15px !important;
     
         background: transparent !important;
+        box-shadow: none !important;
     }
     
     .tab-btn {
