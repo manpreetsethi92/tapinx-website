@@ -83,6 +83,7 @@
         height: 500px !important;
         margin: 0 auto 20px !important;
         margin-top: 0 !important;
+        overflow: visible !important;
     }
     
     /* Ensure phone container doesn't clip bubbles */
@@ -485,20 +486,21 @@
     }
     
     .phone-container {
-        transform: scale(0.7) !important;
-    
+        transform: scale(0.85) !important;
+        overflow: visible !important;
         margin-top: 0 !important;
     }
     
     .hero-visual {
         height: 420px !important;
         margin-bottom: 40px !important;
+        overflow: visible !important;
     }
     
     .message-bubble {
         font-size: 10px !important;
         padding: 6px 10px !important;
-        max-width: 110px !important;
+        max-width: 100px !important;
     }
     
     .welcome-section h1 {
