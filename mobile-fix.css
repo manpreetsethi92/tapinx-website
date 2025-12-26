@@ -346,17 +346,99 @@
         font-size: 14px !important;
     }
     
-    /* Modal */
-    .modal-content {
-        width: 95% !important;
-        max-width: none !important;
-        margin: 10px !important;
-        padding: 24px 20px !important;
+            /* Modal - Series.so Style */
+    /* Modal Overlay - Full screen blur (all modals) */
+    .modal-overlay,
+    .signin-modal-overlay,
+    .signup-modal-overlay,
+    .connection-modal-overlay,
+    .request-modal-overlay,
+    .share-modal-overlay,
+    .task-modal-overlay,
+    #signInModal,
+    [id*="Modal"]:not([id*="Input"]):not([id*="Note"]),
+    [class*="modal-overlay"] {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: rgba(128, 128, 128, 0.6) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        border: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 99999 !important;
+    }
+    
+    /* Modal Content - White card centered (all modals) */
+    .modal-content,
+    .signin-modal-content,
+    .signup-modal-content,
+    .connection-modal,
+    .request-modal,
+    .share-modal,
+    .task-modal,
+    .decline-confirm-modal,
+    .opp-detail-modal,
+    .edit-profile-modal,
+    [class*="modal"]:not([class*="overlay"]):not([class*="close"]):not([class*="btn"]) {
+        background: #fff !important;
+        border-radius: 20px !important;
+        padding: 30px 24px !important;
+        margin: 16px !important;
+        max-width: 400px !important;
+        width: calc(100% - 32px) !important;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.15) !important;
+        border: none !important;
+        position: relative !important;
         max-height: 90vh !important;
         overflow-y: auto !important;
     }
     
+    /* Remove any white lines/borders on modals */
+    .modal-overlay *,
+    .modal-content *,
+    [id*="Modal"] *,
+    [class*="modal-overlay"] *,
+    [class*="modal"]:not([class*="btn"]) * {
+        border-top: none !important;
+        border-bottom: none !important;
+    }
+    
+    /* Ensure body/html don't show white background */
+    body.modal-open,
+    html.modal-open,
+    body:has(.modal-overlay.active),
+    body:has([id*="Modal"].active) {
+        overflow: hidden !important;
+    }
+    
     /* OTP Inputs */
+    .otp-container {
+        gap: 8px !important;
+    }
+    
+    .otp-input {
+        width: 45px !important;
+        height: 50px !important;
+        font-size: 20px !important;
+    }
+    .otp-container {
+        gap: 8px !important;
+    }
+    
+    .otp-input {
+        width: 45px !important;
+        height: 50px !important;
+        font-size: 20px !important;
+    }/* OTP Inputs */
     .otp-container {
         gap: 8px !important;
     }
