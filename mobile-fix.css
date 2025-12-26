@@ -346,7 +346,7 @@
         font-size: 14px !important;
     }
     
-            /* Modal - Series.so Style */
+                /* Modal - Series.so Style with Blur */
     /* Modal Overlay - Full screen blur (all modals) */
     .modal-overlay,
     .signin-modal-overlay,
@@ -367,14 +367,25 @@
         height: 100vh !important;
         margin: 0 !important;
         padding: 0 !important;
-        background: rgba(128, 128, 128, 0.6) !important;
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
+        background: rgba(80, 80, 80, 0.7) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
         border: none !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        z-index: 99999 !important;
+        z-index: 99998 !important;
+    }
+    
+    /* Ensure active state also has blur */
+    .modal-overlay.active,
+    #signInModal.active,
+    [id*="Modal"].active:not([id*="Input"]):not([id*="Note"]) {
+        display: flex !important;
+        position: fixed !important;
+        background: rgba(80, 80, 80, 0.7) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
     }
     
     /* Modal Content - White card centered (all modals) */
@@ -398,6 +409,7 @@
         box-shadow: 0 10px 40px rgba(0,0,0,0.15) !important;
         border: none !important;
         position: relative !important;
+        z-index: 99999 !important;
         max-height: 90vh !important;
         overflow-y: auto !important;
     }
@@ -421,6 +433,16 @@
     }
     
     /* OTP Inputs */
+    .otp-container {
+        gap: 8px !important;
+    }
+    
+    .otp-input {
+        width: 45px !important;
+        height: 50px !important;
+        font-size: 20px !important;
+    }
+/* OTP Inputs */
     .otp-container {
         gap: 8px !important;
     }
