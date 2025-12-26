@@ -388,10 +388,4 @@
     display: flex !important;
 }
 
-.country-list {
-    display: none !important;
-}
-
-.country-list.active {
-    display: block !important;
-}
+/* DO NOT put .country-list styles here - they're in index.html */
