@@ -85,6 +85,12 @@
         margin-top: 0 !important;
     }
     
+    /* Ensure phone container doesn't clip bubbles */
+    .phone-container,
+    .phone-frame {
+        overflow: visible !important;
+    }
+    
     .phone-container {
         position: relative !important;
         left: auto !important;
@@ -95,47 +101,33 @@
         transform-origin: center center !important;
     }
     
-    /* ========== BUBBLE POSITIONING ========== */
-    /* Make bubbles readable */
+    /* ========== BUBBLE POSITIONING FOR MOBILE ========== */
+    /* Make bubbles visible and properly sized */
     .message-bubble {
-        font-size: 12px !important;
-        padding: 8px 12px !important;
-        max-width: 130px !important;
-        line-height: 1.3 !important;
+        font-size: 10px !important;
+        padding: 6px 10px !important;
+        max-width: 100px !important;
+        line-height: 1.2 !important;
         text-align: left !important;
+        opacity: 1 !important;
+        z-index: 20 !important;
     }
     
-    /* 
-     * CONVERSATION 1: User looking for producer
-     * User (outgoing/light) = RIGHT side
-     * Taj (incoming/dark) = LEFT side
-     * Pushed down to not cover phone header
-     */
-    .bubble-1 { top: 22% !important; right: 8% !important; left: auto !important;
-        background: transparent !important;
-        box-shadow: none !important;
-    }   /* User: "I need a producer..." */
-    .bubble-2 { top: 36% !important; left: 8% !important; right: auto !important; }   /* Taj: "What's your budget?" */
-    .bubble-3 { top: 51% !important; right: 8% !important; left: auto !important; }   /* User: "$2-3k..." */
-    .bubble-4 { top: 66% !important; left: 8% !important; right: auto !important; }   /* Taj: "Found 2 producers..." */
+    /* Position bubbles closer to phone center so they're visible */
+    .bubble-1 { top: 25% !important; right: 15% !important; left: auto !important; }
+    .bubble-2 { top: 38% !important; left: 15% !important; right: auto !important; }
+    .bubble-3 { top: 51% !important; right: 15% !important; left: auto !important; }
+    .bubble-4 { top: 64% !important; left: 15% !important; right: auto !important; }
     
-    /* 
-     * CONVERSATION 2: Taj offers makeup gig
-     * Taj starts this one
-     */
-    .bubble-5 { top: 22% !important; left: 8% !important; right: auto !important; display: block !important; }  /* Taj: "Makeup artist needed..." */
-    .bubble-6 { top: 36% !important; right: 8% !important; left: auto !important; }   /* User: "When's the shoot?" */
-    .bubble-7 { top: 51% !important; left: 8% !important; right: auto !important; }   /* Taj: "This Saturday" */
-    .bubble-8 { top: 66% !important; right: 8% !important; left: auto !important; }   /* User: "I'm in" */
+    .bubble-5 { top: 25% !important; left: 15% !important; right: auto !important; }
+    .bubble-6 { top: 38% !important; right: 15% !important; left: auto !important; }
+    .bubble-7 { top: 51% !important; left: 15% !important; right: auto !important; }
+    .bubble-8 { top: 64% !important; right: 15% !important; left: auto !important; }
     
-    /* 
-     * CONVERSATION 3: User looking for video editor
-     * User starts this one
-     */
-    .bubble-9 { top: 22% !important; right: 8% !important; left: auto !important; }   /* User: "Looking for video editor..." */
-    .bubble-10 { top: 36% !important; left: 8% !important; right: auto !important; }  /* Taj: "What type of content?" */
-    .bubble-11 { top: 51% !important; right: 8% !important; left: auto !important; }  /* User: "Vlogs, 10-15 min..." */
-    .bubble-12 { top: 66% !important; left: 8% !important; right: auto !important; }  /* Taj: "Got 3 editors..." */
+    .bubble-9 { top: 25% !important; right: 15% !important; left: auto !important; }
+    .bubble-10 { top: 38% !important; left: 15% !important; right: auto !important; }
+    .bubble-11 { top: 51% !important; right: 15% !important; left: auto !important; }
+    .bubble-12 { top: 64% !important; left: 15% !important; right: auto !important; }
     
     /* Hero text */
     .hero-text {
