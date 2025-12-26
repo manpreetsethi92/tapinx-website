@@ -540,22 +540,50 @@
     display: flex !important;
 
     
-    /* Footer - Mobile */
+    /* Footer at bottom of content */
     .site-footer {
-        padding: 16px !important;
-        position: relative !important; /* Not absolute on mobile - flows naturally */
+        position: relative !important;
+        bottom: auto !important;
+        left: auto !important;
+        right: auto !important;
+        padding: 24px 16px 32px !important;
+        margin-top: 40px !important;
+        text-align: center !important;
+        background: #fff !important;
+        border-top: none !important;
     }
     
     .footer-links {
-        gap: 20px !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 24px !important;
+        margin-bottom: 12px !important;
+        flex-wrap: wrap !important;
     }
     
     .footer-links a {
-        font-size: 12px !important;
+        color: #536471 !important;
+        text-decoration: none !important;
+        font-size: 14px !important;
+        font-weight: 400 !important;
     }
     
     .footer-copyright {
-        font-size: 11px !important;
+        font-size: 13px !important;
+        color: #8b98a5 !important;
+        margin-top: 8px !important;
+    }
+    
+    /* Remove any extra padding at bottom of hero that might cause gap */
+    #landingPage .hero {
+        padding-bottom: 20px !important;
+    }
+    
+    /* Ensure landing page doesn't have extra bottom space */
+    #landingPage {
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
     }
 
 }
