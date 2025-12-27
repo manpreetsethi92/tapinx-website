@@ -547,6 +547,26 @@
         border-top: 1px solid #eee !important;
         background: #fff !important;
     }
+    
+    /* Hide footer and other elements when edit profile modal is open */
+    body.modal-open .site-footer,
+    body.modal-open footer,
+    body.modal-open .new-sidebar,
+    body.modal-open .mobile-header,
+    body.modal-open .mobile-overlay {
+        display: none !important;
+        visibility: hidden !important;
+    }
+    
+    /* Ensure the overlay covers absolutely everything */
+    .edit-profile-overlay.active {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999999 !important;
+    }
 }
 
 /* Extra small devices */
