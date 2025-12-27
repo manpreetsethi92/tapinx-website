@@ -480,6 +480,30 @@
         height: 50px !important;
         font-size: 20px !important;
     }
+
+    /* ========== EDIT PROFILE MODAL MOBILE FIXES ========== */
+    .edit-profile-overlay {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        transform: none !important;
+        -webkit-transform: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 999999 !important;
+    }
+    
+    .edit-profile-modal {
+        max-height: 85vh !important;
+        overflow-y: auto !important;
+        margin: auto !important;
+        width: calc(100% - 32px) !important;
+        max-width: 480px !important;
+        position: relative !important;
+    }
 }
 
 /* Extra small devices */
